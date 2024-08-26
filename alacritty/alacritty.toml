@@ -1,0 +1,29 @@
+
+[scrolling]
+  history = 10000
+  multiplier = 3
+
+[font]
+  size = 16
+
+  normal = { family = "Cousine Nerd Font Mono", style = "Regular" }
+  bold = { family = "Cousine Nerd Font Mono", style = "Bold" }
+  italic = { family = "Cousine Nerd Font Mono", style = "Italic" }
+  bold_italic = { family = "Cousine Nerd Font Mono", style = "Bold Italic" }
+
+[window]
+  [window.dimensions]
+    columns = 100
+    lines = 40
+  [window.padding]
+    x = 5
+    y = 5
+  [window.class]
+    instance = "Alacritty"
+    general = "Alacritty"
+
+[env]
+  TERM = "xterm-256color"
+
+[general]
+import = ["~/.config/alacritty/themes/themes/alabaster.toml"]

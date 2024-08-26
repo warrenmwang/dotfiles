@@ -1,0 +1,172 @@
+{
+  "workbench.colorTheme": "Catppuccin Latte",
+  "editor.lineNumbers": "relative",
+  "editor.minimap.enabled": false,
+  "editor.wordWrap": "off",
+  "editor.snippetSuggestions": "none",
+
+  // Language Dependent Tab Size
+  // Webdev stuff should be 2 space indent and be formatted using prettier.
+
+  // Prettier config
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.requireConfig": false,
+  // "prettier.prettierPath": "./node_modules/prettier",
+
+  // per language config
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.tabSize": 2
+  },
+  "[html]": {
+    "editor.tabSize": 2
+  },
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced",
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.quickSuggestions": {
+      "comments": "on",
+      "other": "on",
+      "strings": "on"
+    },
+    "editor.quickSuggestionsDelay": 250,
+    "editor.wordBasedSuggestions": "off"
+  },
+  "[markdown]": {
+    "editor.tabSize": 2,
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "editor.unicodeHighlight.invisibleCharacters": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.wordWrap": "on",
+    "editor.quickSuggestions": {
+      "comments": "off",
+      "strings": "off",
+      "other": "off"
+    }
+  },
+  "prettier.documentSelectors": ["**/*.astro"],
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Copilot, disable stars
+  "editor.lightbulb.enabled": "onCode",
+
+  "vim.leader": "<Space>",
+  "vim.hlsearch": false,
+  "vim.useSystemClipboard": true,
+  "vim.normalModeKeyBindingsNonRecursive": [
+    // NAVIGATION
+    // switch b/w buffers
+    { "before": ["<S-h>"], "commands": [":bprevious"] },
+    { "before": ["<S-l>"], "commands": [":bnext"] },
+
+    // splits
+    { "before": ["leader", "p", "v"], "commands": [":vsplit"] },
+    { "before": ["leader", "p", "s"], "commands": [":split"] },
+
+    // Pane navigation
+    {
+      "before": ["leader", "h"],
+      "commands": ["workbench.action.focusLeftGroup"]
+    },
+    {
+      "before": ["leader", "j"],
+      "commands": ["workbench.action.focusBelowGroup"]
+    },
+    {
+      "before": ["leader", "k"],
+      "commands": ["workbench.action.focusAboveGroup"]
+    },
+    {
+      "before": ["leader", "l"],
+      "commands": ["workbench.action.focusRightGroup"]
+    },
+    // I have bit myself in the ass too many times with these, bc of fat finger.
+    // { "before": ["leader", "w"], "commands": [":w!"] },
+    // { "before": ["leader", "q"], "commands": [":q!"] },
+    // { "before": ["leader", "x"], "commands": [":x!"] },
+    // {
+    //   "before": ["[", "d"],
+    //   "commands": ["editor.action.marker.prev"]
+    // },
+    // {
+    //   "before": ["]", "d"],
+    //   "commands": ["editor.action.marker.next"]
+    // },
+    // {
+    //   "before": ["<leader>", "c", "a"],
+    //   "commands": ["editor.action.quickFix"]
+    // },
+    {
+      "before": ["leader", "s", "f"],
+      "commands": ["workbench.action.quickOpen"]
+    },
+    {
+      "before": ["leader", "s", "g"],
+      "commands": ["workbench.action.findInFiles"]
+    },
+    { "before": ["leader", "f"], "commands": ["editor.action.formatDocument"] },
+
+    // "g" starting actions
+
+    // go to def
+    {
+      "before": ["g", "d"],
+      "commands": ["editor.action.revealDefinition"]
+    },
+    // go to ref
+    {
+      "before": ["g", "r"],
+      "commands": ["editor.action.referenceSearch.trigger"]
+    }
+  ],
+  "terminal.integrated.inheritEnv": false,
+  "github.copilot.enable": {
+    "quarto": false,
+    "*": false,
+    "markdown": false,
+    "python": false,
+    "typescriptreact": false
+  },
+  "grammarly.files.include": [
+    "**/readme.md",
+    "**/README.md",
+    "**/*.txt",
+    "**/*.md",
+    "**/*.qmd"
+  ],
+  "grammarly.config.documentDomain": "creative",
+  "go.toolsManagement.autoUpdate": true,
+  "notebook.lineNumbers": "on",
+  "liveServer.settings.donotVerifyTags": true,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "git.openRepositoryInParentFolders": "never",
+  "workbench.iconTheme": "vscode-icons",
+  "github.copilot.editor.enableAutoCompletions": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "workbench.startupEditor": "none",
+  "window.menuBarVisibility": "toggle",
+  "editor.fontFamily": "\"Cousine Nerd Font Mono\"",
+  "workbench.sideBar.location": "right",
+  "editor.fontSize": 16,
+  "redhat.telemetry.enabled": true
+}
