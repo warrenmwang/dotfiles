@@ -107,7 +107,13 @@ vim.opt.scrolloff = 10
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+vim.keymap.set('n', '<leader>ql', vim.diagnostic.setloclist, { desc = 'Open Diagnostic [Q]uickfix [L]ist' })
+vim.keymap.set('n', '<leader>qn', function()
+  vim.diagnostic.jump { count = 1, float = true }
+end, { desc = 'Go to Diagnostic [Q]uickfix [N]ext' })
+vim.keymap.set('n', '<leader>qp', function()
+  vim.diagnostic.jump { count = -1, float = true }
+end, { desc = 'Go to Diagnostic [Q]uickfix [P]revious' })
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -204,6 +210,7 @@ require('lazy').setup({
       require('which-key').add {
         { '<leader>c', group = '[C]ode' },
         { '<leader>d', group = '[D]ocument' },
+        { '<leader>q', group = '[Q]uickfix / Diagnostics' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>w', group = '[W]orkspace' },
