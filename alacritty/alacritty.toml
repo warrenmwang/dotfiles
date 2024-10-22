@@ -25,5 +25,10 @@
 [env]
   TERM = "xterm-256color"
 
+# Some themes I have liked before
+# - hyper
+# - solarized_light
+# - tokyo-night
+
 [general]
-import = ["~/.config/alacritty/themes/themes/solarized_light.toml"]
+import = ["~/.config/alacritty/themes/themes/tokyo-night.toml"]

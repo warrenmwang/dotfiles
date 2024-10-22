@@ -79,11 +79,6 @@ vim.opt.timeoutlen = 300
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
--- Use Ctrl+w keybindings instead for window operations.
--- Configure Pane split keymaps
--- vim.keymap.set('n', '<leader>wv', ':vsplit<CR>', { desc = '[W]indow Split [V]ertical' })
--- vim.keymap.set('n', '<leader>wh', ':split<CR>', { desc = '[W]indow Split [H]orizontal' })
-
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
@@ -139,12 +134,19 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
--- alternative  --- using <leader>movement key to shift focus
--- vim.keymap.set('n', '<leader>h', '<C-w><C-h>', { desc = 'Move focus to the left window' })
--- vim.keymap.set('n', '<leader>l', '<C-w><C-l>', { desc = 'Move focus to the right window' })
--- vim.keymap.set('n', '<leader>j', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
--- vim.keymap.set('n', '<leader>k', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
---
+-- [[ Misc function stuff... ]]
+
+-- Set the correct filetype for docker compose yamls, to trigger LSP attachment.
+-- https://vi.stackexchange.com/a/44948
+local function set_filetype(pattern, filetype)
+    vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = pattern,
+        command = "set filetype=" .. filetype,
+    })
+end
+
+set_filetype({ "docker-compose.yml" }, "yaml.docker-compose")
+
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`

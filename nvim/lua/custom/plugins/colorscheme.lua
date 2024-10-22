@@ -34,7 +34,8 @@ return {
   init = function()
     vim.cmd.termguicolors = true
     vim.opt.background = 'light'
-    vim.cmd.colorscheme 'delek'
+    -- vim.cmd.colorscheme 'delek'
+    vim.cmd.colorscheme 'tokyonight-moon'
     vim.cmd.hi 'Comment gui=none' -- highlights
   end,
 }
