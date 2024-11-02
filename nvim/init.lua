@@ -207,6 +207,8 @@ require('lazy').setup({
   require 'custom.plugins.typescript-tools',
   require 'custom.plugins.tailwind-tools',
 
+  require 'custom.plugins.avante',
+
   -- other plugins that I haven't decided it to be worth putting into a dedicated file
 
   { -- plugin for <leader>sr which opens a small ui that lets you search and replace
