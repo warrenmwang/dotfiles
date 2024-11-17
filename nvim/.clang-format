@@ -8,5 +8,5 @@ UseTab: Never
 ColumnLimit: 100
 DerivePointerAlignment: false
 PointerAlignment: Left
-BreakBeforeBraces: Linux
+BreakBeforeBraces: Attach
 ---

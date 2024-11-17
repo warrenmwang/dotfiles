@@ -127,10 +127,10 @@ end, { desc = 'Go to Diagnostic [Q]uickfix [P]revious' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode -- lol
-vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
-vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
-vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
-vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
+-- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
+-- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
+-- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
+-- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
@@ -140,6 +140,13 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- window mappings to enable expanding and shrinking window sizes with
+-- leader + movement keys
+vim.keymap.set('n', '<leader>h', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
+vim.keymap.set('n', '<leader>l', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
+vim.keymap.set('n', '<leader>k', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
+vim.keymap.set('n', '<leader>j', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
 
 -- [[ Misc function stuff... ]]
 
