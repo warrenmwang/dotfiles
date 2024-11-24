@@ -14,12 +14,13 @@
 -- space as leader
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
+vim.g.have_nerd_font = true -- Curr Pref: [Cousine Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Cousine.zip)
 
 -- allow moving text selected in visual mode
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+vim.keymap.set('v', 'H', 'xhhp`[v`]')
+vim.keymap.set('v', 'L', 'xp`[v`]')
 
 -- search and replace with spectre
 vim.keymap.set('n', '<leader>sr', '<cmd>lua require("spectre").open()<CR>', { desc = '[S]earch and [R]eplace across Files', noremap = true, silent = true })
@@ -196,18 +197,20 @@ require('lazy').setup({
   require 'core.plugins.git-stuff',
 
   -- kickstart plugins
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.mini',
+  require 'kickstart.plugins.which-key',
 
   -- custom/misc plugins
   require 'custom.plugins.barbar',
-  require 'custom.plugins.colorscheme',
+  require 'custom.plugins.colors',
   require 'custom.plugins.oil',
   require 'custom.plugins.vim-visual-multi',
+  require 'custom.plugins.spectre',
 
   require 'custom.plugins.markdown-preview',
   require 'custom.plugins.autotags',
@@ -215,39 +218,6 @@ require('lazy').setup({
   require 'custom.plugins.tailwind-tools',
 
   require 'custom.plugins.avante',
-
-  -- other plugins that I haven't decided it to be worth putting into a dedicated file
-
-  { -- plugin for <leader>sr which opens a small ui that lets you search and replace
-    -- text across the current project
-    'nvim-pack/nvim-spectre',
-    config = function()
-      require('spectre').setup()
-    end,
-  },
-
-  { -- Useful plugin to show you pending keybinds.
-    'folke/which-key.nvim',
-    event = 'VimEnter', -- Sets the loading event to 'VimEnter'
-    config = function() -- This is the function that runs, AFTER loading
-      require('which-key').setup()
-
-      -- Document existing key chains
-      require('which-key').add {
-        { '<leader>c', group = '[C]ode' },
-        { '<leader>d', group = '[D]ocument' },
-        { '<leader>q', group = '[Q]uickfix / Diagnostics' },
-        { '<leader>r', group = '[R]ename' },
-        { '<leader>s', group = '[S]earch' },
-        { '<leader>w', group = '[W]orkspace' },
-        { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
-      }
-    end,
-  },
-
-  -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the

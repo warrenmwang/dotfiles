@@ -2,16 +2,10 @@
 
 ## TODOs:
 
-plugins to checkout:
+familiarize with debugging.
+then, checkout linting plugin if needed.
 
-https://github.com/brenoprata10/nvim-highlight-colors
-
-
-for super autocompletes (ai) -- altho tbh, it breaks my flow:
-
-https://github.com/yetone/avante.nvim
-https://github.com/supermaven-inc/supermaven-nvim
-
+Original kickstart readme when forked below:
 ---
 
 ## Introduction

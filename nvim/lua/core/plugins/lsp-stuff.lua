@@ -156,6 +156,7 @@ return {
       local servers = {
         clangd = {},
         gopls = {},
+        debugpy = {},
         pyright = {},
         rust_analyzer = {},
         java_language_server = {},
