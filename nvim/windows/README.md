@@ -12,8 +12,11 @@ Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 ```
 2. Install prereqs and Neovim nightly.
 ```
-scoop install git sed ripgrep gcc make gzip fd unzip versions/neovim-nightly
+scoop install git sed ripgrep gcc make gzip fd unzip
+scoop bucket add versions
+scoop install versions/neovim-nightly
 ```
+> If facing a hash check issue when installing neovim nightly, you can add a `-s` flag to skip hash checks (until the [issue](https://github.com/ScoopInstaller/Versions/issues/1717) is fixed).
 
 ## Additional Steps for some plugins 
 1. If going to use Avante.nvim for direct AI assistance, don't forget to set your Anthropic API Key in the PowerShell Profile script:
