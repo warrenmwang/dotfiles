@@ -1,5 +1,5 @@
 {
-  "workbench.colorTheme": "Catppuccin Latte",
+  "workbench.colorTheme": "Tokyo Night Moon",
   "editor.lineNumbers": "relative",
   "editor.minimap.enabled": false,
   "editor.wordWrap": "off",
@@ -141,20 +141,8 @@
   ],
   "terminal.integrated.inheritEnv": false,
   "github.copilot.enable": {
-    "quarto": false,
-    "*": false,
-    "markdown": false,
-    "python": false,
-    "typescriptreact": false
+    "*": false
   },
-  "grammarly.files.include": [
-    "**/readme.md",
-    "**/README.md",
-    "**/*.txt",
-    "**/*.md",
-    "**/*.qmd"
-  ],
-  "grammarly.config.documentDomain": "creative",
   "go.toolsManagement.autoUpdate": true,
   "notebook.lineNumbers": "on",
   "liveServer.settings.donotVerifyTags": true,
@@ -168,5 +156,5 @@
   "editor.fontFamily": "\"Cousine Nerd Font Mono\"",
   "workbench.sideBar.location": "right",
   "editor.fontSize": 16,
-  "redhat.telemetry.enabled": true
+  "redhat.telemetry.enabled": false
 }
