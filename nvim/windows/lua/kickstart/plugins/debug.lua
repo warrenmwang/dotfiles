@@ -62,7 +62,7 @@ return {
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
+        -- 'delve',
       },
     }
 
@@ -101,6 +101,11 @@ return {
       },
     }
 
-    require('dap-python').setup("~/.local/share/nvim/mason/packages/debugpy/venv/bin/python")
+    local mason_path = vim.fn.stdpath("data") .. "/mason/"
+    local debugpy_path = mason_path .. "packages/debugpy/venv/bin/python"
+    if vim.fn.has('win32') == 1 then
+        debugpy_path = mason_path .. "packages\\debugpy\\venv\\Scripts\\python.exe"
+    end
+    require('dap-python').setup(debugpy_path)
   end,
 }
