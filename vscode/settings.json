@@ -155,7 +155,15 @@
       "commands": ["editor.action.referenceSearch.trigger"]
     },
     // formatting
-    { "before": ["leader", "f"], "commands": ["editor.action.formatDocument"] }
+    {
+      "before": ["leader", "f"],
+      "commands": ["editor.action.formatDocument"]
+    },
+    // rename variable
+    {
+      "before": ["leader", "r", "n"],
+      "commands": ["editor.action.rename"]
+    }
   ],
 
   // *sigh* ***moar*** Web Dev
@@ -172,6 +180,8 @@
   // Misc
   "notebook.lineNumbers": "on",
   "terminal.integrated.inheritEnv": false,
+  "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
+  "terminal.integrated.defaultProfile.linux": "bash",
 
   // Copilot
   "github.copilot.editor.enableAutoCompletions": false,
