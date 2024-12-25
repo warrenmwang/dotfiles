@@ -1,6 +1,6 @@
 {
   // Appearance
-  "workbench.colorTheme": "Dark Modern",
+  "workbench.colorTheme": "Default Dark Modern",
   "editor.fontFamily": "\"Cousine Nerd Font Mono\"",
   "editor.fontSize": 16,
   "editor.lineNumbers": "relative",

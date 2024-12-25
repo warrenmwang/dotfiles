@@ -1,5 +1,7 @@
 # VS Code Setup
 
+Install the nerd font [Cousine Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Cousine.zip).
+
 ## Copying the config files to the default location
 
 Linux
