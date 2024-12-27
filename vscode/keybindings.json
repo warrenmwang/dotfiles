@@ -1,5 +1,12 @@
 // Place your key bindings in this file to override the defaults
 [
+  // Override vim's default Ctrl+t which doesn't quite work in vscode
+  // with vscode's native Alt+Left for Go Back
+  {
+    "key": "ctrl+t",
+    "command": "workbench.action.navigateBack",
+    "when": "editorTextFocus && vim.active"
+  },
   // Remap Ctrl+D and Ctrl+U to default Vim motions
   {
     "key": "ctrl+d",
