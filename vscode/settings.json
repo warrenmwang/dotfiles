@@ -15,12 +15,9 @@
   // =============== Language specifics ===============
 
   "[python]": {
+    "editor.tabSize": 4,
     "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.formatOnSave": false,
-    "editor.codeActionsOnSave": {
-      "source.fixAll": true,
-      "source.organizeImports": true
-    }
+    "editor.formatOnSave": false
   },
 
   // Web Dev
@@ -54,6 +51,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": false
   },
+  "prettier.documentSelectors": ["**/*.astro"],
+  "[astro]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": false
+  },
+
+  // =============== Markup Languages ===============   
   "[yaml]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
@@ -78,11 +83,6 @@
       "strings": "off",
       "other": "off"
     }
-  },
-  "prettier.documentSelectors": ["**/*.astro"],
-  "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": false
   },
 
   // ===============  VIM  ===============
