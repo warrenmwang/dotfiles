@@ -1,5 +1,5 @@
-// Place your key bindings in this file to override the defaults
 [
+  // =============== VIM SPECIFIC ===============  
   // Override vim's default Ctrl+t which doesn't quite work in vscode
   // with vscode's native Alt+Left for Go Back
   {
@@ -17,29 +17,6 @@
     "key": "ctrl+u",
     "command": "extension.vim_ctrl+u",
     "when": "editorTextFocus && vim.mode != 'Insert'"
-  },
-  // Map Ctrl+Shift+D to select the next occurrence
-  {
-    "key": "ctrl+shift+d",
-    "command": "editor.action.addSelectionToNextFindMatch",
-    "when": "editorTextFocus"
-  },
-  // Map Ctrl+Shift+U to undo the last selection
-  {
-    "key": "ctrl+shift+u",
-    "command": "cursorUndo",
-    "when": "editorTextFocus"
-  },
-  // ?
-  {
-    "key": "ctrl+c",
-    "command": "-extension.vim_ctrl+c",
-    "when": "editorTextFocus && vim.active && vim.overrideCtrlC && vim.use<C-c> && !inDebugRepl"
-  },
-  {
-    "key": "ctrl+f",
-    "command": "-extension.vim_ctrl+f",
-    "when": "editorTextFocus && vim.active && vim.use<C-f> && !inDebugRepl && vim.mode != 'Insert'"
   },
   // allow moving lines in visual select modes
   {
@@ -68,6 +45,49 @@
     "command": "editor.action.showHover",
     "when": "editorTextFocus && vim.mode == 'Normal'"
   },
+  // move to left/right buffers
+  {
+      "key": "alt+,",
+      "command": "workbench.action.previousEditor"
+  },
+  {
+      "key": "alt+.",
+      "command": "workbench.action.nextEditor"
+  },
+  // moving the current buffer left/right
+  {
+      "key": "alt+shift+,",
+      "command": "workbench.action.moveEditorLeftInGroup"
+  },
+  {
+      "key": "alt+shift+.",
+      "command": "workbench.action.moveEditorRightInGroup"
+  },
+
+  // =============== VSCODE ADDONS =============== 
+  // Map Ctrl+Shift+D to select the next occurrence
+  {
+    "key": "ctrl+shift+d",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "editorTextFocus"
+  },
+  // Map Ctrl+Shift+U to undo the last selection
+  {
+    "key": "ctrl+shift+u",
+    "command": "cursorUndo",
+    "when": "editorTextFocus"
+  },
+  // Allow regular Ctrl+c for copying even in Vim visual mode.
+  {
+    "key": "ctrl+c",
+    "command": "-extension.vim_ctrl+c",
+    "when": "editorTextFocus && vim.active && vim.overrideCtrlC && vim.use<C-c> && !inDebugRepl"
+  }, 
+  {
+    "key": "ctrl+f",
+    "command": "-extension.vim_ctrl+f",
+    "when": "editorTextFocus && vim.active && vim.use<C-f> && !inDebugRepl && vim.mode != 'Insert'"
+  },
   // allow regular paste in insert mode (selected text will be replaced instead of displaced)
   {
     "key": "ctrl+v",
@@ -75,7 +95,7 @@
     "when": "editorTextFocus && !inDebugRepl && vim.mode == 'Insert'"
   },
 
-  // OPEN TERMINAL AND TOGGLE FOCUS TERMINAL
+  // =============== TERMINAL =============== 
   // toggle open and close terminal panel
   {
     "key": "ctrl+shift+j",
@@ -97,22 +117,25 @@
     "command": "workbench.action.focusActiveEditorGroup",
     "when": "terminalFocus"
   },
-  // TERMINAL NAVIGATION
+  // cycle to next shell open
   {
     "key": "ctrl+shift+a",
     "command": "workbench.action.terminal.focusNext",
     "when": "terminalFocus"
   },
+  // cycle to previous shell open
   {
     "key": "ctrl+shift+b",
     "command": "workbench.action.terminal.focusPrevious",
     "when": "terminalFocus"
   },
+  // create new shell session in terminal
   {
     "key": "ctrl+shift+n",
     "command": "workbench.action.terminal.new",
     "when": "terminalFocus"
   },
+  // close current shell session
   {
     "key": "ctrl+shift+w",
     "command": "workbench.action.terminal.kill",
@@ -144,7 +167,8 @@
     "key": "d",
     "when": "filesExplorerFocus && !inputFocus"
   },
-  // Removed shortcuts
+
+  // =============== REMOVED SHORTCUTS =============== 
   {
     "key": "ctrl+a",
     "command": "-extension.vim_ctrl+a",
@@ -175,7 +199,8 @@
     "command": "-editor.action.codeAction",
     "when": "editorTextFocus && editorLangId =~ /^(c|(cuda-)?cpp)$/ && !(config.C_Cpp.intelliSenseEngine =~ /^[dD]isabled$/)"
   },
-  // Select Completions
+
+  // =============== SELECT COMPLETIONS =============== 
   {
     "key": "ctrl+n",
     "command": "selectNextSuggestion",

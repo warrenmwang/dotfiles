@@ -9,7 +9,7 @@
   "editor.snippetSuggestions": "none",
   "workbench.iconTheme": "vscode-icons",
   "workbench.sideBar.location": "right",
-  "window.menuBarVisibility": "toggle",
+  "window.menuBarVisibility": "hidden",
   "workbench.startupEditor": "none",
 
   // =============== Language specifics ===============
@@ -93,11 +93,6 @@
   "vim.hlsearch": false,
   "vim.useSystemClipboard": true,
   "vim.normalModeKeyBindingsNonRecursive": [
-    // NAVIGATION
-    // switch b/w buffers
-    { "before": ["<S-h>"], "commands": [":bprevious"] },
-    { "before": ["<S-l>"], "commands": [":bnext"] },
-
     // splits
     { "before": ["leader", "p", "v"], "commands": [":vsplit"] },
     { "before": ["leader", "p", "s"], "commands": [":split"] },
