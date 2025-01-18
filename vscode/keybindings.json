@@ -63,6 +63,11 @@
       "key": "alt+shift+.",
       "command": "workbench.action.moveEditorRightInGroup"
   },
+  // close current buffer
+  {
+    "key": "alt+c",
+    "command": "workbench.action.closeActiveEditor"
+  },
 
   // =============== VSCODE ADDONS =============== 
   // Map Ctrl+Shift+D to select the next occurrence

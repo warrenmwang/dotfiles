@@ -19,6 +19,10 @@
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": false
   },
+  "ruff.lint.enabled": true,
+  "ruff.lint.run": "onSave", // options: "onSave", "onType" 
+  "python.analysis.typeCheckingMode": "basic", // options: "basic", "strict"
+  "python.languageServer": "Pylance",
 
   // Web Dev
   "[javascript]": {
@@ -93,10 +97,6 @@
   "vim.hlsearch": false,
   "vim.useSystemClipboard": true,
   "vim.normalModeKeyBindingsNonRecursive": [
-    // splits
-    { "before": ["leader", "p", "v"], "commands": [":vsplit"] },
-    { "before": ["leader", "p", "s"], "commands": [":split"] },
-
     // Pane navigation
     {
       "before": ["leader", "h"],
