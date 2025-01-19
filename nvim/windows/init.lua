@@ -212,7 +212,7 @@ require('lazy').setup({
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.mini',
-  require 'kickstart.plugins.which-key',
+  -- require 'kickstart.plugins.which-key',
 
   -- custom/misc plugins
   require 'custom.plugins.barbar',
