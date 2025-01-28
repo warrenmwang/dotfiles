@@ -7,3 +7,8 @@
 {
     Run "C:\Program Files\Google\Chrome\Application\chrome.exe"
 }
+
+#f::
+{
+    Run "explorer.exe"
+}
