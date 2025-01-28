@@ -11,9 +11,11 @@
   "workbench.sideBar.location": "right",
   "window.menuBarVisibility": "hidden",
   "workbench.startupEditor": "none",
+  "search.useIgnoreFiles": false,
 
   // =============== Language specifics ===============
 
+  // Python
   "[python]": {
     "editor.tabSize": 4,
     "editor.defaultFormatter": "charliermarsh.ruff",
@@ -23,6 +25,36 @@
   "ruff.lint.run": "onSave", // options: "onSave", "onType" 
   "python.analysis.typeCheckingMode": "basic", // options: "basic", "strict"
   "python.languageServer": "Pylance",
+
+  // Rust
+  "[rust]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  },
+  "rust-analyzer.checkOnSave.command": "clippy",
+  "rust-analyzer.inlayHints.enable": true,
+  "rust-analyzer.cargo.allFeatures": true,
+
+  // C/C++
+  "[c]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.defaultFormatter": "xaver.clang-format",
+    "editor.formatOnSave": false
+  },
+  "[cpp]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.defaultFormatter": "xaver.clang-format",
+    "editor.formatOnSave": false
+  },
+  "C_Cpp.clang_format_fallbackStyle": "Linux",
+  "C_Cpp.default.cStandard": "c17",
+  "C_Cpp.default.cppStandard": "c++17",
+  "C_Cpp.inlayHints.enabled": true,
+  "C_Cpp.intelliSenseEngine": "default",
 
   // Web Dev
   "[javascript]": {

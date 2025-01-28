@@ -5,7 +5,6 @@ charliermarsh.ruff
 christian-kohler.npm-intellisense
 davidanson.vscode-markdownlint
 dsznajder.es7-react-js-snippets
-eamodio.gitlens
 esbenp.prettier-vscode
 github.vscode-github-actions
 golang.go
@@ -25,6 +24,7 @@ ms-vscode-remote.remote-containers
 ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit
 ms-vscode-remote.remote-wsl
+ms-vscode.cpptools
 ms-vscode.cpptools-themes
 ms-vscode.powershell
 ms-vscode.remote-explorer
@@ -37,8 +37,11 @@ redhat.java
 ritwickdey.liveserver
 rust-lang.rust-analyzer
 simonsiefke.svg-preview
+slevesque.vscode-autohotkey
+thqby.vscode-autohotkey2-lsp
 tomoki1207.pdf
 unifiedjs.vscode-mdx
+vadimcn.vscode-lldb
 vscjava.vscode-gradle
 vscjava.vscode-java-debug
 vscjava.vscode-java-dependency
@@ -47,5 +50,7 @@ vscjava.vscode-java-test
 vscjava.vscode-maven
 vscode-icons-team.vscode-icons
 vscodevim.vim
+waderyan.gitblame
 wayou.vscode-todo-highlight
+xaver.clang-format
 zignd.html-css-class-completion
