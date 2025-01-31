@@ -1,7 +1,18 @@
-# Neovim Config (on Windows)
+# Neovim Config
+
+## Linux
+
+ubuntu
+```
+sudo add-apt-repository ppa:neovim-ppa/unstable -y
+sudo apt update
+sudo apt install make gcc ripgrep unzip git xclip neovim
+```
+
+## Windows
 
 In order to learn Windows, I am actually trying to not use [WSL2](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux).
-So this configuration is for using Neovim in PowerShell.
+So there are some switches in the code for allowing Neovim to work within PowerShell.
 
 ## Setup and Installation
 
@@ -30,5 +41,5 @@ cd ~\AppData\Local\nvim-data\lazy\markdown-preview.nvim\app
 npm install
 ```
 
-## Misc.
-Once again, config is based off of [Kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
+## Starting Code
+This config is based off of [Kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).

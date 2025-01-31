@@ -72,20 +72,20 @@ return {
       -- Set icons to characters that are more likely to work in every terminal.
       --    Feel free to remove or use ones that you like more! :)
       --    Don't feel like these are good choices.
-      icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
-      controls = {
-        icons = {
-          pause = '⏸',
-          play = '▶',
-          step_into = '⏎',
-          step_over = '⏭',
-          step_out = '⏮',
-          step_back = 'b',
-          run_last = '▶▶',
-          terminate = '⏹',
-          disconnect = '⏏',
-        },
-      },
+      -- icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+      -- controls = {
+      --   icons = {
+      --     pause = '⏸',
+      --     play = '▶',
+      --     step_into = '⏎',
+      --     step_over = '⏭',
+      --     step_out = '⏮',
+      --     step_back = 'b',
+      --     run_last = '▶▶',
+      --     terminate = '⏹',
+      --     disconnect = '⏏',
+      --   },
+      -- },
     }
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
@@ -101,10 +101,10 @@ return {
       },
     }
 
-    local mason_path = vim.fn.stdpath("data") .. "/mason/"
-    local debugpy_path = mason_path .. "packages/debugpy/venv/bin/python"
-    if vim.fn.has('win32') == 1 then
-        debugpy_path = mason_path .. "packages\\debugpy\\venv\\Scripts\\python.exe"
+    local mason_path = vim.fn.stdpath 'data' .. '/mason/'
+    local debugpy_path = mason_path .. 'packages/debugpy/venv/bin/python'
+    if vim.fn.has 'win32' == 1 then
+      debugpy_path = mason_path .. 'packages\\debugpy\\venv\\Scripts\\python.exe'
     end
     require('dap-python').setup(debugpy_path)
   end,
