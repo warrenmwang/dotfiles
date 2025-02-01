@@ -35,6 +35,9 @@ vim.keymap.set('v', 'L', 'xp`[v`]')
 -- search and replace with spectre
 vim.keymap.set('n', '<leader>sr', '<cmd>lua require("spectre").open()<CR>', { desc = '[S]earch and [R]eplace across Files', noremap = true, silent = true })
 
+vim.keymap.set('n', 'gc', ':Commentary')
+vim.keymap.set('v', 'gc', ':Commentary')
+
 -- set tab to 4 spaces
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
