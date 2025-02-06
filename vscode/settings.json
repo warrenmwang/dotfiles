@@ -22,7 +22,7 @@
     "editor.formatOnSave": false
   },
   "ruff.lint.enabled": true,
-  "ruff.lint.run": "onSave", // options: "onSave", "onType" 
+  "ruff.lint.run": "onType", // options: "onSave", "onType" 
   "python.analysis.typeCheckingMode": "basic", // options: "basic", "strict"
   "python.languageServer": "Pylance",
 
