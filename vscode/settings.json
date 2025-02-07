@@ -16,15 +16,15 @@
   // =============== Language specifics ===============
 
   // Python
+  "python.languageServer": "Pylance",
+  "ruff.enable": true,
+  "ruff.lint.enable": false,
   "[python]": {
     "editor.tabSize": 4,
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": false
   },
-  "ruff.lint.enabled": true,
-  "ruff.lint.run": "onType", // options: "onSave", "onType" 
   "python.analysis.typeCheckingMode": "basic", // options: "basic", "strict"
-  "python.languageServer": "Pylance",
 
   // Rust
   "[rust]": {
