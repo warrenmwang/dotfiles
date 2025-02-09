@@ -1,5 +1,6 @@
 astro-build.astro-vscode
 bradlc.vscode-tailwindcss
+bradymholt.pgformatter
 catppuccin.catppuccin-vsc
 charliermarsh.ruff
 christian-kohler.npm-intellisense
@@ -8,8 +9,10 @@ dsznajder.es7-react-js-snippets
 esbenp.prettier-vscode
 github.vscode-github-actions
 golang.go
+heron.firefox-devtools-theme
 humao.rest-client
 james-yu.latex-workshop
+mark-wiemer.vscode-autohotkey-plus-plus
 mechatroner.rainbow-csv
 ms-azuretools.vscode-docker
 ms-python.debugpy
@@ -25,6 +28,7 @@ ms-vscode-remote.remote-ssh
 ms-vscode-remote.remote-ssh-edit
 ms-vscode-remote.remote-wsl
 ms-vscode.cpptools
+ms-vscode.cpptools-extension-pack
 ms-vscode.cpptools-themes
 ms-vscode.powershell
 ms-vscode.remote-explorer
@@ -37,7 +41,6 @@ redhat.java
 ritwickdey.liveserver
 rust-lang.rust-analyzer
 simonsiefke.svg-preview
-slevesque.vscode-autohotkey
 thqby.vscode-autohotkey2-lsp
 tomoki1207.pdf
 unifiedjs.vscode-mdx
