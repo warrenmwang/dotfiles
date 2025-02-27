@@ -201,3 +201,6 @@ bindsym $mod+Shift+Return exec google-chrome
 
 # Start alttab
 exec_always --no-startup-id alttab -w 1 -d 1 -t 128x128 -i 128x128
+
+# Set background image
+exec_always --no-startup-id feh --bg-fill ~/Pictures/berserk-guts-sword-armor-4k-wallpaper-3840x2160-uhdpaper.com-384.0_c.jpg
