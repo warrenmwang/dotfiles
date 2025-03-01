@@ -202,6 +202,12 @@ bindsym $mod+Shift+Return exec google-chrome
 # Start alttab
 exec_always --no-startup-id alttab -w 1 -d 1 -t 128x128 -i 128x128
 
+# Set background images for all monitors
+exec_always --no-startup-id feh --bg-fill \
+    ~/Pictures/main_monitor_wallpaper.jpg \
+    ~/Pictures/left_monitor_wallpaper.jpg \
+    ~/Pictures/right_monitor_wallpaper.jpg \
+
 # Set monitor layout
 exec_always --no-startup-id xrandr \
     --output DP-2 --off \
@@ -209,8 +215,3 @@ exec_always --no-startup-id xrandr \
     --output HDMI-0 --mode 1920x1080 --rate 144 --rotate left --pos 0x0 --scale 1.2x1.2 \
     --output DP-3 --mode 1920x1080 --rotate left --pos 5136x0 --scale 1.2x1.2
 
-# Set background images for all monitors
-exec_always --no-startup-id feh --bg-fill \
-    ~/Pictures/main_monitor_wallpaper.jpg \
-    ~/Pictures/left_monitor_wallpaper.jpg \
-    ~/Pictures/right_monitor_wallpaper.jpg \
