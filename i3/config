@@ -215,3 +215,6 @@ exec_always --no-startup-id xrandr \
     --output HDMI-0 --mode 1920x1080 --rate 144 --rotate left --pos 0x0 --scale 1.2x1.2 \
     --output DP-3 --mode 1920x1080 --rotate left --pos 5136x0 --scale 1.2x1.2
 
+# Create screenshot from selection using maim
+bindsym $mod+Shift+s exec --no-startup-id maim --select "/home/$USER/Pictures/Screenshots/Screenshot $(date).png"
+
