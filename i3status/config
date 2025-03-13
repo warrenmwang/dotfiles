@@ -11,58 +11,59 @@ order += "ipv6"
 order += "ethernet _first_"
 order += "wireless _first_"
 order += "disk /"
-order += "battery all"
 order += "cpu_usage"
 order += "memory"
+order += "battery all"
 order += "tztime local"
 
 tztime custom {
-    format = "( ͡° ͜ʖ ͡°)"
+    format = "(ー_ーゞ"
 }
 
 disk "/" {
-        format = "DISK: %avail"
-        prefix_type = custom
-        low_threshold = 10
-        threshold_type = percentage_free
+    format = "DISK: %avail / %total"
+    prefix_type = custom
+    low_threshold = 10
+    threshold_type = percentage_free
 }
 
 ipv6 {
-        format_up = "IPv6: %ip"
-        format_down = "IPv6: down"
+    format_up = "IPv6: %ip"
+    format_down = "IPv6: down"
 }
 
 ethernet _first_ {
-        format_up = "E: %ip"
-        format_down = "E: down"
+    format_up = "E: %ip"
+    format_down = "E: down"
 }
 
 wireless _first_ {
-        format_up = "W: %ip"
-        format_down = "W: down"
+    format_up = "W: %ip"
+    format_down = "W: down"
 }
 
 battery all {
-        format = "%status %percentage %remaining"
-        format_down = "No battery"
-        status_chr = "⚡ CHR"
-        status_bat = "🔋 BAT"
-        status_unk = "? UNK"
-        status_full = "☻ FULL"
-        path = "/sys/class/power_supply/BAT%d/uevent"
-        low_threshold = 10
+    last_full_capacity = true
+    format = "%status %percentage"
+    format_down = "No battery"
+    status_chr = "CHR"
+    status_bat = "BAT"
+    status_unk = "UNK"
+    status_full = "☻ FULL"
+    path = "/sys/class/power_supply/BAT%d/uevent"
+    low_threshold = 10
 }
 
 cpu_usage {
-        format = "CPU: %usage"
+    format = "CPU: %usage"
 }
 
 memory {
-        format = "MEM: %used / %total"
-        threshold_degraded = "1G"
-        format_degraded = "Running out of mem: %available (buy more ram)"
+    format = "RAM: %used / %total"
+    threshold_degraded = "1G"
+    format_degraded = "BUY MORE RAM: %available"
 }
 
 tztime local {
-        format = "%Y-%m-%d %H:%M:%S"
+    format = "%H:%M:%S %m-%d-%Y"
 }
