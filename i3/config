@@ -52,8 +52,6 @@ floating_modifier $mod
 # or left-clicking anywhere into the window while holding the floating modifier.
 tiling_drag modifier titlebar
 
-# start a terminal
-bindsym $mod+Return exec ~/.local/kitty.app/bin/kitty
 
 # kill focused window (set to Alt+F4, carry over as much muscle memory as possible)
 bindsym Mod1+F4 kill
@@ -100,7 +98,7 @@ bindsym $mod+s split h
 bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+u layout stacking
@@ -114,10 +112,10 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 
 # focus the parent container
-bindsym $mod+a focus parent
+# bindsym $mod+a focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+# bindsym $mod+d focus child
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
@@ -165,27 +163,27 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+    # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym h resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym j resize shrink height 10 px or 10 ppt
-        bindsym l resize grow width 10 px or 10 ppt
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym k resize grow height 10 px or 10 ppt
+    bindsym j resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
 
-        # same bindings, but for the arrow keys
-        # bindsym Left resize shrink width 10 px or 10 ppt
-        # bindsym Down resize grow height 10 px or 10 ppt
-        # bindsym Up resize shrink height 10 px or 10 ppt
-        # bindsym Right resize grow width 10 px or 10 ppt
+    # same bindings, but for the arrow keys
+    # bindsym Left resize shrink width 10 px or 10 ppt
+    # bindsym Down resize grow height 10 px or 10 ppt
+    # bindsym Up resize shrink height 10 px or 10 ppt
+    # bindsym Right resize grow width 10 px or 10 ppt
 
-        # back to normal: Enter or Escape or $mod+r
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+    # back to normal: Enter or Escape or $mod+r
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
 }
 
 bindsym $mod+r mode "resize"
@@ -193,17 +191,19 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+    status_command i3status
 }
-
-# Sets my preferred monitor settings
-exec_always --no-startup-id autorandr --change
-
-# Browser launcher
-bindsym $mod+Shift+Return exec google-chrome
 
 # Start alttab
 exec_always --no-startup-id alttab -w 1 -d 1 -t 128x128 -i 128x128
+
+
+
+# keyboard shortcuts to launch an application
+bindsym $mod+Shift+Return exec google-chrome
+bindsym $mod+Return exec ~/.local/kitty.app/bin/kitty
+bindsym $mod+c exec /home/wang/bin/scripts/cursor
+bindsym $mod+f exec nautilus
 
 # Set background images for all monitors
 exec_always --no-startup-id feh --bg-fill \
