@@ -98,7 +98,7 @@ bindsym $mod+s split h
 bindsym $mod+v split v
 
 # enter fullscreen mode for the focused container
-bindsym $mod+Shift+f fullscreen toggle
+bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
 bindsym $mod+u layout stacking
@@ -197,13 +197,10 @@ bar {
 # Start alttab
 exec_always --no-startup-id alttab -w 1 -d 1 -t 128x128 -i 128x128
 
-
-
 # keyboard shortcuts to launch an application
 bindsym $mod+Shift+Return exec google-chrome
 bindsym $mod+Return exec ~/.local/kitty.app/bin/kitty
 bindsym $mod+c exec /home/wang/bin/scripts/cursor
-bindsym $mod+f exec nautilus
 
 # Set background images for all monitors
 exec_always --no-startup-id feh --bg-fill \
