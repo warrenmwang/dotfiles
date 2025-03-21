@@ -154,16 +154,16 @@ return {
       --
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       local servers = {
-        -- clangd = {},
-        -- rust_analyzer = {},
+        clangd = {},
+        rust_analyzer = {},
         -- java_language_server = {},
         -- gopls = {},
         --
         --
         -- debugpy = {},
-        -- pyright = {},
+        pyright = {},
         --
-        -- tailwindcss = {},
+        tailwindcss = {},
         -- cssls = {},
         -- astro = {},
 
@@ -198,6 +198,8 @@ return {
         'prettier',
         'prettierd',
         'sql-formatter',
+        'clang-format',
+        'ruff',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -246,7 +248,7 @@ return {
     },
     opts = {
       notify_on_error = false,
-      format_on_save = false,
+      format_on_save = true,
       -- format_on_save = function(bufnr)
       --   -- Disable "format_on_save lsp_fallback" for languages that don't
       --   -- have a well standardized coding style. You can add additional
@@ -262,8 +264,7 @@ return {
 
         c = { 'clang_formatter' },
 
-        -- Conform can also run multiple formatters sequentially
-        python = { 'isort', 'black' },
+        python = { 'ruff' },
 
         -- You can use 'stop_after_first' to run the first available formatter from the list
         html = { 'prettierd', 'prettier', stop_after_first = true },
