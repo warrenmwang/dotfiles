@@ -1,2 +1,2 @@
-#!/bin/bash
-rsync -avh ~/.config/nvim ./
+#!/usr/bin/env bash
+rsync -av --delete --exclude 'import.sh' --exclude '.git' ~/.config/nvim ./
