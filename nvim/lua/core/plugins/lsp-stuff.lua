@@ -163,7 +163,7 @@ return {
         -- debugpy = {},
         pyright = {},
         --
-        tailwindcss = {},
+        tailwindcss = {}, -- (AKA tailwindcss-language-server)
         -- cssls = {},
         -- astro = {},
 
@@ -261,8 +261,10 @@ return {
       -- end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        sh = { 'shfmt' },
 
         c = { 'clang_formatter' },
+        rust = { 'rustfmt' },
 
         python = { 'ruff' },
 
