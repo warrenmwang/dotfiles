@@ -201,6 +201,7 @@ exec_always --no-startup-id alttab -w 1 -d 1 -t 128x128 -i 128x128
 bindsym $mod+Shift+Return exec google-chrome
 bindsym $mod+Return exec ~/.local/kitty.app/bin/kitty
 bindsym $mod+c exec /home/wang/bin/scripts/cursor
+bindsym $mod+t exec thunar
 
 # Set background images for all monitors
 exec_always --no-startup-id feh --bg-fill \
@@ -211,9 +212,9 @@ exec_always --no-startup-id feh --bg-fill \
 # Set monitor layout
 exec_always --no-startup-id xrandr \
     --output DP-2 --off \
-    --output DP-0 --primary --mode 3840x2160 --rate 144 --pos 1296x0 --scale 1x1 \
-    --output HDMI-0 --mode 1920x1080 --rate 144 --rotate left --pos 0x0 --scale 1.2x1.2 \
-    --output DP-3 --mode 1920x1080 --rotate left --pos 5136x0 --scale 1.2x1.2
+    --output DP-0 --primary --mode 3840x2160 --rate 144 --pos 2304x0 --scale 1x1 \
+    --output HDMI-0 --mode 1920x1080 --rate 144 --pos 0x0 --scale 1.2x1.2 \
+    --output DP-3 --mode 1920x1080 --rotate left --pos 6144x0 --scale 1.2x1.2
 
 # Create selection screenshot image and copy to clipboard
 bindsym $mod+Shift+s exec --no-startup-id "\
