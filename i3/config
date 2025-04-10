@@ -34,6 +34,9 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # activate locker keybind
 bindsym $mod+Control+l exec i3lock
 
+# system suspend
+bindsym $mod+Control+s exec "i3-nagbar -t warning -m 'You pressed the system sleep shortcut. Do you really want to system sleep?' -B 'Sleep' 'systemctl suspend'"
+
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
@@ -203,18 +206,10 @@ bindsym $mod+Return exec ~/.local/kitty.app/bin/kitty
 bindsym $mod+c exec /home/wang/bin/scripts/cursor
 bindsym $mod+t exec thunar
 
-# Set background images for all monitors
-exec_always --no-startup-id feh --bg-fill \
-    ~/Pictures/main_monitor_wallpaper.jpg \
-    ~/Pictures/left_monitor_wallpaper.jpg \
-    ~/Pictures/right_monitor_wallpaper.jpg \
-
-# Set monitor layout
-exec_always --no-startup-id xrandr \
-    --output DP-2 --off \
-    --output DP-0 --primary --mode 3840x2160 --rate 144 --pos 2304x0 --scale 1x1 \
-    --output HDMI-0 --mode 1920x1080 --rate 144 --pos 0x0 --scale 1.2x1.2 \
-    --output DP-3 --mode 1920x1080 --rotate left --pos 6144x0 --scale 1.2x1.2
+# multiple monitor layout configs to allow for desired monitor setup
+# for docked or mobile (inspired by tsoding's config)
+bindsym $mod+Control+d exec --no-startup-id  $HOME/.config/i3/docked-monitor-layout.sh
+bindsym $mod+Control+m exec --no-startup-id  $HOME/.config/i3/mobile-monitor-layout.sh
 
 # Create selection screenshot image and copy to clipboard
 bindsym $mod+Shift+s exec --no-startup-id "\
