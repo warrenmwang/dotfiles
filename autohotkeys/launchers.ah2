@@ -10,5 +10,6 @@
 
 #f::
 {
-    Run "explorer.exe"
+    ; Run "explorer.exe"
+    Run "C:\Users\Warren\AppData\Local\Voidstar\FilePilot\FPilot.exe"
 }
