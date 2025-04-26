@@ -18,11 +18,15 @@
   // Python
   "python.languageServer": "Pylance",
   "ruff.enable": true,
-  "ruff.lint.enable": false,
+  "ruff.lint.enable": true,
+  "ruff.organizeImports": true,
   "[python]": {
     "editor.tabSize": 4,
     "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports.ruff": "explicit"
+    }
   },
   "python.analysis.typeCheckingMode": "basic", // options: "basic", "strict"
 
@@ -34,27 +38,26 @@
     "editor.insertSpaces": true
   },
   "rust-analyzer.checkOnSave.command": "clippy",
-  "rust-analyzer.inlayHints.enable": true,
   "rust-analyzer.cargo.allFeatures": true,
+  "editor.inlayHints.enabled": "off",
 
-  // C/C++
-  "[c]": {
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true,
-    "editor.defaultFormatter": "xaver.clang-format",
-    "editor.formatOnSave": false
-  },
-  "[cpp]": {
-    "editor.tabSize": 4,
-    "editor.insertSpaces": true,
-    "editor.defaultFormatter": "xaver.clang-format",
-    "editor.formatOnSave": false
-  },
-  "C_Cpp.clang_format_fallbackStyle": "Linux",
-  "C_Cpp.default.cStandard": "c17",
-  "C_Cpp.default.cppStandard": "c++17",
-  "C_Cpp.inlayHints.enabled": true,
-  "C_Cpp.intelliSenseEngine": "default",
+  // // C/C++
+  // "[c]": {
+  //   "editor.tabSize": 4,
+  //   "editor.insertSpaces": true,
+  //   "editor.defaultFormatter": "xaver.clang-format",
+  //   "editor.formatOnSave": false
+  // },
+  // "[cpp]": {
+  //   "editor.tabSize": 4,
+  //   "editor.insertSpaces": true,
+  //   "editor.defaultFormatter": "xaver.clang-format",
+  //   "editor.formatOnSave": false
+  // },
+  // "C_Cpp.clang_format_fallbackStyle": "Linux",
+  // "C_Cpp.default.cStandard": "c17",
+  // "C_Cpp.default.cppStandard": "c++17",
+  // "C_Cpp.intelliSenseEngine": "default",
 
   // Web Dev
   "[javascript]": {
@@ -193,9 +196,7 @@
     }
   ],
 
-  // *sigh* ***moar*** Web Dev
-  // i owe a lot of my knowledge to resources only accessible via
-  // the web. am i surprised that a lot of config goes into "web dev"?
+  // Web Dev
   "go.toolsManagement.autoUpdate": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "liveServer.settings.donotVerifyTags": true,
@@ -204,8 +205,10 @@
   // Git
   "git.openRepositoryInParentFolders": "never",
 
-  // Misc
+  // Jupyter Notebook
   "notebook.lineNumbers": "on",
+
+  // Terminal
   "terminal.integrated.inheritEnv": false,
   "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
   "terminal.integrated.defaultProfile.linux": "bash",
@@ -215,5 +218,8 @@
   "editor.lightbulb.enabled": "onCode",
 
   // Selection completion
-  "editor.acceptSuggestionOnCommitCharacter": false
+  "editor.acceptSuggestionOnCommitCharacter": false,
+
+  // Misc
+  "vsicons.dontShowNewVersionMessage": true
 }
