@@ -1,1 +1,1 @@
-Copy-Item -Recurse -Force -Path -Destination "$($env:APPDATA)\..\Local\nvim\" .
+Copy-Item -Recurse -Force -Path "$($env:APPDATA)\..\Local\nvim\" -Destination . -Exclude ".git", ".github"

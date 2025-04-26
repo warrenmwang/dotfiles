@@ -264,6 +264,7 @@ return {
         sh = { 'shfmt' },
 
         c = { 'clang_formatter' },
+        cpp = { 'clang_formatter' },
         rust = { 'rustfmt' },
 
         python = { 'ruff' },
@@ -282,11 +283,18 @@ return {
       formatters = {
         sql_formatter = {
           command = 'sql-formatter',
-          args = { '--config', vim.fn.expand '~/.config/nvim/.sql-formatter.json' },
+          args = {
+            '--config',
+            vim.fn.has 'win32' == 1 and vim.fn.getenv 'APPDATA' .. '\\..\\Local\\nvim\\.sql_formatter.json'
+              or vim.fn.expand '~/.config/nvim/.sql-formatter.json',
+          },
         },
         clang_formatter = {
           command = 'clang-format',
-          args = { '-style=file:' .. vim.fn.expand '~/.config/nvim/.clang-format' },
+          args = {
+            '-style=file:'
+              .. (vim.fn.has 'win32' == 1 and vim.fn.getenv 'APPDATA' .. '\\..\\Local\\nvim\\.clang-format' or vim.fn.expand '~/.config/nvim/.clang-format'),
+          },
         },
       },
     },
