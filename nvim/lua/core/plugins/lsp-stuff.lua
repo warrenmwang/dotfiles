@@ -248,7 +248,7 @@ return {
     },
     opts = {
       notify_on_error = false,
-      format_on_save = true,
+      format_on_save = false,
       -- format_on_save = function(bufnr)
       --   -- Disable "format_on_save lsp_fallback" for languages that don't
       --   -- have a well standardized coding style. You can add additional
@@ -285,8 +285,20 @@ return {
           command = 'sql-formatter',
           args = {
             '--config',
-            vim.fn.has 'win32' == 1 and vim.fn.getenv 'APPDATA' .. '\\..\\Local\\nvim\\.sql_formatter.json'
-              or vim.fn.expand '~/.config/nvim/.sql-formatter.json',
+            (function()
+              -- Use the CWD's sql-formatter.json format file if present
+              local local_config = vim.fn.expand './.sql-formatter.json'
+              if vim.fn.filereadable(local_config) == 1 then
+                return local_config
+              else
+                -- Fallback to a global one
+                if vim.fn.has 'win32' == 1 then
+                  return vim.fn.getenv 'APPDATA' .. '\\..\\Local\\nvim\\.sql-formatter.json'
+                else
+                  return vim.fn.expand '~/.config/nvim/.sql-formatter.json'
+                end
+              end
+            end)(),
           },
         },
         clang_formatter = {

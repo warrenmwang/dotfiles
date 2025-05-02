@@ -2,7 +2,7 @@
 
 return {
   {
-    'tpope/vim-fugitive',
+    'tpope/vim-fugitive', -- an interactive git plugin :G
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -57,15 +57,15 @@ return {
         -- map('n', '<leader>hS', gitsigns.stage_buffer, { desc = 'git [S]tage buffer' })
         -- map('n', '<leader>hu', gitsigns.undo_stage_hunk, { desc = 'git [u]ndo stage hunk' })
         -- map('n', '<leader>hR', gitsigns.reset_buffer, { desc = 'git [R]eset buffer' })
-        map('n', '<leader>hp', gitsigns.preview_hunk_inline, { desc = 'git [p]review hunk inline' })
-        map('n', '<leader>hb', gitsigns.blame_line, { desc = 'git [b]lame line' })
-        -- map('n', '<leader>gd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
-        -- map('n', '<leader>hD', function()
+        map('n', '<leader>gp', gitsigns.preview_hunk_inline, { desc = 'git [p]review hunk inline' })
+        map('n', '<leader>gb', gitsigns.blame_line, { desc = 'git [b]lame line' })
+        map('n', '<leader>gd', gitsigns.diffthis, { desc = 'git [d]iff against index' })
+        -- map('n', '<leader>gD', function()
         --   gitsigns.diffthis '@'
         -- end, { desc = 'git [D]iff against last commit' })
         --
         -- Toggles
-        map('n', '<leader>htb', gitsigns.toggle_current_line_blame, { desc = 'git [T]oggle show [b]lame line' })
+        map('n', '<leader>glb', gitsigns.toggle_current_line_blame, { desc = 'git [T]oggle show [b]lame line' })
         -- map('n', '<leader>gtD', gitsigns.toggle_deleted, { desc = '[G]it [T]oggle show [D]eleted' })
       end,
     },

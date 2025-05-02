@@ -5,7 +5,7 @@ return {
     -- See `:help ibl`
     main = 'ibl',
     opts = {
-      scope = { enabled = false },
+      scope = { enabled = false }, -- set to true to enable highlighting of the current scope (requires tree-sitter)
     },
   },
 }

@@ -35,27 +35,14 @@ vim.keymap.set('v', 'L', 'xp`[v`]')
 -- search and replace with spectre
 vim.keymap.set('n', '<leader>sr', '<cmd>lua require("spectre").open()<CR>', { desc = '[S]earch and [R]eplace across Files', noremap = true, silent = true })
 
-vim.keymap.set('n', 'gc', ':Commentary')
+vim.keymap.set('n', 'gc', ':Commentary') -- you do want this so you can comment and uncomment.
 vim.keymap.set('v', 'gc', ':Commentary')
 
--- set tab to 4 spaces
+-- default tab options
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.expandtab = true
-
--- autocommand group and definition for 2 spaces tab for web dev files (html, css, js, ts, jsx, tsx)
-vim.api.nvim_create_augroup('SetTabWidth', { clear = true })
-vim.api.nvim_create_autocmd('FileType', {
-  group = 'SetTabWidth',
-  pattern = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
-  callback = function()
-    vim.bo.tabstop = 2
-    vim.bo.shiftwidth = 2
-    vim.bo.tabstop = 2
-    vim.bo.expandtab = true
-  end,
-})
 
 -- Make line numbers default
 vim.opt.number = true
@@ -172,8 +159,51 @@ local function set_filetype(pattern, filetype)
     command = 'set filetype=' .. filetype,
   })
 end
-
 set_filetype({ 'docker-compose.yml' }, 'yaml.docker-compose')
+
+-- autocommand group for tab widths for differnet languages
+vim.api.nvim_create_augroup('SetTabWidth', { clear = true })
+
+-- tabwidth: web dev files (html, css, js, ts, jsx, tsx)
+vim.api.nvim_create_autocmd('FileType', {
+  group = 'SetTabWidth',
+  pattern = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+  callback = function()
+    vim.bo.tabstop = 2
+    vim.bo.shiftwidth = 2
+    vim.bo.tabstop = 2
+    vim.bo.expandtab = true
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = 'SetTabWidth',
+  pattern = { 'yaml', 'toml' },
+  callback = function()
+    vim.bo.tabstop = 2
+    vim.bo.shiftwidth = 2
+    vim.bo.tabstop = 2
+    vim.bo.expandtab = true
+  end,
+})
+
+-- set auto-indentation options for c/c++
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'c', 'cpp' },
+  callback = function()
+    vim.opt_local.cindent = true
+    vim.opt_local.autoindent = false
+
+    -- TODO: find the right options to get proper indentation levels for C style switch case statements
+    --
+    vim.opt_local.cinoptions = ':0,l1'
+
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.tabstop = 4
+    vim.opt_local.expandtab = true
+  end,
+})
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -211,7 +241,7 @@ require('lazy').setup({
   require 'core.plugins.comment',
 
   -- kickstart plugins
-  require 'kickstart.plugins.debug',
+  -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
@@ -225,13 +255,13 @@ require('lazy').setup({
   require 'custom.plugins.oil',
   require 'custom.plugins.vim-visual-multi',
   require 'custom.plugins.spectre',
+  -- require 'custom.plugins.markdown-preview',
+  -- require 'custom.plugins.avante',
 
-  require 'custom.plugins.markdown-preview',
+  -- Web development
   require 'custom.plugins.autotags',
   require 'custom.plugins.typescript-tools',
   require 'custom.plugins.tailwind-tools',
-
-  -- require 'custom.plugins.avante',
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
