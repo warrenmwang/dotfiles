@@ -292,8 +292,20 @@ return {
         clang_formatter = {
           command = 'clang-format',
           args = {
-            '-style=file:'
-              .. (vim.fn.has 'win32' == 1 and vim.fn.getenv 'APPDATA' .. '\\..\\Local\\nvim\\.clang-format' or vim.fn.expand '~/.config/nvim/.clang-format'),
+            '-style=file:' .. (function()
+              -- Use the CWD's clang format file if present
+              local local_config = vim.fn.expand './.clang-format'
+              if vim.fn.filereadable(local_config) == 1 then
+                return local_config
+              else
+                -- Fallback to a global one
+                if vim.fn.has 'win32' == 1 then
+                  return vim.fn.getenv 'APPDATA' .. '\\..\\Local\\nvim\\.clang-format'
+                else
+                  return vim.fn.expand '~/.config/nvim/.clang-format'
+                end
+              end
+            end)(),
           },
         },
       },
