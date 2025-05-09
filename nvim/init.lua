@@ -205,6 +205,49 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+local build_term_buf = nil
+vim.keymap.set('n', '<A-m>', function()
+  -- Find the build script in CWD
+  local build_script
+  local cwd = vim.fn.getcwd()
+  local bat_path = cwd .. '/build.bat'
+  local ps1_path = cwd .. '/build.ps1'
+  local sh_path = cwd .. '/build.sh'
+
+  if vim.fn.has 'win32' then
+    if vim.fn.filereadable(bat_path) == 1 then
+      build_script = bat_path
+    elseif vim.fn.filereadable(ps1_path) == 1 then
+      build_script = ps1_path
+    end
+  else
+    if vim.fn.filereadable(sh_path) == 1 then
+      build_script = sh_path
+    end
+  end
+
+  if not build_script then
+    vim.notify('No build script found', vim.log.levels.ERROR)
+    return
+  end
+
+  -- Close previous terminal buffer if exists
+  if build_term_buf and vim.api.nvim_buf_is_valid(build_term_buf) then
+    vim.api.nvim_buf_delete(build_term_buf, { force = true })
+    build_term_buf = nil
+  end
+
+  local current_win = vim.api.nvim_get_current_win()
+
+  -- Open new terminal buffer and run build script
+  vim.cmd 'vsplit'
+  vim.cmd('terminal ' .. build_script)
+  build_term_buf = vim.api.nvim_get_current_buf()
+
+  -- Move focus back to window we were on
+  vim.api.nvim_set_current_win(current_win)
+end, { desc = 'Run a build script in the CWD' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 

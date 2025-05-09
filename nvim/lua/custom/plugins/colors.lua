@@ -24,6 +24,7 @@
 
 return {
   {
+    -- Main ColorScheme
     'folke/tokyonight.nvim',
     priority = 1000,
     init = function()
@@ -95,9 +96,17 @@ return {
     -- TODO: what a todo looks like
     -- NOTE: what a note looks like
     -- FIXME: what a fixme looks like
+    -- HACK: this is what a hack looks like
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false },
+    opts = {
+      signs = false, -- show icons in the signs column
+      highlight = {
+        keyword = 'bg', -- only highlight the keyword, default: 'wide'
+        after = '', -- don't highlight the words after, just the keyword
+        pattern = [[.*<(KEYWORDS)\s*]], -- set a pattern without the ':', default is: [[.*<(KEYWORDS)\s*:]]
+      },
+    },
   },
 }
