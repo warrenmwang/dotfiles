@@ -26,6 +26,15 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true -- Curr Pref: [Cousine Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Cousine.zip)
 
+if vim.fn.has 'gui_running' == 1 then
+  vim.opt.guifont = 'Cousine Nerd Font Mono:h12'
+  if vim.g.neovide then
+    vim.g.neovide_cursor_animation_length = 0 -- cursor smear; default: 0.15
+    vim.g.neovide_scroll_animation_length = 0.05 -- smooth scroll; default: 0.3
+    vim.g.neovide_hide_mouse_when_typing = true
+  end
+end
+
 -- allow moving text selected in visual mode
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
@@ -99,6 +108,9 @@ vim.opt.inccommand = 'split'
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
+
+-- Disable line wrap
+vim.opt.wrap = false
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
@@ -247,6 +259,8 @@ vim.keymap.set('n', '<A-m>', function()
   -- Move focus back to window we were on
   vim.api.nvim_set_current_win(current_win)
 end, { desc = 'Run a build script in the CWD' })
+
+vim.keymap.set('n', '<leader>gg', '<cmd>Git<CR>', { desc = 'Open Git Fugitive' })
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
