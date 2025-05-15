@@ -10,4 +10,6 @@ return {
     'neovim/nvim-lspconfig',
   },
   opts = {}, -- your configuration
+  lazy = true,
+  ft = WebFileTypes,
 }

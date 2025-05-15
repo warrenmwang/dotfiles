@@ -2,7 +2,10 @@
 
 return {
   {
-    'tpope/vim-fugitive', -- an interactive git plugin :G
+    'tpope/vim-fugitive',
+    keys = {
+      { '<leader>gg', '<cmd>Git<CR>', { desc = 'Open Git Fugitive' } },
+    },
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -15,8 +18,6 @@ return {
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        print 'loading gitsigns'
-
         local gitsigns = require 'gitsigns'
 
         local function map(mode, l, r, opts)

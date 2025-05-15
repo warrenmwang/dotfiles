@@ -14,5 +14,6 @@ return { -- auto close and auto rename html tags
     }
   end,
   dependencies = 'nvim-treesitter/nvim-treesitter',
-  event = 'VeryLazy',
+  lazy = true,
+  ft = WebFileTypes,
 }

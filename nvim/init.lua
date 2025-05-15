@@ -11,6 +11,10 @@
 --  To update plugins you can run
 --    :Lazy update
 
+-- Globals
+WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' }
+
+-- Shell configuration for windows
 if vim.fn.has 'win32' == 1 then
   vim.opt.shell = 'powershell.exe'
   vim.opt.shellcmdflag =
@@ -30,7 +34,8 @@ if vim.fn.has 'gui_running' == 1 then
   vim.opt.guifont = 'Cousine Nerd Font Mono:h12'
   if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0 -- cursor smear; default: 0.15
-    vim.g.neovide_scroll_animation_length = 0.05 -- smooth scroll; default: 0.3
+    vim.g.neovide_scroll_animation_length = 0 -- smooth scroll; default: 0.3
+    vim.g.neovide_position_animation_length = 0 -- default: 0.15
     vim.g.neovide_hide_mouse_when_typing = true
   end
 end
@@ -41,21 +46,13 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 vim.keymap.set('v', 'H', 'xhhp`[v`]')
 vim.keymap.set('v', 'L', 'xp`[v`]')
 
--- search and replace with spectre
-vim.keymap.set('n', '<leader>sr', '<cmd>lua require("spectre").open()<CR>', { desc = '[S]earch and [R]eplace across Files', noremap = true, silent = true })
-
-vim.keymap.set('n', 'gc', ':Commentary') -- you do want this so you can comment and uncomment.
-vim.keymap.set('v', 'gc', ':Commentary')
-
 -- default tab options
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
 vim.opt.expandtab = true
 
--- Make line numbers default
 vim.opt.number = true
--- Relative line numbers, to help with jumping.
 vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
@@ -101,7 +98,6 @@ vim.opt.splitbelow = true
 --  and `:help 'listchars'`
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
--- vim.opt.listchars = { trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
@@ -139,12 +135,6 @@ end, { desc = 'Go to Diagnostic [Q]uickfix [P]revious' })
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- TIP: Disable arrow keys in normal mode -- lol
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
 --
@@ -176,10 +166,20 @@ set_filetype({ 'docker-compose.yml' }, 'yaml.docker-compose')
 -- autocommand group for tab widths for differnet languages
 vim.api.nvim_create_augroup('SetTabWidth', { clear = true })
 
--- tabwidth: web dev files (html, css, js, ts, jsx, tsx)
 vim.api.nvim_create_autocmd('FileType', {
   group = 'SetTabWidth',
-  pattern = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+  pattern = WebFileTypes,
+  callback = function()
+    vim.bo.tabstop = 2
+    vim.bo.shiftwidth = 2
+    vim.bo.tabstop = 2
+    vim.bo.expandtab = true
+  end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = 'SetTabWidth',
+  pattern = { 'lua' },
   callback = function()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
@@ -207,7 +207,6 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt_local.autoindent = false
 
     -- TODO: find the right options to get proper indentation levels for C style switch case statements
-    --
     vim.opt_local.cinoptions = ':0,l1'
 
     vim.opt_local.tabstop = 4
@@ -216,6 +215,15 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt_local.expandtab = true
   end,
 })
+
+-- vim.api.nvim_create_autocmd('FileExplorer', {
+--   callback = function()
+--     if not vim.t.neotree_open then
+--       vim.t.neotree_open = true
+--       vim.cmd 'Neotree position=current'
+--     end
+--   end,
+-- })
 
 local build_term_buf = nil
 vim.keymap.set('n', '<A-m>', function()
@@ -260,19 +268,15 @@ vim.keymap.set('n', '<A-m>', function()
   vim.api.nvim_set_current_win(current_win)
 end, { desc = 'Run a build script in the CWD' })
 
-vim.keymap.set('n', '<leader>gg', '<cmd>Git<CR>', { desc = 'Open Git Fugitive' })
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
 -- Highlight when yanking (copying) text
---  Try it with `yap` in normal mode
---  See `:help vim.highlight.on_yank()`
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 
@@ -298,20 +302,22 @@ require('lazy').setup({
   require 'core.plugins.comment',
 
   -- kickstart plugins
-  -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.mini',
+
+  -- require 'kickstart.plugins.lint',
+  -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.which-key',
 
   -- custom/misc plugins
-  require 'custom.plugins.barbar',
   require 'custom.plugins.colors',
-  require 'custom.plugins.oil',
   require 'custom.plugins.vim-visual-multi',
   require 'custom.plugins.spectre',
+  require 'custom.plugins.oil',
+
+  -- require 'custom.plugins.barbar',
   -- require 'custom.plugins.markdown-preview',
   -- require 'custom.plugins.avante',
 
