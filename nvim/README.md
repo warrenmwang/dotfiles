@@ -1,5 +1,7 @@
 # Neovim Config
 
+note: last verified to work with nvim v0.11.1
+
 ## Linux
 
 ubuntu
