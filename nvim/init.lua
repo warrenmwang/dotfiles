@@ -216,14 +216,18 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- vim.api.nvim_create_autocmd('FileExplorer', {
---   callback = function()
---     if not vim.t.neotree_open then
---       vim.t.neotree_open = true
---       vim.cmd 'Neotree position=current'
---     end
---   end,
--- })
+-- vim.keymap.set('n', '<A-h>', function()
+--   print 'current window information:'
+--   local win_id = vim.api.nvim_get_current_win()
+--   local window = vim.api.nvim_win_get_config(win_id)
+
+--   for k, v in pairs(window) do
+--     print(k, vim.inspect(v))
+--   end
+
+--   local position = vim.api.nvim_win_get_position(win_id)
+--   print('Row:', position[1], 'Col:', position[2])
+-- end)
 
 local build_term_buf = nil
 vim.keymap.set('n', '<A-m>', function()
@@ -257,15 +261,59 @@ vim.keymap.set('n', '<A-m>', function()
     build_term_buf = nil
   end
 
-  local current_win = vim.api.nvim_get_current_win()
+  local starting_window = vim.api.nvim_get_current_win()
 
-  -- Open new terminal buffer and run build script
-  vim.cmd 'vsplit'
+  local window_ids = vim.api.nvim_list_wins()
+  local num_windows = #window_ids
+
+  -- Determine which window to run build command in
+  if num_windows == 1 then
+    vim.cmd 'vsplit'
+  elseif num_windows == 2 then
+    -- Attach to existing leftmost window
+    -- if windows are actually stacked, then run in bottom one
+
+    -- [row,col]
+    local win1_pos = vim.api.nvim_win_get_position(window_ids[1])
+    local win2_pos = vim.api.nvim_win_get_position(window_ids[2])
+
+    -- vertical splits
+    if win2_pos[2] > win1_pos[2] then
+      vim.api.nvim_set_current_win(window_ids[2])
+    elseif win1_pos[2] > win2_pos[2] then
+      vim.api.nvim_set_current_win(window_ids[1])
+    end
+
+    -- stacked splits
+    if win2_pos[1] > win1_pos[1] then
+      vim.api.nvim_set_current_win(window_ids[2])
+    elseif win1_pos[1] > win2_pos[1] then
+      vim.api.nvim_set_current_win(window_ids[1])
+    else
+      vim.api.nvim_set_current_win(window_ids[2])
+    end
+  else
+    -- Attach to the rightmost window and run script in there
+    local largest_col = 0
+    local leftmost_window_id = window_ids[1] -- set an arbitrary default window id
+
+    for _, win_id in ipairs(window_ids) do
+      local curr_win = vim.api.nvim_win_get_position(win_id)
+      if curr_win[2] > largest_col then
+        largest_col = curr_win[2]
+        leftmost_window_id = win_id
+      end
+    end
+
+    vim.api.nvim_set_current_win(leftmost_window_id)
+  end
+
+  -- Execute build script in selected window and buffer
   vim.cmd('terminal ' .. build_script)
   build_term_buf = vim.api.nvim_get_current_buf()
 
-  -- Move focus back to window we were on
-  vim.api.nvim_set_current_win(current_win)
+  -- Return to previous starting window
+  vim.api.nvim_set_current_win(starting_window)
 end, { desc = 'Run a build script in the CWD' })
 
 -- [[ Basic Autocommands ]]
