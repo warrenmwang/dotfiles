@@ -255,6 +255,11 @@ vim.keymap.set('n', '<A-m>', function()
     return
   end
 
+  -- TODO: fix bug where if have 3 vertical windows, and run script twice
+  -- first time attaches result to rightmost window.
+  -- second time closes that window, leaving 2 windows, then attach result
+  -- to right window. altering the window layout
+
   -- Close previous terminal buffer if exists
   if build_term_buf and vim.api.nvim_buf_is_valid(build_term_buf) then
     vim.api.nvim_buf_delete(build_term_buf, { force = true })
@@ -364,6 +369,7 @@ require('lazy').setup({
   require 'custom.plugins.vim-visual-multi',
   require 'custom.plugins.spectre',
   require 'custom.plugins.oil',
+  require 'custom.plugins.harpoon',
 
   -- require 'custom.plugins.barbar',
   -- require 'custom.plugins.markdown-preview',
