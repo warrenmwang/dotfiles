@@ -37,6 +37,28 @@ if vim.fn.has 'gui_running' == 1 then
     vim.g.neovide_scroll_animation_length = 0 -- smooth scroll; default: 0.3
     vim.g.neovide_position_animation_length = 0 -- default: 0.15
     vim.g.neovide_hide_mouse_when_typing = true
+
+    -- dynamically resizable text
+    -- orig: https://github.com/neovide/neovide/discussions/2301#discussioncomment-8223203
+    vim.keymap.set({ 'n', 'v' }, '<C-=>', function()
+      vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
+    end)
+    vim.keymap.set({ 'n', 'v' }, '<C-->', function()
+      if vim.g.neovide_scale_factor > 0.2 then
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
+      end
+    end)
+    vim.keymap.set({ 'n', 'v' }, '<C-ScrollWheelUp>', function()
+      vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
+    end)
+    vim.keymap.set({ 'n', 'v' }, '<C-ScrollWheelDown>', function()
+      if vim.g.neovide_scale_factor > 0.2 then
+        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
+      end
+    end)
+    vim.keymap.set({ 'n', 'v' }, '<C-0>', function()
+      vim.g.neovide_scale_factor = 1
+    end)
   end
 end
 
@@ -109,7 +131,7 @@ vim.opt.cursorline = true
 vim.opt.wrap = false
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+-- vim.opt.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
