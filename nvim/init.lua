@@ -277,17 +277,6 @@ vim.keymap.set('n', '<A-m>', function()
     return
   end
 
-  -- TODO: fix bug where if have 3 vertical windows, and run script twice
-  -- first time attaches result to rightmost window.
-  -- second time closes that window, leaving 2 windows, then attach result
-  -- to right window. altering the window layout
-
-  -- Close previous terminal buffer if exists
-  if build_term_buf and vim.api.nvim_buf_is_valid(build_term_buf) then
-    vim.api.nvim_buf_delete(build_term_buf, { force = true })
-    build_term_buf = nil
-  end
-
   local starting_window = vim.api.nvim_get_current_win()
 
   local window_ids = vim.api.nvim_list_wins()
@@ -337,6 +326,12 @@ vim.keymap.set('n', '<A-m>', function()
 
   -- Execute build script in selected window and buffer
   vim.cmd('terminal ' .. build_script)
+
+  -- Close previous terminal buffer and save new one
+  if build_term_buf and vim.api.nvim_buf_is_valid(build_term_buf) then
+    vim.api.nvim_buf_delete(build_term_buf, { force = true })
+    build_term_buf = nil
+  end
   build_term_buf = vim.api.nvim_get_current_buf()
 
   -- Return to previous starting window
