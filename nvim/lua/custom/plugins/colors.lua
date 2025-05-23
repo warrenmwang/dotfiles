@@ -95,8 +95,10 @@ return {
     -- Highlight todo, notes, etc in comments
     -- TODO: what a todo looks like
     -- NOTE: what a note looks like
-    -- FIXME: what a fixme looks like
+    -- FIX: what a fix looks like
     -- HACK: this is what a hack looks like
+    -- WARNING: ruh roh
+    -- PERF: optimize this
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
