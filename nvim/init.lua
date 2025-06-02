@@ -59,7 +59,21 @@ if vim.fn.has 'gui_running' == 1 then
     vim.keymap.set({ 'n', 'v' }, '<C-0>', function()
       vim.g.neovide_scale_factor = 1
     end)
+
+    -- window mappings to enable expanding and shrinking window sizes with Ctrl+Shift + movement keys
+    vim.keymap.set({ 'n', 'v' }, '<C-S-h>', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
+    vim.keymap.set({ 'n', 'v' }, '<C-S-l>', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
+    vim.keymap.set({ 'n', 'v' }, '<C-S-k>', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
+    vim.keymap.set({ 'n', 'v' }, '<C-S-j>', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
   end
+else
+  -- IN TERMINAL MODE
+
+  -- window mappings to enable expanding and shrinking window sizes with leader + movement keys
+  vim.keymap.set({ 'n', 'v' }, '<leader>h', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
+  vim.keymap.set({ 'n', 'v' }, '<leader>l', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
+  vim.keymap.set({ 'n', 'v' }, '<leader>k', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
+  vim.keymap.set({ 'n', 'v' }, '<leader>j', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
 end
 
 -- allow moving text selected in visual mode
@@ -165,13 +179,6 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
--- window mappings to enable expanding and shrinking window sizes with
--- leader + movement keys
-vim.keymap.set('n', '<leader>h', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
-vim.keymap.set('n', '<leader>l', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
-vim.keymap.set('n', '<leader>k', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
-vim.keymap.set('n', '<leader>j', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
 
 -- [[ Misc function stuff... ]]
 
@@ -372,7 +379,7 @@ require('lazy').setup {
   require 'core.plugins.comment',
 
   -- kickstart plugins
-  require 'kickstart.plugins.indent-line',
+  -- require 'kickstart.plugins.indent-line',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.mini',
