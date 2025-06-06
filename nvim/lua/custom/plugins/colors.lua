@@ -96,6 +96,7 @@ return {
     -- TODO: what a todo looks like
     -- NOTE: what a note looks like
     -- FIX: what a fix looks like
+    -- BUG: this is what a bug looks like
     -- HACK: this is what a hack looks like
     -- WARNING: ruh roh
     -- PERF: optimize this

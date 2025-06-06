@@ -258,6 +258,9 @@ vim.api.nvim_create_autocmd('FileType', {
 --   print('Row:', position[1], 'Col:', position[2])
 -- end)
 
+-- BUG: rust analyzer triggered after a write runs in a window
+-- that we will interfere with or rather be attached to by this
+-- build script output, which is not desired.
 local build_term_buf = nil
 vim.keymap.set('n', '<A-m>', function()
   -- Find the build script in CWD
@@ -344,6 +347,49 @@ vim.keymap.set('n', '<A-m>', function()
   -- Return to previous starting window
   vim.api.nvim_set_current_win(starting_window)
 end, { desc = 'Run a build script in the CWD' })
+
+-- Floating terminal config
+local floating_term_state = {
+  win = nil,
+  buf = nil,
+}
+local function toggle_floating_term()
+  if floating_term_state.win and vim.api.nvim_win_is_valid(floating_term_state.win) then
+    -- close window if opened
+    vim.api.nvim_win_close(floating_term_state.win, false)
+    floating_term_state.win = nil
+  else
+    -- init buffer with terminal if not exist
+    if not floating_term_state.buf or not vim.api.nvim_buf_is_valid(floating_term_state.buf) then
+      floating_term_state.buf = vim.api.nvim_create_buf(false, true)
+      vim.api.nvim_buf_call(floating_term_state.buf, function()
+        vim.cmd 'terminal'
+      end)
+    end
+
+    -- open/create window if closed
+    local width = math.floor(vim.o.columns * 0.8)
+    local height = math.floor(vim.o.lines * 0.8)
+    local col = math.floor((vim.o.columns - width) / 2)
+    local row = math.floor((vim.o.lines - height) / 2)
+    local opts = {
+      relative = 'editor',
+      width = width,
+      height = height,
+      col = col,
+      row = row,
+      anchor = 'NW',
+      style = 'minimal',
+      border = 'rounded',
+      title = 'Terminal',
+      title_pos = 'center',
+    }
+    floating_term_state.win = vim.api.nvim_open_win(floating_term_state.buf, true, opts)
+    vim.cmd 'startinsert'
+  end
+end
+vim.keymap.set('n', '<A-;>', toggle_floating_term)
+vim.keymap.set('t', '<A-;>', toggle_floating_term)
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
