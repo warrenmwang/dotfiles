@@ -428,7 +428,7 @@ require('lazy').setup {
   -- require 'kickstart.plugins.indent-line',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-  require 'kickstart.plugins.mini',
+  -- require 'kickstart.plugins.mini',
 
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.debug',
@@ -440,6 +440,7 @@ require('lazy').setup {
   require 'custom.plugins.spectre',
   require 'custom.plugins.oil',
   require 'custom.plugins.harpoon',
+  require 'custom.plugins.lualine',
 
   -- require 'custom.plugins.barbar',
   -- require 'custom.plugins.avante',
