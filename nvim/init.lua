@@ -258,6 +258,13 @@ vim.api.nvim_create_autocmd('FileType', {
 --   print('Row:', position[1], 'Col:', position[2])
 -- end)
 
+local function is_not_neo_tree_window(win_id)
+  local bufnr = vim.api.nvim_win_get_buf(win_id)
+  local filetype = vim.bo[bufnr].filetype
+  return not (filetype == 'neo-tree')
+end
+
+-- Build Hotkey
 local build_term_buf = nil
 vim.keymap.set('n', '<A-m>', function()
   -- Find the build script in CWD
@@ -302,17 +309,17 @@ vim.keymap.set('n', '<A-m>', function()
     local win2_pos = vim.api.nvim_win_get_position(win2)
 
     -- vertical splits (choose the rightmost top window)
-    if win2_pos[2] > win1_pos[2] and win2_pos[1] == 0 then
+    if win2_pos[2] > win1_pos[2] and win2_pos[1] == 0 and is_not_neo_tree_window(win2) then
       vim.api.nvim_set_current_win(win2)
-    elseif win1_pos[2] > win2_pos[2] and win1_pos[1] == 0 then
+    elseif win1_pos[2] > win2_pos[2] and win1_pos[1] == 0 and is_not_neo_tree_window(win1) then
       vim.api.nvim_set_current_win(win1)
     -- stacked splits (choose the leftmost bottom window)
-    elseif win2_pos[1] > win1_pos[1] and win2_pos[2] == 0 then
+    elseif win2_pos[1] > win1_pos[1] and win2_pos[2] == 0 and is_not_neo_tree_window(win2) then
       vim.api.nvim_set_current_win(win2)
-    elseif win1_pos[1] > win2_pos[1] and win1_pos[2] == 0 then
+    elseif win1_pos[1] > win2_pos[1] and win1_pos[2] == 0 and is_not_neo_tree_window(win1) then
       vim.api.nvim_set_current_win(win1)
     else
-      vim.cmd 'vsplit'
+      vim.cmd 'vsplit' -- other windows are special/should not be attached to, so create a new one
     end
   else
     -- At least 3 windows
@@ -326,7 +333,7 @@ vim.keymap.set('n', '<A-m>', function()
       local curr_win_col = curr_win[2]
 
       -- find the rightmost top window
-      if curr_win_col > largest_col and curr_win_row == 0 then
+      if curr_win_col > largest_col and curr_win_row == 0 and is_not_neo_tree_window(win_id) then
         largest_col = curr_win[2]
         leftmost_window_id = win_id
       end
@@ -335,7 +342,7 @@ vim.keymap.set('n', '<A-m>', function()
     if leftmost_window_id then
       vim.api.nvim_set_current_win(leftmost_window_id)
     else
-      vim.notify("ERROR: Didn't find a rightmost top window.", vim.log.levels.ERROR)
+      vim.cmd 'vsplit' -- other windows are special/should not be attached to, so create a new one
     end
   end
 
