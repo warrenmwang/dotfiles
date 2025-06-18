@@ -23,13 +23,22 @@ So there are some switches in the code for allowing Neovim to work within PowerS
 Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
 Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
 ```
-2. Install prereqs and Neovim nightly.
+2. Install prereqs and Neovim.
 ```
 scoop install git sed ripgrep gcc make gzip fd unzip
-scoop bucket add versions
-scoop install versions/neovim-nightly
+scoop install main/neovim
 ```
-> If facing a hash check issue when installing neovim nightly, you can add a `-s` flag to skip hash checks (until the [issue](https://github.com/ScoopInstaller/Versions/issues/1717) is fixed).
+3. Export dotfiles
+- Windows `.\export.ps1`
+- Linux `./export.sh`
+
+4. *(absolutely mandatory!!)* Install Nerd Font.
+If you're setting this up, you're likely to be setting up fonts for the first time too.
+You can install Cousine Nerd Font Mono (current fav) via scoop too!
+```
+scoop bucket add nerd-fonts
+scoop install nerd-fonts/Cousine-NF-Mono
+```
 
 ## Additional Steps for some plugins 
 1. If going to use Avante.nvim for direct AI assistance, don't forget to set your Anthropic API Key in the PowerShell Profile script:
