@@ -194,6 +194,22 @@
     "key": "d",
     "when": "filesExplorerFocus && !inputFocus"
   },
+  {
+    "command": "filesExplorer.cut",
+    "key": "x",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "filesExplorer.copy",
+    "key": "c",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+  {
+    "command": "filesExplorer.paste",
+    "key": "p",
+    "when": "filesExplorerFocus && !inputFocus"
+  },
+
 
   // =============== REMOVED SHORTCUTS ===============
   {

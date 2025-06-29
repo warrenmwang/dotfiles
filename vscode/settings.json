@@ -12,6 +12,7 @@
   "window.menuBarVisibility": "hidden",
   "workbench.startupEditor": "none",
   "search.useIgnoreFiles": false,
+  "gitlens.currentLine.enabled": false,
 
   // =============== Language specifics ===============
 
@@ -35,11 +36,9 @@
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "rust-lang.rust-analyzer",
     "editor.tabSize": 4,
-    "editor.insertSpaces": true
+    "editor.insertSpaces": true,
+    "editor.inlayHints.enabled": "off",
   },
-  "rust-analyzer.checkOnSave.command": "clippy",
-  "rust-analyzer.cargo.allFeatures": true,
-  "editor.inlayHints.enabled": "off",
 
   // // C/C++
   // "[c]": {
