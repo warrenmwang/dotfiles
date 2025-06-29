@@ -1,0 +1,7 @@
+astro-build.astro-vscode
+bradlc.vscode-tailwindcss
+esbenp.prettier-vscode
+ms-vscode.vscode-typescript-next
+christian-kohler.npm-intellisense
+unifiedjs.vscode-mdx
+ritwickdey.liveserver

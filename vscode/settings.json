@@ -132,23 +132,6 @@
   "vim.hlsearch": false,
   "vim.useSystemClipboard": true,
   "vim.normalModeKeyBindingsNonRecursive": [
-    // Pane navigation
-    {
-      "before": ["leader", "h"],
-      "commands": ["workbench.action.focusLeftGroup"]
-    },
-    {
-      "before": ["leader", "j"],
-      "commands": ["workbench.action.focusBelowGroup"]
-    },
-    {
-      "before": ["leader", "k"],
-      "commands": ["workbench.action.focusAboveGroup"]
-    },
-    {
-      "before": ["leader", "l"],
-      "commands": ["workbench.action.focusRightGroup"]
-    },
     // quick fix, jump to next, prev, and show list of problems
     {
       "before": ["leader", "q", "l"],

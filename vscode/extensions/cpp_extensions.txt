@@ -1,0 +1,4 @@
+xaver.clang-format
+vadimcn.vscode-lldb
+ms-vscode.cpptools
+ms-vscode.cpptools-extension-pack

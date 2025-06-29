@@ -1,0 +1,6 @@
+vscodevim.vim
+eamodio.gitlens
+vscode-icons-team.vscode-icons
+wayou.vscode-todo-highlight
+tomoki1207.pdf
+simonsiefke.svg-preview
