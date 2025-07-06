@@ -1,1 +1,1 @@
-some of my dev dotfiles
+dotfiles and nixos config (wip)

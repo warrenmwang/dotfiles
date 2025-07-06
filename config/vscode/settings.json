@@ -203,5 +203,11 @@
   "editor.acceptSuggestionOnCommitCharacter": false,
 
   // Misc
-  "vsicons.dontShowNewVersionMessage": true
+  "vsicons.dontShowNewVersionMessage": true,
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  }
 }
