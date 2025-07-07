@@ -195,15 +195,15 @@
   "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
   "terminal.integrated.defaultProfile.linux": "bash",
 
-  // Copilot
-  "github.copilot.editor.enableAutoCompletions": false,
-  "editor.lightbulb.enabled": "onCode",
-
   // Selection completion
   "editor.acceptSuggestionOnCommitCharacter": false,
 
   // Misc
   "vsicons.dontShowNewVersionMessage": true,
+
+  // Copilot
+  "github.copilot.nextEditSuggestions.enabled": false,
+  "editor.lightbulb.enabled": "onCode",
   "github.copilot.enable": {
     "*": false,
     "plaintext": false,

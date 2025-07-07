@@ -39,5 +39,31 @@
     ".config/Code/User/keybindings.json" = {
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/vscode/keybindings.json";
     };
+    "bin" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/bin";
+    };
+  };
+
+  programs.git = {
+    enable = true;
+    userName = "Warren Wang";
+    userEmail = "warren.min.wang@gmail.com";
+    aliases = {
+      a = "add";
+      s = "status";
+      d = "diff";
+      l = "log";
+      ci = "commit";
+      co = "checkout";
+    };
+    extraConfig = {
+      init = {
+        defaultBranch = "main";
+      };
+      push = {
+        autoSetupRemote = true;
+        default = "current";
+      };
+    };
   };
 }

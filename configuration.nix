@@ -119,7 +119,7 @@
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
 
-    EDITOR = "nvim";
+    EDITOR = "vim";
 
     #==================================
     # XDG Base Directory Specification

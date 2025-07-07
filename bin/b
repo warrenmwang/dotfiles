@@ -1,0 +1,31 @@
+#!/usr/bin/env nu
+
+def main [
+    verb: string      # action: "up" or "down"
+    display_id: string # display id (1,2,3,etc) or "all"
+    amount: int       # amount to change brightness
+] {
+    let op = match $verb {
+        "up" => "+"
+        "down" => "-"
+	"+" => "+"
+	"-" => "-"
+        _ => { print $"Invalid verb: ($verb)"; exit 1 }
+    }
+    
+    if $display_id == "all" {
+        # Parse display IDs from ddcutil detect
+        let displays = (ddcutil detect 
+            | lines 
+            | where ($it | str starts-with "Display ")
+            | each { |line| $line | str replace "Display " "" | into int }
+        )
+        
+        for display in $displays {
+            ddcutil --display $display setvcp 10 $op $amount
+        }
+    } else {
+        let display_num = ($display_id | into int)
+        ddcutil --display $display_num setvcp 10 $op $amount
+    }
+}
