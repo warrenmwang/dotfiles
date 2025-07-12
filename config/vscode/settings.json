@@ -26,7 +26,7 @@
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.organizeImports.ruff": "explicit"
+      "source.organizeImports.ruff": "explicit"
     }
   },
   "python.analysis.typeCheckingMode": "basic", // options: "basic", "strict"
@@ -37,7 +37,7 @@
     "editor.defaultFormatter": "rust-lang.rust-analyzer",
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
-    "editor.inlayHints.enabled": "off",
+    "editor.inlayHints.enabled": "off"
   },
 
   // // C/C++
@@ -96,7 +96,17 @@
     "editor.formatOnSave": false
   },
 
-  // =============== Markup Languages ===============   
+  // =============== Markup / Structured Text ===============
+  "[json]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[yaml]": {
     "editor.insertSpaces": true,
     "editor.tabSize": 2,
@@ -175,6 +185,16 @@
     {
       "before": ["leader", "r", "n"],
       "commands": ["editor.action.rename"]
+    }
+  ],
+
+  "multiCommand.commands": [
+    {
+      "command": "multiCommand.skipNextFindMatch",
+      "sequence": [
+        "editor.action.addSelectionToNextFindMatch",
+        "editor.action.moveSelectionToNextFindMatch"
+      ]
     }
   ],
 

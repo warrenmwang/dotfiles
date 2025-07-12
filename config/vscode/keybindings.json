@@ -92,16 +92,21 @@
   },
 
   // =============== VSCODE ADDONS ===============
-  // Map Ctrl+Shift+D to select the next occurrence
+  // Map Ctrl+N to select the next occurrence (default vscode is Ctrl+Shift+D I believe)
   {
-    "key": "ctrl+shift+d",
+    "key": "ctrl+n",
     "command": "editor.action.addSelectionToNextFindMatch",
     "when": "editorTextFocus"
   },
-  // Map Ctrl+Shift+U to undo the last selection
+  // Map Ctrl+Shift+N to undo the last selection
   {
-    "key": "ctrl+shift+u",
+    "key": "ctrl+shift+n",
     "command": "cursorUndo",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+m",
+    "command": "multiCommand.skipNextFindMatch",
     "when": "editorTextFocus"
   },
   // Allow regular Ctrl+c for copying even in Vim visual mode.

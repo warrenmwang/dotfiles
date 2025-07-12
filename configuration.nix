@@ -42,22 +42,24 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  # services.xserver.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.xkb = {
-  #   layout = "us";
-  #   variant = "";
-  # };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
-  # Enable the KDE Plasma Desktop Environment.
+  # Desktop Environments and related modules
+  # - keep default sddm
   services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  services.displayManager.sddm.wayland.enable = true;
+  # - KDE
+  # services.desktopManager.plasma6.enable = true;
+  # - Hyprland
+  programs.hyprland.enable = true;
+  programs.hyprlock.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gtk
+      kdePackages.xdg-desktop-portal-kde
+    ];
+  };
 
   # Enable CUPS to print documents.
   services.printing = {
@@ -82,7 +84,6 @@
   # SANE Scanners (scan document to raster image/pdf)
   hardware.sane.enable = true;
   hardware.sane.extraBackends = [ pkgs.hplipWithPlugin ];
-
 
   # Enable fonts
   fonts.fontconfig.enable = true;
@@ -113,31 +114,9 @@
     shell = pkgs.nushell;
   };
 
-  programs.hyprland.enable = true;
-  programs.hyprlock.enable = true;
-
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
-
-    EDITOR = "vim";
-
-    #==================================
-    # XDG Base Directory Specification
-    # https://specifications.freedesktop.org/basedir-spec/latest/
-    #==================================
-    XDG_CACHE_HOME  = "$HOME/.cache";
-    XDG_CONFIG_HOME = "$HOME/.config";
-    XDG_DATA_HOME   = "$HOME/.local/share";
-    XDG_STATE_HOME  = "$HOME/.local/state";
-  };
-
   nixpkgs.config.allowUnfree = true;
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  programs.firefox.enable = true;
-
-  # CURRENTLY THROWING MY DESIRED GLOBALLY AVAILABE PROGRAMS HERE!
   environment.systemPackages = with pkgs; [
     font-awesome
     nerd-fonts.cousine
@@ -155,53 +134,23 @@
     btop
     tmux
     vim
-    neovim
 
-    vscode
-    zed-editor
-    neovide
-    kitty
-    ghostty
-
-    obsidian
-    google-chrome
-    spotify
-    discord-canary # need canary for screen sharing to work on wayland
-    thunderbird
-
-    vlc
-    shotcut
-    obs-studio
-    audacity
-    pulsemixer
-
-    aseprite
-    krita
-    xournalpp
-    gimp
-    kdePackages.kolourpaint
-
-    kdePackages.okular # PDF viewer
-    geeqie # image viewer
-    
+    # utils
     lshw
     usbutils
     pciutils
     hardinfo2
     ddcutil
-
-    dunst # a notification daemon
-    pavucontrol # audio control
     wayland-utils
+
+    pulsemixer
+    dunst # a notification daemon
+    pavucontrol # audio control gui
     wofi # program launcher menu
     waybar # top decoration bar
     networkmanagerapplet
     hyprshot # screenshot tool
-
-    hplip
-    kdePackages.skanlite
   ];
-
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
@@ -209,8 +158,9 @@
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
 
-
-
+  # =================
+  # Hardware Stuff
+  # =================
   hardware.graphics = {
     enable = true;
   };
