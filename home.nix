@@ -7,6 +7,21 @@
 
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
 
+  programs.firefox = {
+    enable = true;
+    profiles.default = {
+      id = 0;
+      name = "default";
+      isDefault = true;
+      extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
+        ublock-origin
+        bitwarden
+        darkreader
+        vimium
+      ];
+    };
+  };
+
   home.packages = with pkgs; [
     kitty
     vscode
@@ -43,6 +58,7 @@
     # office
     hplip
     kdePackages.skanlite
+    parsec-bin
 
     prismlauncher # open source minecraft launcher
   ];
@@ -111,11 +127,11 @@
     mimeApps = {
       enable = true;
       defaultApplications = {
-        "text/html" = "google-chrome.desktop";
-        "x-scheme-handler/http" = "google-chrome.desktop";
-        "x-scheme-handler/https" = "google-chrome.desktop";
-        "x-scheme-handler/about" = "google-chrome.desktop";
-        "x-scheme-handler/unknown" = "google-chrome.desktop";
+        "text/html" = "firefox.desktop";
+        "x-scheme-handler/http" = "firefox.desktop";
+        "x-scheme-handler/https" = "firefox.desktop";
+        "x-scheme-handler/about" = "firefox.desktop";
+        "x-scheme-handler/unknown" = "firefox.desktop";
 
         "text/plain" = "code.desktop";
         "text/x-python" = "code.desktop";
@@ -168,19 +184,4 @@
     };
   };
 
-  home.sessionVariables = {
-    NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
-
-    XDG_CONFIG_HOME = "${config.home.homeDirectory}/.config";
-    XDG_DATA_HOME = "${config.home.homeDirectory}/.local/share";
-    XDG_STATE_HOME = "${config.home.homeDirectory}/.local/state";
-    XDG_CACHE_HOME = "${config.home.homeDirectory}/.cache";
-    
-    BROWSER = "google-chrome-stable";
-    TERMINAL = "kitty";
-    EDITOR = "vim";
-    PAGER = "vim";
-    VISUAL = "code";
-    FILE_MANAGER = "thunar";
-  };
 }

@@ -1,15 +1,15 @@
 #!/usr/bin/env nu
 
 def main [
-    verb: string      # action: "up" or "down"
+    verb: string       # action: "up" or "down"
     display_id: string # display id (1,2,3,etc) or "all"
-    amount: int       # amount to change brightness
+    amount: int        # amount to change brightness
 ] {
     let op = match $verb {
         "up" => "+"
         "down" => "-"
-	"+" => "+"
-	"-" => "-"
+        "+" => "+"
+        "-" => "-"
         _ => { print $"Invalid verb: ($verb)"; exit 1 }
     }
     

@@ -150,12 +150,31 @@
     waybar # top decoration bar
     networkmanagerapplet
     hyprshot # screenshot tool
+    wl-clipboard
+    cliphist # clipboard manager
   ];
   programs.steam = {
     enable = true;
     remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
+
+
+  # NOTE: this didn't work in home manager, so putting vars in system env def
+  # https://github.com/nix-community/home-manager/issues/1011
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
+
+    XDG_CONFIG_HOME = "$HOME/.config";
+    XDG_DATA_HOME = "$HOME/.local/share";
+    XDG_STATE_HOME = "$HOME/.local/state";
+    XDG_CACHE_HOME = "$HOME/.cache";
+    
+    BROWSER = "firefox";
+    TERMINAL = "kitty";
+    EDITOR = "nvim";
+    FILE_MANAGER = "thunar";
   };
 
   # =================
