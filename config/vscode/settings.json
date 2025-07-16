@@ -141,21 +141,21 @@
   "vim.hlsearch": false,
   "vim.useSystemClipboard": true,
   "vim.normalModeKeyBindingsNonRecursive": [
-    // quick fix, jump to next, prev, and show list of problems
+    // diagnostics, jump to next, prev, and show list of problems
     {
-      "before": ["leader", "q", "l"],
+      "before": ["leader", "d", "l"],
       "commands": ["workbench.actions.view.problems"]
     },
     {
-      "before": ["leader", "q", "n"],
+      "before": ["leader", "d", "n"],
       "commands": ["editor.action.marker.next"]
     },
     {
-      "before": ["leader", "q", "p"],
+      "before": ["leader", "d", "p"],
       "commands": ["editor.action.marker.prev"]
     },
     {
-      "before": ["leader", "q", "a"],
+      "before": ["leader", "d", "a"],
       "commands": ["editor.action.quickFix"]
     },
     // mimicing telescope searching for files and searching in files

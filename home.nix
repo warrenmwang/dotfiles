@@ -23,6 +23,11 @@
   };
 
   home.packages = with pkgs; [
+    # global packages honestly just for nvim right now...use devshells for per project deps management.
+    gcc
+    nodejs_24
+    python3
+
     kitty
     vscode
     zed-editor
@@ -32,21 +37,24 @@
 
     obsidian
     google-chrome
+    thunderbird
+    parsec-bin
 
+    # recording
     obs-studio
     audacity
 
-    # editting tools
+    # media editting
     shotcut
     gimp
 
-    # drawing tools
+    # drawing
     aseprite
     krita
     xournalpp
     kdePackages.kolourpaint
 
-    # file tools
+    # files
     xfce.thunar        # file explorer
     xfce.tumbler       # d-bus thumbnailer service (for thunar)
     xfce.thunar-volman # thunar extension (removeablle media management)
@@ -55,10 +63,9 @@
     vlc                # video, sound viewer
     kdePackages.ark    # zip archive tool
 
-    # office
+    # physical office
     hplip
     kdePackages.skanlite
-    parsec-bin
 
     prismlauncher # open source minecraft launcher
   ];
@@ -86,7 +93,7 @@
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/kitty/kitty.conf";
     };
     ".config/nvim" = {
-      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim-plain";
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim";
     };
     ".config/Code/User/settings.json" = {
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/vscode/settings.json";
@@ -146,33 +153,37 @@
         "text/bash" = "code.desktop";
         "text/nu" = "code.desktop";
         "application/x-shellscript" = "code.desktop";
-        
+
         "image/jpeg" = "eog.desktop";
         "image/png" = "eog.desktop";
         "image/gif" = "eog.desktop";
         "image/webp" = "eog.desktop";
         "image/avif" = "eog.desktop";
         "image/svg+xml" = "eog.desktop";
-        
+
         "video/mp4" = "vlc.desktop";
         "video/x-matroska" = "vlc.desktop";
         "video/webm" = "vlc.desktop";
-        
+
         "audio/mpeg" = "vlc.desktop";
         "audio/wav" = "vlc.desktop";
         "audio/mp4" = "vlc.desktop";
         "audio/flac" = "vlc.desktop";
-        
+
         "application/pdf" = "org.kde.okular.desktop";
-        
+
         "application/zip" = "org.kde.ark.desktop";
         "application/x-tar" = "org.kde.ark.desktop";
         "application/x-7z-compressed" = "org.kde.ark.desktop";
-        
+
         "inode/directory" = "thunar.desktop";
+
+        "x-scheme-handler/mailto" = "thunderbird.desktop";
+        "message/rfc822" = "thunderbird.desktop";
+        "text/calendar" = "thunderbird.desktop";
       };
     };
-    
+
     userDirs = {
       enable = true;
       desktop = "${config.home.homeDirectory}/Desktop";

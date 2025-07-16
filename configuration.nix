@@ -134,6 +134,7 @@
     btop
     tmux
     vim
+    unzip
 
     # utils
     lshw
@@ -182,6 +183,10 @@
   # =================
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+    ];
   };
   services.xserver.videoDrivers = ["nvidia"];
   hardware.nvidia = {
@@ -231,6 +236,7 @@
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
+  nixpkgs.config.cudaSupport = true;
 
   # Bluetooth
   hardware.bluetooth.enable = true;
