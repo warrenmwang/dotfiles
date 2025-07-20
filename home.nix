@@ -22,8 +22,29 @@
     };
   };
 
+  programs.thunderbird = {
+    enable = true;
+    profiles.default = {
+      isDefault = true;
+      settings = {
+        # Turn off notification sound/alert
+        "mail.biff.play_sound" = false;
+        "mail.biff.show_alert" = false;
+
+        "mailnews.default_sort_type" = 18; # 18 = threaded view
+        "mailnews.default_sort_order" = 2; # 1 = ascending, 2 = descending
+        "mailnews.thread_pane_column_unthreads" = false;
+        "mail.thread_without_re" = true;
+        "mailnews.scroll_to_new_message" = true;
+        "mail.showCondensedAddresses" = true;
+      };
+    };
+  };
+
   home.packages = with pkgs; [
     # global packages honestly just for nvim right now...use devshells for per project deps management.
+    # TODO: look into https://github.com/BirdeeHub/nixCats-nvim
+    # i am indeed having Mason issues and other whatnots like lua_lsp, rust_analyzer lsp's not being able to run bc they are dynamically linked...
     gcc
     nodejs_24
     python3
@@ -31,13 +52,15 @@
     kitty
     vscode
     zed-editor
-    helix
+    # helix
+    evil-helix
     neovim
-    neovide
+    # neovide
+    yazi
+    hyperfine
 
     obsidian
     google-chrome
-    thunderbird
     parsec-bin
 
     # recording
@@ -68,6 +91,10 @@
     kdePackages.skanlite
 
     prismlauncher # open source minecraft launcher
+
+    fastfetch
+    cbonsai
+    asciiquarium
   ];
 
   # how lovely, i needed to find this thread to learn about this symlink magic
@@ -180,7 +207,12 @@
 
         "x-scheme-handler/mailto" = "thunderbird.desktop";
         "message/rfc822" = "thunderbird.desktop";
+        "application/x-extension-eml" = "thunderbird.desktop";
+      
         "text/calendar" = "thunderbird.desktop";
+        "application/x-extension-ics" = "thunderbird.desktop";
+        "x-scheme-handler/webcal" = "thunderbird.desktop";
+        "x-scheme-handler/webcals" = "thunderbird.desktop";
       };
     };
 

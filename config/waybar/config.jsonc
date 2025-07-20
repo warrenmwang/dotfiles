@@ -1,27 +1,29 @@
 // -*- mode: jsonc -*-
 {
-    // "layer": "top", // Waybar at top layer
-    // "position": "bottom", // Waybar position (top|bottom|left|right)
-    "height": 30, // Waybar height (to be removed for auto height)
+    "layer": "bottom", // top, bottom
+    "position": "bottom", // (top|bottom|left|right)
+    "height": 30,
     // "width": 1280, // Waybar width
-    "spacing": 4, // Gaps between modules (4px)
+    "spacing": 2, // Gaps between modules (4px)
     // Choose the order of the modules
     "modules-left": [
-        "hyprland/workspaces",
-        "hyprland/window"
+        "custom/os-button",
+        "hyprland/workspaces"
+        // "hyprland/window"
         // "hyprland/submap"
         // "hyprland/scratchpad",
         // "custom/media"
     ],
-    "modules-center": [
-        "clock"
-    ],
+    // "modules-center": [
+    //     "clock"
+    // ],
     "modules-right": [
         // "mpd",
-        "idle_inhibitor",
+        "tray",
+        // "idle_inhibitor",
         "pulseaudio",
         // "network",
-        "power-profiles-daemon",
+        // "power-profiles-daemon",
         "cpu",
         "memory",
         "temperature",
@@ -30,8 +32,7 @@
         // "sway/language",
         "battery",
         // "battery#bat2",
-        "tray"
-        // "custom/power"
+        "clock"
     ],
     // Modules configuration
     // "sway/workspaces": {
@@ -50,6 +51,18 @@
     //         "default": ""
     //     }
     // },
+    "custom/os-button": {
+        "format": "<span size='xx-large'></span> ",
+        "tooltip": false,
+		"menu": "on-click",
+		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
+		"menu-actions": {
+			"shutdown": "shutdown",
+			"reboot": "reboot",
+			"suspend": "systemctl suspend",
+			"hibernate": "systemctl hibernate"
+		}
+    },
     "keyboard-state": {
         "numlock": true,
         "capslock": true,
@@ -98,30 +111,31 @@
     "idle_inhibitor": {
         "format": "{icon}",
         "format-icons": {
-            "activated": "☕",
-            "deactivated": "🫗"
+            "activated": "",
+            "deactivated": ""
         }
     },
     "tray": {
         // "icon-size": 21,
         "spacing": 10,
-        // "icons": {
-        //   "blueman": "bluetooth",
+        "icons": {
+          "blueman": "bluetooth"
         //   "TelegramDesktop": "$HOME/.local/share/icons/hicolor/16x16/apps/telegram.png"
-        // }
+        }
     },
     "clock": {
         // "timezone": "America/New_York",
-	"format": "{:%Y-%m-%d | %H:%M}",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        "format": "{:%R | %m/%d/%Y}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><big>{calendar}</big></tt>"
+        // "tooltip-format": "<tt><big>{calender}</big></tt>"
+        // "format-alt": "{:%Y-%m-%d}"
     },
     "cpu": {
         "format": "{usage}% ",
         "tooltip": false
     },
     "memory": {
-        "format": "{}% 🐏"
+        "format": "{}% "
     },
     "temperature": {
         "thermal-zone": 5,
@@ -129,7 +143,7 @@
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "🌡️"]
+        "format-icons": [""]
     },
     "backlight": {
         // "device": "acpi_video1",
@@ -176,7 +190,7 @@
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{volume}% {icon} {format_source}",
+        "format": "{volume}% {icon}   {format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
         "format-muted": " {format_source}",
@@ -204,17 +218,5 @@
         "escape": true,
         "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
         // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
-    },
-    "custom/power": {
-        "format" : "⏻ ",
-		"tooltip": false,
-		"menu": "on-click",
-		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
-		"menu-actions": {
-			"shutdown": "shutdown",
-			"reboot": "reboot",
-			"suspend": "systemctl suspend",
-			"hibernate": "systemctl hibernate"
-		}
     }
 }

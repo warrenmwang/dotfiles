@@ -87,6 +87,10 @@
 
   # Enable fonts
   fonts.fontconfig.enable = true;
+  fonts.packages = with pkgs; [
+    font-awesome
+    nerd-fonts.cousine
+  ];
 
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
@@ -118,13 +122,6 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   environment.systemPackages = with pkgs; [
-    font-awesome
-    nerd-fonts.cousine
-
-    fastfetch
-    cbonsai
-    asciiquarium
-
     wget
     file
     git

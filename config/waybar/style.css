@@ -5,11 +5,11 @@
 }
 
 window#waybar {
-    background-color: rgba(43, 48, 59, 0.5);
-    border-bottom: 3px solid rgba(100, 114, 125, 0.5);
-    color: #ffffff;
+    background-color: transparent;
+    /* border-bottom: 3px solid rgba(100, 114, 125, 0.5); */
+    /* color: #ffffff;
     transition-property: background-color;
-    transition-duration: .5s;
+    transition-duration: .5s; */
 }
 
 window#waybar.hidden {
@@ -250,6 +250,7 @@ label:focus {
 
 #idle_inhibitor {
     background-color: #2d3436;
+    margin: 1px;
 }
 
 #idle_inhibitor.activated {
