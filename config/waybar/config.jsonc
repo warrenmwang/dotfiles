@@ -15,7 +15,6 @@
         // "custom/media"
     ],
     // "modules-center": [
-    //     "clock"
     // ],
     "modules-right": [
         // "mpd",
@@ -52,12 +51,12 @@
     //     }
     // },
     "custom/os-button": {
-        "format": "<span size='xx-large'></span> ",
+        "format": "<span size='xx-large'></span>",
         "tooltip": false,
 		"menu": "on-click",
 		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
 		"menu-actions": {
-			"shutdown": "shutdown",
+			"shutdown": "shutdown now",
 			"reboot": "reboot",
 			"suspend": "systemctl suspend",
 			"hibernate": "systemctl hibernate"
