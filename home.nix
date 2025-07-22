@@ -62,6 +62,7 @@
     obsidian
     google-chrome
     parsec-bin
+    gnome-calculator
 
     # recording
     obs-studio
@@ -143,6 +144,7 @@
       d = "diff";
       l = "log";
       ci = "commit";
+      cm = "commit -m";
       co = "checkout";
     };
     extraConfig = {

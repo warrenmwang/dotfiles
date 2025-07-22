@@ -256,13 +256,15 @@ label:focus {
 }
 
 #idle_inhibitor {
-    /* background-color: #2d3436; */
-    margin: 1px;
+    color: #000000;
+}
+
+#idle_inhibitor.deactivated {
+    padding-right: 15px;
 }
 
 #idle_inhibitor.activated {
-    /* background-color: #dba474; */
-    color: #2d3436;
+    background-color: aquamarine;
 }
 
 #mpd {
