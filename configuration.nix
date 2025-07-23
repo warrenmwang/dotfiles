@@ -143,7 +143,8 @@
     wayland-utils
 
     pulsemixer
-    dunst # a notification daemon
+    mako # a notification daemon
+    libnotify
     pavucontrol # audio control gui
     wofi # program launcher menu
     waybar # top decoration bar
