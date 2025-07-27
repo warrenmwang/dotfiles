@@ -58,8 +58,8 @@
 		"menu-actions": {
 			"shutdown": "shutdown now",
 			"reboot": "reboot",
-			"suspend": "systemctl suspend",
-			"hibernate": "systemctl hibernate"
+			"suspend": "hyprlock & sleep 1 && systemctl suspend",
+			"hibernate": "hyprlock & sleep 1 && systemctl hibernate"
 		}
     },
     "keyboard-state": {

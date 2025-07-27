@@ -139,7 +139,7 @@
     pciutils
     hardinfo2
     ddcutil
-    luminance
+    ddcui
     wayland-utils
 
     pulsemixer

@@ -108,6 +108,9 @@
     ".config/waybar" = {
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/waybar";
     };
+    ".config/mako" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/mako";
+    };
     ".config/nushell/config.nu" = {
       source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nushell/config.nu";
     };
@@ -143,9 +146,13 @@
       s = "status";
       d = "diff";
       l = "log";
+      ll = ""; # TODO:
+      lg = ""; # TODO:
       ci = "commit";
       cm = "commit -m";
       co = "checkout";
+      ps = "push";
+      pl = "pull";
     };
     extraConfig = {
       init = {

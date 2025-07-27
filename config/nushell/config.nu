@@ -23,8 +23,9 @@ $env.config.show_banner = false
 
 
 # Aliases
+alias l = ls -a
 alias ll = ls -l
-alias l = ls -al
 alias n = nvim
 alias ng = neovide
 alias c = code
+alias y = yazi
