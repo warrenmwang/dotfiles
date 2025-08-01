@@ -7,10 +7,9 @@
 
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
 
-  # TODO: deprecated setup, look at error msg, find more up to date way to config
   # TODO: can see program running, can "switch" keyboards but doesn't actually work, no pinyin keyboard chinese character chooser.
   i18n.inputMethod = {
-    enabled = "fcitx5";
+    type = "fcitx5";
     fcitx5.addons = with pkgs; [
       fcitx5-chinese-addons
       fcitx5-gtk
@@ -154,16 +153,19 @@
     userEmail = "warren.min.wang@gmail.com";
     aliases = {
       a = "add";
+      b = "branch";
       s = "status";
       d = "diff";
       l = "log";
-      ll = ""; # TODO:
-      lg = ""; # TODO:
+      f = "fetch";
+      lg = "log --oneline --graph --decorate";
+      ll = "log --oneline --graph --decorate --all";
       ci = "commit";
       cm = "commit -m";
       co = "checkout";
       ps = "push";
       pl = "pull";
+      unstage = "reset HEAD --";
     };
     extraConfig = {
       init = {
@@ -201,13 +203,12 @@
         "text/nu" = "code.desktop";
         "application/x-shellscript" = "code.desktop";
 
-        # TODO: thunar currently defaults to aseprite to open these, not what i want.
-        "image/jpeg" = "eog.desktop";
-        "image/png" = "eog.desktop";
-        "image/gif" = "eog.desktop";
-        "image/webp" = "eog.desktop";
-        "image/avif" = "eog.desktop";
-        "image/svg+xml" = "eog.desktop";
+        "image/jpeg" = "org.gnome.eog.desktop";
+        "image/png" = "org.gnome.eog.desktop";
+        "image/gif" = "org.gnome.eog.desktop";
+        "image/webp" = "org.gnome.eog.desktop";
+        "image/avif" = "org.gnome.eog.desktop";
+        "image/svg+xml" = "org.gnome.eog.desktop";
 
         "video/mp4" = "vlc.desktop";
         "video/x-matroska" = "vlc.desktop";

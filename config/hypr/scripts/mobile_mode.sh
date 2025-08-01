@@ -1,6 +1,6 @@
 #!/usr/bin/env nu
 
-hyprctl keyword monitor "eDP-1, 2560x1440@240, 0x0, 1"
+hyprctl keyword monitor "eDP-1, 2560x1440@240, 0x0, 1.25"
 
 let found_monitors = hyprctl monitors -j | from json | get name
 for monitor in $found_monitors {

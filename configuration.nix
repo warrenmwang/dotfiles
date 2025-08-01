@@ -170,13 +170,12 @@
     XDG_DATA_HOME = "$HOME/.local/share";
     XDG_STATE_HOME = "$HOME/.local/state";
     XDG_CACHE_HOME = "$HOME/.cache";
-    
+
     BROWSER = "firefox";
     TERMINAL = "kitty";
     EDITOR = "nvim";
     FILE_MANAGER = "thunar";
 
-    GTK_IM_MODULE = "fcitx";
     QT_IM_MODULE = "fcitx";
     GLFW_IM_MODULE = "ibus";
     XMODIFIERS = "@im=fcitx";
