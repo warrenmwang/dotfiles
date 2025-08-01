@@ -429,10 +429,10 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup {
   -- core plugins
-  require 'core.plugins.lsp-stuff',
+  require 'core.plugins.lsp',
   require 'core.plugins.telescope',
   require 'core.plugins.treesitter',
-  require 'core.plugins.git-stuff',
+  require 'core.plugins.git',
   require 'core.plugins.comment',
 
   -- kickstart plugins

@@ -12,7 +12,6 @@
   "window.menuBarVisibility": "hidden",
   "workbench.startupEditor": "none",
   "search.useIgnoreFiles": false,
-  "gitlens.currentLine.enabled": false,
 
   // =============== Language specifics ===============
 
@@ -158,6 +157,34 @@
       "before": ["leader", "d", "a"],
       "commands": ["editor.action.quickFix"]
     },
+    // navigate git hunks
+    {
+      "before": ["]", "c"],
+      "commands": ["workbench.action.editor.nextChange"]
+    },
+    {
+      "before": ["[", "c"],
+      "commands": ["workbench.action.editor.previousChange"]
+    },
+    // navigate git diff peek views
+    {
+      "before": ["leader", "g", "d", "n"],
+      "commands": ["editor.action.dirtydiff.next"]
+    },
+    {
+      "before": ["leader", "g", "d", "p"],
+      "commands": ["editor.action.dirtydiff.previous"]
+    },
+    // toggle file blame
+    {
+      "before": ["leader", "g", "b"],
+      "commands": ["gitlens.toggleFileBlame"]
+    },
+    // togle line blame
+    {
+      "before": ["leader", "g", "t", "b"],
+      "commands": ["gitlens.toggleLineBlame"]
+    },
     // mimicing telescope searching for files and searching in files
     {
       "before": ["leader", "s", "f"],
@@ -206,6 +233,9 @@
 
   // Git
   "git.openRepositoryInParentFolders": "never",
+  "git.blame.editorDecoration.enabled": false,
+  "git.blame.statusBarItem.enabled": false,
+  "gitlens.currentLine.enabled": false,
 
   // Jupyter Notebook
   "notebook.lineNumbers": "on",
@@ -213,7 +243,7 @@
   // Terminal
   "terminal.integrated.inheritEnv": false,
   "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
-  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.linux": "nu",
 
   // Selection completion
   "editor.acceptSuggestionOnCommitCharacter": false,

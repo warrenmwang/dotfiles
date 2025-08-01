@@ -7,6 +7,17 @@
 
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
 
+  # TODO: deprecated setup, look at error msg, find more up to date way to config
+  # TODO: can see program running, can "switch" keyboards but doesn't actually work, no pinyin keyboard chinese character chooser.
+  i18n.inputMethod = {
+    enabled = "fcitx5";
+    fcitx5.addons = with pkgs; [
+      fcitx5-chinese-addons
+      fcitx5-gtk
+      fcitx5-configtool
+    ];
+  };
+
   programs.firefox = {
     enable = true;
     profiles.default = {
@@ -190,6 +201,7 @@
         "text/nu" = "code.desktop";
         "application/x-shellscript" = "code.desktop";
 
+        # TODO: thunar currently defaults to aseprite to open these, not what i want.
         "image/jpeg" = "eog.desktop";
         "image/png" = "eog.desktop";
         "image/gif" = "eog.desktop";

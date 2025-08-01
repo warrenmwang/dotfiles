@@ -175,6 +175,11 @@
     TERMINAL = "kitty";
     EDITOR = "nvim";
     FILE_MANAGER = "thunar";
+
+    GTK_IM_MODULE = "fcitx";
+    QT_IM_MODULE = "fcitx";
+    GLFW_IM_MODULE = "ibus";
+    XMODIFIERS = "@im=fcitx";
   };
 
   # =================

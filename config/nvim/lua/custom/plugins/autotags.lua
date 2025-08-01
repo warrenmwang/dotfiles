@@ -1,6 +1,5 @@
--- https://github.com/windwp/nvim-ts-autotag
---
-return { -- auto close and auto rename html tags
+return {
+  -- auto close and auto rename html tags
   'windwp/nvim-ts-autotag',
   config = function()
     require('nvim-ts-autotag').setup {

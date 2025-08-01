@@ -1,5 +1,4 @@
--- tailwind-tools.lua
--- requires tailwindcss-language-server (install using Mason)
+-- NOTE: requires tailwindcss-language-server (install using Mason)
 return {
   'luckasRanarison/tailwind-tools.nvim',
   name = 'tailwind-tools',
@@ -9,7 +8,7 @@ return {
     'nvim-telescope/telescope.nvim',
     'neovim/nvim-lspconfig',
   },
-  opts = {}, -- your configuration
+  opts = {},
   lazy = true,
   ft = WebFileTypes,
 }
