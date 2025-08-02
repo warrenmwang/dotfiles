@@ -140,6 +140,7 @@
     hardinfo2
     ddcutil
     ddcui
+    brightnessctl
     wayland-utils
 
     pulsemixer
