@@ -12,22 +12,22 @@
     "when": "editorTextFocus && vim.active"
   },
   // Window pane navigation
-  {
-    "key": "ctrl+h",
-    "command": "workbench.action.focusLeftGroup"
-  },
-  {
-    "key": "ctrl+j",
-    "command": "workbench.action.focusBelowGroup"
-  },
-  {
-    "key": "ctrl+k",
-    "command": "workbench.action.focusAboveGroup"
-  },
-  {
-    "key": "ctrl+l",
-    "command": "workbench.action.focusRightGroup"
-  },
+  // {
+  //   "key": "ctrl+h",
+  //   "command": "workbench.action.focusLeftGroup"
+  // },
+  // {
+  //   "key": "ctrl+j",
+  //   "command": "workbench.action.focusBelowGroup"
+  // },
+  // {
+  //   "key": "ctrl+k",
+  //   "command": "workbench.action.focusAboveGroup"
+  // },
+  // {
+  //   "key": "ctrl+l",
+  //   "command": "workbench.action.focusRightGroup"
+  // },
 
   // Remap Ctrl+D and Ctrl+U to default Vim motions
   {
@@ -151,13 +151,13 @@
   },
   // cycle to next shell open
   {
-    "key": "ctrl+shift+a",
+    "key": "alt+j",
     "command": "workbench.action.terminal.focusNext",
     "when": "terminalFocus"
   },
   // cycle to previous shell open
   {
-    "key": "ctrl+shift+b",
+    "key": "alt+k",
     "command": "workbench.action.terminal.focusPrevious",
     "when": "terminalFocus"
   },

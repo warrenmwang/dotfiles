@@ -51,6 +51,7 @@
   # - Hyprland
   programs.hyprland.enable = true;
   programs.hyprlock.enable = true;
+  security.pam.services.hyprlock = {};
 
   xdg.portal = {
     enable = true;
@@ -185,6 +186,7 @@
   # =================
   # Hardware Stuff
   # =================
+  hardware.opentabletdriver.enable = true; # TODO: daemon doesn't startup, also is this really how i get wacom to work via bluetooth?
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -192,7 +194,7 @@
       nvidia-vaapi-driver
     ];
   };
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = ["nvidia"]; # this actually seems important, first time i had to use a prev generation was trying to remove this line.
   hardware.nvidia = {
 
     # NOTE: if just utilize the MUX switch and go discrete graphics mode

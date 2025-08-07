@@ -40,18 +40,19 @@
   },
 
   // // C/C++
-  // "[c]": {
-  //   "editor.tabSize": 4,
-  //   "editor.insertSpaces": true,
-  //   "editor.defaultFormatter": "xaver.clang-format",
-  //   "editor.formatOnSave": false
-  // },
-  // "[cpp]": {
-  //   "editor.tabSize": 4,
-  //   "editor.insertSpaces": true,
-  //   "editor.defaultFormatter": "xaver.clang-format",
-  //   "editor.formatOnSave": false
-  // },
+  "[c]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    // "editor.defaultFormatter": "xaver.clang-format",
+    // "editor.formatOnSave": false,
+    "editor.inlayHints.enabled": "off"
+  },
+  "[cpp]": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+    // "editor.defaultFormatter": "xaver.clang-format",
+    // "editor.formatOnSave": false
+  },
   // "C_Cpp.clang_format_fallbackStyle": "Linux",
   // "C_Cpp.default.cStandard": "c17",
   // "C_Cpp.default.cppStandard": "c++17",
@@ -157,6 +158,23 @@
       "before": ["leader", "d", "a"],
       "commands": ["editor.action.quickFix"]
     },
+    // window pane navigation
+    {
+      "before": ["leader", "h"],
+      "commands": ["workbench.action.focusLeftGroup"]
+    },
+    {
+      "before": ["leader", "j"],
+      "commands": ["workbench.action.focusBelowGroup"]
+    },
+    {
+      "before": ["leader", "k"],
+      "commands": ["workbench.action.focusAboveGroup"]
+    },
+    {
+      "before": ["leader", "l"],
+      "commands": ["workbench.action.focusRightGroup"]
+    },
     // navigate git hunks
     {
       "before": ["]", "c"],
@@ -203,6 +221,14 @@
       "before": ["g", "r"],
       "commands": ["editor.action.referenceSearch.trigger"]
     },
+    {
+      "before": ["g", "h"],
+      "after": ["_"]
+    },
+    {
+      "before": ["g", "l"],
+      "after": ["g", "_"]
+    },
     // formatting
     {
       "before": ["leader", "f"],
@@ -212,6 +238,16 @@
     {
       "before": ["leader", "r", "n"],
       "commands": ["editor.action.rename"]
+    }
+  ],
+  "vim.visualModeKeyBindingsNonRecursive": [
+    {
+      "before": ["g", "h"],
+      "after": ["_"]
+    },
+    {
+      "before": ["g", "l"],
+      "after": ["g", "_"]
     }
   ],
 
