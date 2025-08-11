@@ -1,4 +1,5 @@
-{ config, pkgs, ... } : {
+{ config, pkgs, ... }:
+{
   home.username = "wang";
   home.homeDirectory = "/home/wang";
   home.stateVersion = "25.05";
@@ -15,6 +16,14 @@
       fcitx5-gtk
       fcitx5-configtool
     ];
+  };
+
+  gtk = {
+    enable = true;
+    iconTheme = {
+      name = "Papirus";
+      package = pkgs.papirus-icon-theme;
+    };
   };
 
   programs.firefox = {
@@ -55,16 +64,19 @@
     # global packages honestly just for nvim right now...use devshells for per project deps management.
     # TODO: look into https://github.com/BirdeeHub/nixCats-nvim
     # i am indeed having Mason issues and other whatnots like lua_lsp, rust_analyzer lsp's not being able to run bc they are dynamically linked...
-    gcc
-    nodejs_24
-    python3
+    # gcc
+    # nodejs_24
+    # python3
+
+    nixfmt-rfc-style
 
     kitty
+    ghostty
     vscode
     zed-editor
     # helix
     evil-helix
-    neovim
+    # neovim
     # neovide
     yazi
     hyperfine
@@ -89,15 +101,15 @@
     kdePackages.kolourpaint
 
     # files
-    xfce.thunar        # file explorer
-    xfce.tumbler       # d-bus thumbnailer service (for thunar)
+    xfce.thunar # file explorer
+    xfce.tumbler # d-bus thumbnailer service (for thunar)
     xfce.thunar-volman # thunar extension (removeablle media management)
     kdePackages.okular # PDF viewer
-    eog                # image viewer
-    vlc                # video, sound viewer
-    kdePackages.ark    # zip archive tool
+    eog # image viewer
+    vlc # video, sound viewer
+    kdePackages.ark # zip archive tool
 
-    # physical office
+    # Printer / Scanning
     hplip
     kdePackages.skanlite
 
@@ -230,7 +242,7 @@
         "x-scheme-handler/mailto" = "thunderbird.desktop";
         "message/rfc822" = "thunderbird.desktop";
         "application/x-extension-eml" = "thunderbird.desktop";
-      
+
         "text/calendar" = "thunderbird.desktop";
         "application/x-extension-ics" = "thunderbird.desktop";
         "x-scheme-handler/webcal" = "thunderbird.desktop";

@@ -12,10 +12,21 @@
 --    :Lazy update
 
 -- Globals
+DEBUG = true
+ON_WINDOWS_OS = vim.fn.has 'win32' == 1
+ON_LINUX_NIXOS = vim.fn.has 'unix' == 1 and vim.fn.executable('nix') == 1
+ON_LINUX_NORMAL_OS = vim.fn.has 'unix' == 1 and not ON_WINDOWS_OS and not ON_LINUX_NIXOS
 WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' }
 
+if DEBUG then
+  print("OS Detection:")
+  print("Windows:", ON_WINDOWS_OS)
+  print("NixOS:", ON_LINUX_NIXOS)
+  print("Regular Linux:", ON_LINUX_NORMAL_OS)
+end
+
 -- Shell configuration for windows
-if vim.fn.has 'win32' == 1 then
+if ON_WINDOWS_OS then
   vim.opt.shell = 'powershell.exe'
   vim.opt.shellcmdflag =
     '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
@@ -61,19 +72,19 @@ if vim.fn.has 'gui_running' == 1 then
     end)
 
     -- window mappings to enable expanding and shrinking window sizes with Ctrl+Shift + movement keys
-    vim.keymap.set({ 'n', 'v' }, '<C-S-h>', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
-    vim.keymap.set({ 'n', 'v' }, '<C-S-l>', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
-    vim.keymap.set({ 'n', 'v' }, '<C-S-k>', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
-    vim.keymap.set({ 'n', 'v' }, '<C-S-j>', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
+    -- vim.keymap.set({ 'n', 'v' }, '<C-S-h>', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
+    -- vim.keymap.set({ 'n', 'v' }, '<C-S-l>', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
+    -- vim.keymap.set({ 'n', 'v' }, '<C-S-k>', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
+    -- vim.keymap.set({ 'n', 'v' }, '<C-S-j>', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
   end
 else
   -- IN TERMINAL MODE
 
   -- window mappings to enable expanding and shrinking window sizes with leader + movement keys
-  vim.keymap.set({ 'n', 'v' }, '<leader>h', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
-  vim.keymap.set({ 'n', 'v' }, '<leader>l', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
-  vim.keymap.set({ 'n', 'v' }, '<leader>k', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
-  vim.keymap.set({ 'n', 'v' }, '<leader>j', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
+  -- vim.keymap.set({ 'n', 'v' }, '<leader>h', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
+  -- vim.keymap.set({ 'n', 'v' }, '<leader>l', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
+  -- vim.keymap.set({ 'n', 'v' }, '<leader>k', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
+  -- vim.keymap.set({ 'n', 'v' }, '<leader>j', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
 end
 
 -- allow moving text selected in visual mode
@@ -208,7 +219,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.api.nvim_create_autocmd('FileType', {
   group = 'SetTabWidth',
-  pattern = { 'lua' },
+  pattern = { 'lua', 'nix' },
   callback = function()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
@@ -274,7 +285,7 @@ vim.keymap.set('n', '<A-m>', function()
   local ps1_path = cwd .. '/build.ps1'
   local sh_path = cwd .. '/build.sh'
 
-  if vim.fn.has 'win32' then
+  if ON_WINDOWS_OS then
     if vim.fn.filereadable(bat_path) == 1 then
       build_script = bat_path
     elseif vim.fn.filereadable(ps1_path) == 1 then
@@ -415,6 +426,10 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+
+-- TODO: check if on NixOS, then we'll need to do some funky stuff
+-- if vim.fn.has
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -436,25 +451,22 @@ require('lazy').setup {
   require 'core.plugins.comment',
 
   -- kickstart plugins
-  -- require 'kickstart.plugins.indent-line',
+  require 'kickstart.plugins.indent-line',
   require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.mini',
-
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.which-key',
 
   -- custom/misc plugins
   require 'custom.plugins.colors',
   require 'custom.plugins.vim-visual-multi',
   require 'custom.plugins.spectre',
   require 'custom.plugins.oil',
+  require 'custom.plugins.barbar',
   require 'custom.plugins.harpoon',
   require 'custom.plugins.lualine',
 
-  -- require 'custom.plugins.barbar',
   -- require 'custom.plugins.avante',
+  -- TODO: can checkout supermaven if want that ai code completion, altho not really fan of, but could give another try.
 
   -- Web development
   require 'custom.plugins.autotags',

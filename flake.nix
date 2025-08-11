@@ -13,21 +13,32 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, nur, ... }@inputs: {
-    nixosConfigurations.nixhalla = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./configuration.nix
-        ({pkgs, ... }: {
-          nixpkgs.overlays = [ nur.overlays.default ];
-        })
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.wang = import ./home.nix;
-        }
-      ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      nur,
+      ...
+    }@inputs:
+    {
+      nixosConfigurations.nixhalla = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./configuration.nix
+          (
+            { pkgs, ... }:
+            {
+              nixpkgs.overlays = [ nur.overlays.default ];
+            }
+          )
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.wang = import ./home.nix;
+          }
+        ];
+      };
     };
-  };
 }

@@ -3,7 +3,7 @@ return {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     opts = {
-      scope = { enabled = false }, -- set to true to enable highlighting of the current scope (requires tree-sitter)
+      scope = { enabled = true }, -- set to true to enable highlighting of the current scope (requires tree-sitter)
     },
   },
 }

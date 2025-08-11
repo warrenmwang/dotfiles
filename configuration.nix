@@ -5,10 +5,10 @@
 { config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -51,7 +51,7 @@
   # - Hyprland
   programs.hyprland.enable = true;
   programs.hyprlock.enable = true;
-  security.pam.services.hyprlock = {};
+  security.pam.services.hyprlock = { };
 
   xdg.portal = {
     enable = true;
@@ -109,18 +109,23 @@
     #media-session.enable = true;
   };
 
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.wang = {
     isNormalUser = true;
     description = "Warren Wang";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [ ];
     shell = pkgs.nushell;
   };
 
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   environment.systemPackages = with pkgs; [
     wget
@@ -134,7 +139,6 @@
     vim
     unzip
 
-    # utils
     lshw
     usbutils
     pciutils
@@ -161,7 +165,6 @@
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
-
 
   # NOTE: this didn't work in home manager, so putting vars in system env def
   # https://github.com/nix-community/home-manager/issues/1011
@@ -194,12 +197,12 @@
       nvidia-vaapi-driver
     ];
   };
-  services.xserver.videoDrivers = ["nvidia"]; # this actually seems important, first time i had to use a prev generation was trying to remove this line.
+  services.xserver.videoDrivers = [ "nvidia" ]; # this actually seems important, first time i had to use a prev generation was trying to remove this line.
   hardware.nvidia = {
 
     # NOTE: if just utilize the MUX switch and go discrete graphics mode
     # then don't need the settings below.
-    # 
+    #
     # optimus prime settings
     # For more information: https://nixos.wiki/wiki/Nvidia#Laptop_Configuration:_Hybrid_Graphics_(Nvidia_Optimus_PRIME)
     #
@@ -219,7 +222,7 @@
 
     # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
     # Enable this if you have graphical corruption issues or application crashes after waking
-    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead 
+    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
     # of just the bare essentials.
     powerManagement.enable = true;
 
@@ -229,9 +232,9 @@
 
     # Use the NVidia open source kernel module (not to be confused with the
     # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
+    # Support is limited to the Turing and later architectures. Full list of
+    # supported GPUs is at:
+    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
     # Only available from driver 515.43.04+
     open = true; # can use for my 3070 ti laptop gpu
 
@@ -248,7 +251,6 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
   services.blueman.enable = true; # gui tool
-
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

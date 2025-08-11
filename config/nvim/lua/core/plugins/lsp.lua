@@ -134,7 +134,7 @@ return {
         -- debugpy = {},
         pyright = {},
         --
-        tailwindcss = {}, -- (AKA tailwindcss-language-server)
+        -- tailwindcss = {}, -- (AKA tailwindcss-language-server)
         -- cssls = {},
         -- astro = {},
 
@@ -165,6 +165,7 @@ return {
       -- Put formatters and linters managed by Mason here
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
+        'eslint',
         'stylua',
         'prettier',
         'prettierd',
@@ -240,7 +241,6 @@ return {
 
         python = { 'ruff' },
 
-        -- You can use 'stop_after_first' to run the first available formatter from the list
         html = { 'prettierd', 'prettier', stop_after_first = true },
         javascript = { 'prettierd', 'prettier', stop_after_first = true },
         javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
@@ -263,7 +263,7 @@ return {
                 return local_config
               else
                 -- Fallback to a global one
-                if vim.fn.has 'win32' == 1 then
+                if ON_WINDOWS_OS then
                   return vim.fn.getenv 'APPDATA' .. '\\..\\Local\\nvim\\.sql-formatter.json'
                 else
                   return vim.fn.expand '~/.config/nvim/.sql-formatter.json'
@@ -282,7 +282,7 @@ return {
                 return local_config
               else
                 -- Fallback to a global one
-                if vim.fn.has 'win32' == 1 then
+                if ON_WINDOWS_OS then
                   return vim.fn.getenv 'APPDATA' .. '\\..\\Local\\nvim\\.clang-format'
                 else
                   return vim.fn.expand '~/.config/nvim/.clang-format'
@@ -306,7 +306,7 @@ return {
           -- Build Step is needed for regex support in snippets.
           -- This step is not supported in many windows environments.
           -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+          if ON_WINDOWS_OS or vim.fn.executable 'make' == 0 then
             return
           end
           return 'make install_jsregexp'
