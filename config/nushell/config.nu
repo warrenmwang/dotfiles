@@ -29,4 +29,4 @@ alias n = nvim
 alias ng = neovide
 alias c = code
 alias y = yazi
-alias cl = clear
+alias cls = clear
