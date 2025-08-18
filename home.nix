@@ -18,6 +18,10 @@
 
   gtk = {
     enable = true;
+    theme = {
+      name = "Nordic";
+      package = pkgs.nordic;
+    };
     iconTheme = {
       name = "Papirus";
       package = pkgs.papirus-icon-theme;
@@ -214,6 +218,7 @@
         "video/mp4" = "vlc.desktop";
         "video/x-matroska" = "vlc.desktop";
         "video/webm" = "vlc.desktop";
+        "video/quicktime=" = "vlc.desktop";
 
         "audio/mpeg" = "vlc.desktop";
         "audio/wav" = "vlc.desktop";
