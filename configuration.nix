@@ -149,15 +149,19 @@
     wayland-utils
 
     pulsemixer
-    mako # a notification daemon
+    mako                      # a notification daemon
     libnotify
-    pavucontrol # audio control gui
-    wofi # program launcher menu
-    waybar # top decoration bar
+    pavucontrol               # audio control gui
+    wofi                      # program launcher menu
+    waybar                    # top decoration bar
     networkmanagerapplet
-    hyprshot # screenshot tool
+    hyprshot                  # screenshot tool
+    hyprpicker                # color picker
     wl-clipboard
-    cliphist # clipboard manager
+    cliphist                  # clipboard manager
+    opentabletdriver
+    libinput
+    libwacom
   ];
   programs.steam = {
     enable = true;
@@ -189,7 +193,6 @@
   # =================
   # Hardware Stuff
   # =================
-  hardware.opentabletdriver.enable = true; # TODO: daemon doesn't startup, also is this really how i get wacom to work via bluetooth?
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
