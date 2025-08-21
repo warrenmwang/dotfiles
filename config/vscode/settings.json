@@ -147,16 +147,16 @@
       "commands": ["workbench.actions.view.problems"]
     },
     {
-      "before": ["leader", "d", "n"],
+      "before": ["leader", "d", "a"],
+      "commands": ["editor.action.quickFix"]
+    },
+    {
+      "before": ["]", "d"],
       "commands": ["editor.action.marker.next"]
     },
     {
-      "before": ["leader", "d", "p"],
+      "before": ["[", "d"],
       "commands": ["editor.action.marker.prev"]
-    },
-    {
-      "before": ["leader", "d", "a"],
-      "commands": ["editor.action.quickFix"]
     },
     // window pane navigation
     {
