@@ -12,22 +12,13 @@
 --    :Lazy update
 
 -- Globals
-local DEBUG = false
-local ON_WINDOWS_OS = vim.fn.has 'win32' == 1
-local ON_LINUX_NIXOS = vim.fn.has 'unix' == 1 and vim.fn.executable('nix') == 1
-local ON_LINUX_NORMAL_OS = vim.fn.has 'unix' == 1 and not ON_WINDOWS_OS and not ON_LINUX_NIXOS
-local WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' }
+DEBUG = false
+ON_WINDOWS_OS = vim.fn.has 'win32' == 1
+ON_LINUX_NIXOS = vim.fn.has 'unix' == 1 and vim.fn.executable('nix') == 1
+ON_LINUX_NORMAL_OS = vim.fn.has 'unix' == 1 and not ON_WINDOWS_OS and not ON_LINUX_NIXOS
+USE_MASON = false
 
-function merge_tables(table1, table2)
-  local result = {}
-  for k,v in pairs(table1) do result[k] = v end
-  for k,v in pairs(table2) do result[k] = v end
-  return result
-end
-
-function merge_arrays(arr1, arr2)
-  return vim.list_extend(vim.deepcopy(arr1), arr2)
-end
+WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' }
 
 if DEBUG then
   print("OS Detection:")
@@ -40,7 +31,7 @@ end
 if ON_WINDOWS_OS then
   vim.opt.shell = 'powershell.exe'
   vim.opt.shellcmdflag =
-    '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
+  '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
   vim.opt.shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
   vim.opt.shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
   vim.opt.shellquote = ''
@@ -57,7 +48,7 @@ if vim.fn.has 'gui_running' == 1 then
   if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0.05 -- cursor smear; default: 0.15
     vim.g.neovide_scroll_animation_length = 0.05 -- smooth scroll; default: 0.3
-    vim.g.neovide_position_animation_length = 0 -- default: 0.15
+    vim.g.neovide_position_animation_length = 0  -- default: 0.15
     vim.g.neovide_hide_mouse_when_typing = true
 
     -- dynamically resizable text
@@ -198,7 +189,7 @@ vim.api.nvim_create_augroup('SetTabWidth', { clear = true })
 
 vim.api.nvim_create_autocmd('FileType', {
   group = 'SetTabWidth',
-  pattern = merge_arrays(WebFileTypes, { 'lua', 'nix', 'yaml', 'toml' }),
+  pattern = vim.list_extend(WebFileTypes, { 'lua', 'nix', 'yaml', 'toml' }),
   callback = function()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
@@ -279,7 +270,7 @@ vim.keymap.set('n', '<A-m>', function()
       vim.api.nvim_set_current_win(win2)
     elseif win1_pos[2] > win2_pos[2] and win1_pos[1] == 0 and is_not_neo_tree_window(win1) then
       vim.api.nvim_set_current_win(win1)
-    -- stacked splits (choose the leftmost bottom window)
+      -- stacked splits (choose the leftmost bottom window)
     elseif win2_pos[1] > win1_pos[1] and win2_pos[2] == 0 and is_not_neo_tree_window(win2) then
       vim.api.nvim_set_current_win(win2)
     elseif win1_pos[1] > win2_pos[1] and win1_pos[2] == 0 and is_not_neo_tree_window(win1) then
@@ -381,6 +372,43 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+
+local lsp_configs = {
+  lua_ls = {
+    -- cmd = {...},
+    -- filetypes = { ...},
+    -- capabilities = {},
+    settings = {
+      Lua = {
+        completion = {
+          callSnippet = 'Replace',
+        },
+        -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+        -- diagnostics = { disable = { 'missing-fields' } },
+      },
+    },
+  },
+  clangd = {},
+  rust_analyzer = {},
+  java_language_server = {},
+  gopls = {},
+  debugpy = {},
+  pyright = {},
+  tailwindcss = {}, -- (AKA tailwindcss-language-server)
+  cssls = {},
+  astro = {},
+}
+
+local formatters_and_linters_config = {
+  'stylua',
+  'eslint',
+  'prettier',
+  -- 'prettierd',
+  'sql-formatter',
+  'clang-format',
+  'ruff',
+}
+
 local config_lsp = {
   {
     -- Main LSP Configuration
@@ -393,7 +421,7 @@ local config_lsp = {
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -451,65 +479,33 @@ local config_lsp = {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      local servers = {
-        -- lua_ls = {
-        --   -- cmd = {...},
-        --   -- filetypes = { ...},
-        --   -- capabilities = {},
-        --   settings = {
-        --     Lua = {
-        --       completion = {
-        --         callSnippet = 'Replace',
-        --       },
-        --       -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-        --       -- diagnostics = { disable = { 'missing-fields' } },
-        --     },
-        --   },
-        -- },
-        -- clangd = {},
-        -- rust_analyzer = {},
-        -- java_language_server = {},
-        -- gopls = {},
-        -- debugpy = {},
-        -- pyright = {},
-        -- tailwindcss = {}, -- (AKA tailwindcss-language-server)
-        -- cssls = {},
-        -- astro = {},
-      }
+      if USE_MASON then
+        -- Ensure the servers and tools above are installed
+        --  To check the current status of installed tools and/or manually install
+        --  other tools, you can run
+        --    :Mason
+        --
+        --  You can press `g?` for help in this menu.
+        require('mason').setup()
 
-      -- Ensure the servers and tools above are installed
-      --  To check the current status of installed tools and/or manually install
-      --  other tools, you can run
-      --    :Mason
-      --
-      --  You can press `g?` for help in this menu.
-      require('mason').setup()
+        -- Put formatters and linters managed by Mason here
+        local ensure_installed = vim.tbl_keys(lsp_configs or {})
+        vim.list_extend(ensure_installed, formatters_and_linters_config)
+        require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      -- Put formatters and linters managed by Mason here
-      local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        -- 'stylua',
-        -- 'eslint',
-        -- 'prettier',
-        -- 'prettierd',
-        -- 'sql-formatter',
-        -- 'clang-format',
-        -- 'ruff',
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-      require('mason-lspconfig').setup {
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for tsserver)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
-      }
+        require('mason-lspconfig').setup {
+          handlers = {
+            function(server_name)
+              local server = servers[server_name] or {}
+              -- This handles overriding only values explicitly passed
+              -- by the server configuration above. Useful when disabling
+              -- certain features of an LSP (for example, turning off formatting for tsserver)
+              server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+              require('lspconfig')[server_name].setup(server)
+            end,
+          },
+        }
+      end
     end,
   },
 
@@ -674,9 +670,9 @@ local config_lsp = {
         -- No, but seriously. Please read `:help ins-completion`, it is really good!
         mapping = cmp.mapping.preset.insert {
           -- Select the [n]ext item
-          ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<C-j>'] = cmp.mapping.select_next_item(),
           -- Select the [p]revious item
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
+          ['<C-k>'] = cmp.mapping.select_prev_item(),
 
           -- Scroll the documentation window [b]ack / [f]orward
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -743,11 +739,18 @@ local config_lsp = {
   }
 }
 
+if not USE_MASON then
+  for k, v in pairs(lsp_configs) do
+    vim.lsp.enable(k)
+    vim.lsp.config[k] = v
+  end
+end
+
 local config_commentary = {
   'tpope/vim-commentary',
   keys = {
-    { '<C-/>', ':Commentary<CR>' },
-    { mode = 'v', '<C-/>', ':Commentary<CR>' },
+    { '<C-/>',    ':Commentary<CR>' },
+    { mode = 'v', '<C-/>',          ':Commentary<CR>' },
   },
 }
 
@@ -854,7 +857,7 @@ local config_telescope = { -- Fuzzy Finder (files, lsp, etc)
     { 'nvim-telescope/telescope-ui-select.nvim' },
 
     -- Useful for getting pretty icons, but requires a Nerd Font.
-    { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+    { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
   },
   config = function()
     -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -882,12 +885,18 @@ local config_telescope = { -- Fuzzy Finder (files, lsp, etc)
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
       --
-      -- defaults = {
-      --   -- mappings = {
-      --   --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-      --   -- },
-      --
-      -- },
+      defaults = {
+        mappings = {
+          i = {
+            ["<C-k>"] = require('telescope.actions').move_selection_previous,
+            ["<C-j>"] = require('telescope.actions').move_selection_next,
+          },
+          n = {
+            ["<C-k>"] = require('telescope.actions').move_selection_previous,
+            ["<C-j>"] = require('telescope.actions').move_selection_next,
+          },
+        },
+      },
       -- pickers = {
       --   find_files = {
       --     find_command = { 'rg', '--files', '--hidden', '--no-ignore' },
@@ -1012,7 +1021,7 @@ local config_indent_line = {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     opts = {
-      scope = { enabled = true }, -- set to true to enable highlighting of the current scope (requires tree-sitter)
+      scope = { enabled = false }, -- set to true to enable highlighting of the current scope (requires tree-sitter)
     },
   },
 }
@@ -1063,16 +1072,22 @@ local config_neo_tree = {
 }
 
 local config_colors = {
+  -- {
+  --   -- Main ColorScheme
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000,
+  --   init = function()
+  --     vim.cmd.termguicolors = true
+  --     vim.opt.background = 'light'
+  --     vim.cmd.colorscheme 'tokyonight-moon'
+  --     vim.cmd.hi 'Comment gui=none' -- highlights
+  --   end,
+  -- },
   {
-    -- Main ColorScheme
-    'folke/tokyonight.nvim',
-    priority = 1000,
+    "EdenEast/nightfox.nvim",
     init = function()
-      vim.cmd.termguicolors = true
-      vim.opt.background = 'light'
-      vim.cmd.colorscheme 'tokyonight-moon'
-      vim.cmd.hi 'Comment gui=none' -- highlights
-    end,
+      vim.cmd.colorscheme "carbonfox"
+    end
   },
   {
     'brenoprata10/nvim-highlight-colors',
@@ -1090,7 +1105,7 @@ local config_colors = {
       enable_named_colors = true,
       enable_tailwind = false,
       custom_colors = {
-        { label = '%-%-theme%-primary%-color', color = '#0f1219' },
+        { label = '%-%-theme%-primary%-color',   color = '#0f1219' },
         { label = '%-%-theme%-secondary%-color', color = '#5a5d64' },
       },
       exclude_filetypes = {},
@@ -1110,10 +1125,10 @@ local config_colors = {
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = {
-      signs = false, -- show icons in the signs column
+      signs = false,                    -- show icons in the signs column
       highlight = {
-        keyword = 'bg', -- only highlight the keyword, default: 'wide'
-        after = '', -- don't highlight the words after, just the keyword
+        keyword = 'bg',                 -- only highlight the keyword, default: 'wide'
+        after = '',                     -- don't highlight the words after, just the keyword
         pattern = [[.*<(KEYWORDS)\s*]], -- set a pattern without the ':', default is: [[.*<(KEYWORDS)\s*:]]
       },
     },
@@ -1164,7 +1179,7 @@ local config_oil = {
 local config_barbar = {
   'romgrk/barbar.nvim',
   dependencies = {
-    'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+    'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
     'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
   },
   init = function()
@@ -1410,7 +1425,7 @@ local config_lint = {
 local config_which_key = {
   "folke/which-key.nvim",
   event = "VeryLazy",
-  opts = { },
+  opts = {},
   keys = {
     {
       "<leader>?",
@@ -1464,7 +1479,7 @@ require('lazy').setup {
   config_autotags,
   -- config_tailwind_tools
 
-  config_which_key
+  -- config_which_key
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`

@@ -63,14 +63,15 @@
   };
 
   home.packages = with pkgs; [
-    # global packages honestly just for nvim right now...use devshells for per project deps management.
-    # TODO: look into https://github.com/BirdeeHub/nixCats-nvim
-    # i am indeed having Mason issues and other whatnots like lua_lsp, rust_analyzer lsp's not being able to run bc they are dynamically linked...
-    # gcc
+    # global packages for nvim default lsps, use devshells for per project needs
+    # NOTE: do NOT use Mason to install any lsps, formatters, linters, etc.
+    # look into https://github.com/BirdeeHub/nixCats-nvim if need it
+    # 
+    gcc
+    lua-language-server
+    nixfmt-rfc-style
     # nodejs_24
     # python3
-
-    nixfmt-rfc-style
 
     kitty
     ghostty
