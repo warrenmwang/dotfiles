@@ -12,11 +12,22 @@
 --    :Lazy update
 
 -- Globals
-local DEBUG = true
+local DEBUG = false
 local ON_WINDOWS_OS = vim.fn.has 'win32' == 1
 local ON_LINUX_NIXOS = vim.fn.has 'unix' == 1 and vim.fn.executable('nix') == 1
 local ON_LINUX_NORMAL_OS = vim.fn.has 'unix' == 1 and not ON_WINDOWS_OS and not ON_LINUX_NIXOS
 local WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' }
+
+function merge_tables(table1, table2)
+  local result = {}
+  for k,v in pairs(table1) do result[k] = v end
+  for k,v in pairs(table2) do result[k] = v end
+  return result
+end
+
+function merge_arrays(arr1, arr2)
+  return vim.list_extend(vim.deepcopy(arr1), arr2)
+end
 
 if DEBUG then
   print("OS Detection:")
@@ -42,10 +53,10 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true -- Curr Pref: [Cousine Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Cousine.zip)
 
 if vim.fn.has 'gui_running' == 1 then
-  vim.opt.guifont = 'Cousine Nerd Font Mono:h12'
+  vim.opt.guifont = 'Cousine Nerd Font Mono:h14'
   if vim.g.neovide then
-    vim.g.neovide_cursor_animation_length = 0 -- cursor smear; default: 0.15
-    vim.g.neovide_scroll_animation_length = 0 -- smooth scroll; default: 0.3
+    vim.g.neovide_cursor_animation_length = 0.05 -- cursor smear; default: 0.15
+    vim.g.neovide_scroll_animation_length = 0.05 -- smooth scroll; default: 0.3
     vim.g.neovide_position_animation_length = 0 -- default: 0.15
     vim.g.neovide_hide_mouse_when_typing = true
 
@@ -101,11 +112,7 @@ vim.opt.expandtab = true
 
 vim.opt.number = true
 vim.opt.relativenumber = true
-
--- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
-
--- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
 -- Sync clipboard between OS and Neovim.
@@ -116,17 +123,12 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
--- Enable break indent
 vim.opt.breakindent = true
-
--- Save undo history
 vim.opt.undofile = true
 
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
--- Keep signcolumn on by default
 vim.opt.signcolumn = 'yes'
 
 -- Decrease update time
@@ -134,7 +136,7 @@ vim.opt.updatetime = 250
 
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 1000
 
 -- Configure how new splits should be opened
 vim.opt.splitright = true
@@ -146,46 +148,34 @@ vim.opt.splitbelow = true
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
--- Preview substitutions live, as you type!
 vim.opt.inccommand = 'split'
-
--- Show which line your cursor is on
 vim.opt.cursorline = true
-
--- Disable line wrap
 vim.opt.wrap = false
-
--- Minimal number of screen lines to keep above and below the cursor.
--- vim.opt.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+
+vim.keymap.set('n', 'gh', '_')
+vim.keymap.set('n', 'gl', 'g_')
+vim.keymap.set('n', '<leader>w', ':w<CR>')
+
+vim.keymap.set('n', '<A-.>', ':tabnext<CR>')
+vim.keymap.set('n', '<A-,>', ':tabprev<CR>')
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Diagnostic keymaps
 vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open [D]iagnostic quickfix [L]ist' })
-vim.keymap.set('n', '<leader>dn', function()
+vim.keymap.set('n', ']d', function()
   vim.diagnostic.jump { count = 1, float = true }
-end, { desc = 'Go to [D]iagnostic quickfix [N]ext' })
-vim.keymap.set('n', '<leader>dp', function()
+end, { desc = 'Go to Diagnostic quickfix Next' })
+vim.keymap.set('n', '[d', function()
   vim.diagnostic.jump { count = -1, float = true }
-end, { desc = 'Go to [D]iagnostic quickfix [P]revious' })
+end, { desc = 'Go to Diagnostic quickfix Previous' })
 
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
@@ -208,29 +198,7 @@ vim.api.nvim_create_augroup('SetTabWidth', { clear = true })
 
 vim.api.nvim_create_autocmd('FileType', {
   group = 'SetTabWidth',
-  pattern = WebFileTypes,
-  callback = function()
-    vim.bo.tabstop = 2
-    vim.bo.shiftwidth = 2
-    vim.bo.tabstop = 2
-    vim.bo.expandtab = true
-  end,
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  group = 'SetTabWidth',
-  pattern = { 'lua', 'nix' },
-  callback = function()
-    vim.bo.tabstop = 2
-    vim.bo.shiftwidth = 2
-    vim.bo.tabstop = 2
-    vim.bo.expandtab = true
-  end,
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  group = 'SetTabWidth',
-  pattern = { 'yaml', 'toml' },
+  pattern = merge_arrays(WebFileTypes, { 'lua', 'nix', 'yaml', 'toml' }),
   callback = function()
     vim.bo.tabstop = 2
     vim.bo.shiftwidth = 2
@@ -255,19 +223,6 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt_local.expandtab = true
   end,
 })
-
--- vim.keymap.set('n', '<A-h>', function()
---   print 'current window information:'
---   local win_id = vim.api.nvim_get_current_win()
---   local window = vim.api.nvim_win_get_config(win_id)
-
---   for k, v in pairs(window) do
---     print(k, vim.inspect(v))
---   end
-
---   local position = vim.api.nvim_win_get_position(win_id)
---   print('Row:', position[1], 'Col:', position[2])
--- end)
 
 local function is_not_neo_tree_window(win_id)
   local bufnr = vim.api.nvim_win_get_buf(win_id)
@@ -411,8 +366,8 @@ local function toggle_floating_term()
     vim.cmd 'startinsert'
   end
 end
-vim.keymap.set('n', '<A-;>', toggle_floating_term)
-vim.keymap.set('t', '<A-;>', toggle_floating_term)
+vim.keymap.set('n', '<C-S-j>', toggle_floating_term)
+vim.keymap.set('t', '<C-S-j>', toggle_floating_term)
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -497,20 +452,20 @@ local config_lsp = {
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
       local servers = {
-        lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
-          settings = {
-            Lua = {
-              completion = {
-                callSnippet = 'Replace',
-              },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
-            },
-          },
-        },
+        -- lua_ls = {
+        --   -- cmd = {...},
+        --   -- filetypes = { ...},
+        --   -- capabilities = {},
+        --   settings = {
+        --     Lua = {
+        --       completion = {
+        --         callSnippet = 'Replace',
+        --       },
+        --       -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+        --       -- diagnostics = { disable = { 'missing-fields' } },
+        --     },
+        --   },
+        -- },
         -- clangd = {},
         -- rust_analyzer = {},
         -- java_language_server = {},
@@ -533,7 +488,7 @@ local config_lsp = {
       -- Put formatters and linters managed by Mason here
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        'stylua',
+        -- 'stylua',
         -- 'eslint',
         -- 'prettier',
         -- 'prettierd',
@@ -791,8 +746,8 @@ local config_lsp = {
 local config_commentary = {
   'tpope/vim-commentary',
   keys = {
-    { 'gc', ':Commentary' },
-    { mode = 'v', 'gc', ':Commentary' },
+    { '<C-/>', ':Commentary<CR>' },
+    { mode = 'v', '<C-/>', ':Commentary<CR>' },
   },
 }
 
@@ -802,6 +757,14 @@ local config_git = {
     keys = {
       { '<leader>gg', '<cmd>Git<CR>', { desc = 'Open Git Fugitive' } },
     },
+    config = function()
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'fugitive',
+        callback = function()
+          vim.keymap.set('n', '<Tab>', '=', { buffer = true, silent = true, remap = true })
+        end
+      })
+    end
   },
   {
     'lewis6991/gitsigns.nvim',
@@ -1196,6 +1159,8 @@ local config_oil = {
   },
 }
 
+-- instead of having something like this for buffers, it should be for actual vim tabs instead
+-- it's pretty cool how tabs can group windows...learned that pretty late
 local config_barbar = {
   'romgrk/barbar.nvim',
   dependencies = {
@@ -1271,43 +1236,43 @@ local config_harpoon = {
       harpoon.ui:toggle_quick_menu(harpoon:list())
     end, { desc = 'Harpoon: Toggle Quick Menu' })
 
-    vim.keymap.set('n', '<leader>h1', function()
+    vim.keymap.set('n', '<A-1>', function()
       harpoon:list():select(1)
     end, { desc = 'Harpoon: Jump to item 1' })
 
-    vim.keymap.set('n', '<leader>h2', function()
+    vim.keymap.set('n', '<A-2>', function()
       harpoon:list():select(2)
     end, { desc = 'Harpoon: Jump to item 2' })
 
-    vim.keymap.set('n', '<leader>h3', function()
+    vim.keymap.set('n', '<A-3>', function()
       harpoon:list():select(3)
     end, { desc = 'Harpoon: Jump to item 3' })
 
-    vim.keymap.set('n', '<leader>h4', function()
+    vim.keymap.set('n', '<A-4>', function()
       harpoon:list():select(4)
     end, { desc = 'Harpoon: Jump to item 4' })
 
-    vim.keymap.set('n', '<leader>h5', function()
+    vim.keymap.set('n', '<A-5>', function()
       harpoon:list():select(5)
     end, { desc = 'Harpoon: Jump to item 5' })
 
-    vim.keymap.set('n', '<leader>h6', function()
+    vim.keymap.set('n', '<A-6>', function()
       harpoon:list():select(6)
     end, { desc = 'Harpoon: Jump to item 6' })
 
-    vim.keymap.set('n', '<leader>h7', function()
+    vim.keymap.set('n', '<A-7>', function()
       harpoon:list():select(7)
     end, { desc = 'Harpoon: Jump to item 7' })
 
-    vim.keymap.set('n', '<leader>h8', function()
+    vim.keymap.set('n', '<A-8>', function()
       harpoon:list():select(8)
     end, { desc = 'Harpoon: Jump to item 8' })
 
-    vim.keymap.set('n', '<leader>h9', function()
+    vim.keymap.set('n', '<A-9>', function()
       harpoon:list():select(9)
     end, { desc = 'Harpoon: Jump to item 9' })
 
-    vim.keymap.set('n', '<leader>h0', function()
+    vim.keymap.set('n', '<A-0>', function()
       harpoon:list():select(10)
     end, { desc = 'Harpoon: Jump to item 10' })
   end,
@@ -1442,6 +1407,21 @@ local config_lint = {
   },
 }
 
+local config_which_key = {
+  "folke/which-key.nvim",
+  event = "VeryLazy",
+  opts = { },
+  keys = {
+    {
+      "<leader>?",
+      function()
+        require("which-key").show({ global = false })
+      end,
+      desc = "Buffer Local Keymaps (which-key)",
+    },
+  },
+}
+
 -- TODO: check if on NixOS, then we'll need to do some funky stuff
 -- if vim.fn.has
 
@@ -1459,30 +1439,32 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup {
   -- core plugins
-  require config_lsp,
-  require config_telescope,
-  require config_treesitter,
-  require config_git,
-  require config_commentary,
+  config_lsp,
+  config_telescope,
+  config_treesitter,
+  config_git,
+  config_commentary,
 
   -- kickstart plugins
-  require config_indent_line,
-  require config_autopairs,
-  require config_neo_tree,
-  -- require config_lint,
+  config_indent_line,
+  config_autopairs,
+  config_neo_tree,
+  -- config_lint,
 
   -- custom/misc plugins
-  require config_colors,
-  require config_vim_multi_cursor,
-  require config_spectre,
-  require config_oil,
-  -- require config_barbar,
-  require config_harpoon,
-  require config_lualine,
+  config_colors,
+  config_vim_multi_cursor,
+  config_spectre,
+  config_oil,
+  -- config_barbar,
+  config_harpoon,
+  config_lualine,
 
   -- Web development
-  require config_autotags,
-  -- require config_tailwind_tools
+  config_autotags,
+  -- config_tailwind_tools
+
+  config_which_key
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`

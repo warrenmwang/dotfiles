@@ -1,5 +1,7 @@
 #!/usr/bin/env nu
 
+# TODO: there is a something wrong about this script where if are in a docked mode and unplug the montiors then
+# try to run this script it just won't do it
 hyprctl keyword monitor "eDP-1, 2560x1440@240, 0x0, 1.25"
 let found_monitors = hyprctl monitors -j | from json | get name
 for monitor in $found_monitors {
@@ -22,7 +24,7 @@ for tablet in found_named_tablets {
     }
 }
 
-1..10 | each { |i| hyprctl dispatch moveworkspacetomonitor $i "eDP-1" }
+hyprctl workspaces -j | from json | get id | each { |i| hyprctl dispatch moveworkspacetomonitor $i "eDP-1" }
 
 # Laptop multimedia keys for volume and LCD brightness
 hyprctl keyword bindel ",XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"

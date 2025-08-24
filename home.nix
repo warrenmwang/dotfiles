@@ -78,8 +78,8 @@
     zed-editor
     # helix
     evil-helix
-    # neovim
-    # neovide
+    neovim
+    neovide
     yazi
     hyperfine
 

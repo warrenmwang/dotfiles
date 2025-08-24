@@ -143,6 +143,10 @@
   "vim.normalModeKeyBindingsNonRecursive": [
     // diagnostics, jump to next, prev, and show list of problems
     {
+      "before": ["leader", "w"],
+      "commands": ["workbench.action.files.save"]
+    },
+    {
       "before": ["leader", "d", "l"],
       "commands": ["workbench.actions.view.problems"]
     },
@@ -159,22 +163,22 @@
       "commands": ["editor.action.marker.prev"]
     },
     // window pane navigation
-    {
-      "before": ["leader", "h"],
-      "commands": ["workbench.action.focusLeftGroup"]
-    },
-    {
-      "before": ["leader", "j"],
-      "commands": ["workbench.action.focusBelowGroup"]
-    },
-    {
-      "before": ["leader", "k"],
-      "commands": ["workbench.action.focusAboveGroup"]
-    },
-    {
-      "before": ["leader", "l"],
-      "commands": ["workbench.action.focusRightGroup"]
-    },
+    // {
+    //   "before": ["leader", "h"],
+    //   "commands": ["workbench.action.focusLeftGroup"]
+    // },
+    // {
+    //   "before": ["leader", "j"],
+    //   "commands": ["workbench.action.focusBelowGroup"]
+    // },
+    // {
+    //   "before": ["leader", "k"],
+    //   "commands": ["workbench.action.focusAboveGroup"]
+    // },
+    // {
+    //   "before": ["leader", "l"],
+    //   "commands": ["workbench.action.focusRightGroup"]
+    // },
     // navigate git hunks
     {
       "before": ["]", "c"],
