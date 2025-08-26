@@ -15,7 +15,7 @@ if "HDMI-A-1" in $found_monitors {
     hyprctl keyword monitor "HDMI-A-1, 1920x1080@144, 1920x0, 1"
     hyprctl keyword workspace "1,monitor:HDMI-A-1,default:true"
     if "wacom-intuos-bt-m-pen" in $found_named_tablets {
-        hyprctl keyword "device:wacom-intuos-bt-m-pen:output" "HDMI-A-1"
+        hyprctl keyword "device[wacom-intuos-bt-m-pen]:output" "HDMI-A-1"
     }
     $found_external_monitor = true
 }

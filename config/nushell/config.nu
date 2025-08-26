@@ -21,7 +21,7 @@
 # Turn off tutorial banner
 $env.config.show_banner = false
 
-
+# TODO: might move these to the bin/ folder bc they disappear in devshells.
 # Aliases
 alias l = ls -a
 alias ll = ls -l

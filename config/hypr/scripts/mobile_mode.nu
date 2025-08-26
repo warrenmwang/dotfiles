@@ -19,7 +19,7 @@ let found_named_tablets = hyprctl devices -j | from json | get tablets | each { 
 for tablet in found_named_tablets {
     match $tablet {
         "wacom-intuos-bt-m-pen" => {
-            hyprctl keyword "device:wacom-intuos-bt-m-pen:output" "eDP-1"
+            hyprctl keyword "device[wacom-intuos-bt-m-pen]:output" "eDP-1"
         }
     }
 }

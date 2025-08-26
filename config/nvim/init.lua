@@ -14,7 +14,7 @@
 -- Globals
 DEBUG = false
 ON_WINDOWS_OS = vim.fn.has 'win32' == 1
-ON_LINUX_NIXOS = vim.fn.has 'unix' == 1 and vim.fn.executable('nix') == 1
+ON_LINUX_NIXOS = vim.fn.has 'unix' == 1 and vim.fn.executable('nixos-rebuild') == 1
 ON_LINUX_NORMAL_OS = vim.fn.has 'unix' == 1 and not ON_WINDOWS_OS and not ON_LINUX_NIXOS
 USE_MASON = false
 
@@ -1072,23 +1072,32 @@ local config_neo_tree = {
 }
 
 local config_colors = {
-  -- {
-  --   -- Main ColorScheme
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000,
-  --   init = function()
-  --     vim.cmd.termguicolors = true
-  --     vim.opt.background = 'light'
-  --     vim.cmd.colorscheme 'tokyonight-moon'
-  --     vim.cmd.hi 'Comment gui=none' -- highlights
-  --   end,
-  -- },
   {
-    "EdenEast/nightfox.nvim",
+    -- Main ColorScheme
+    'folke/tokyonight.nvim',
+    priority = 1000,
     init = function()
-      vim.cmd.colorscheme "carbonfox"
-    end
+      vim.cmd.termguicolors = true
+      vim.opt.background = 'light'
+      vim.cmd.colorscheme 'tokyonight-moon'
+      vim.cmd.hi 'Comment gui=none' -- highlights
+    end,
   },
+  -- {
+  --   "EdenEast/nightfox.nvim",
+  --   init = function()
+  --     vim.cmd.colorscheme "carbonfox"
+  --   end
+  -- },
+  -- {
+  --   "xiantang/darcula-dark.nvim",
+  --   dependencies = {
+  --     "nvim-treesitter/nvim-treesitter",
+  --   },
+  --   init = function()
+  --     vim.cmd.colorscheme("darcula-dark")
+  --   end
+  -- },
   {
     'brenoprata10/nvim-highlight-colors',
     opts = {
@@ -1243,13 +1252,13 @@ local config_harpoon = {
     local harpoon = require 'harpoon'
     harpoon:setup()
 
-    vim.keymap.set('n', '<leader>ha', function()
+    vim.keymap.set('n', '<leader>hp', function()
       harpoon:list():add()
-    end, { desc = 'Harpoon: Add current file to menu' })
+    end, { desc = 'Harpoon: [P]in current file to menu' })
 
     vim.keymap.set('n', '<leader>hl', function()
       harpoon.ui:toggle_quick_menu(harpoon:list())
-    end, { desc = 'Harpoon: Toggle Quick Menu' })
+    end, { desc = 'Harpoon: Toggle Quick Menu/[L]ist' })
 
     vim.keymap.set('n', '<A-1>', function()
       harpoon:list():select(1)
