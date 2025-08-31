@@ -9,20 +9,21 @@
 	email = warren.min.wang@gmail.com
 
 [alias]
-	a = "add"
-	b = "branch"
-	s = "status"
-	d = "diff"
-	l = "log"
-	f = "fetch"
-	lg = "log --oneline --graph --decorate"
-	ll = "log --oneline --graph --decorate --all"
-	ci = "commit"
-	cm = "commit -m"
-	co = "checkout"
-	ps = "push"
-	pl = "pull"
-	unstage = "reset HEAD --"
+	a = add
+	b = branch
+	s = status
+	d = diff
+	l = log
+	f = fetch
+	lg = log --oneline --graph --decorate
+	ll = log --oneline --graph --decorate --all
+	ci = commit
+	cm = commit -m
+	co = checkout
+	ps = push
+	pl = pull
+	unstage = reset HEAD --
+	undo = reset --soft HEAD^
 
 [init]
 	defaultBranch = main
@@ -30,9 +31,6 @@
 [push]
 	autoSetupRemote = true
 	default = current
-
-[alias]
-	undo = reset --soft HEAD^
 
 [core]
 	editor = nvim
