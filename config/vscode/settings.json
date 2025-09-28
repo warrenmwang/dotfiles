@@ -1,6 +1,6 @@
 {
   // Appearance
-  "workbench.colorTheme": "Default Dark Modern",
+  "workbench.colorTheme": "Catppuccin Mocha",
   "editor.fontFamily": "\"Cousine Nerd Font Mono\"",
   "editor.fontSize": 16,
   "editor.lineNumbers": "relative",
@@ -155,30 +155,13 @@
       "commands": ["editor.action.quickFix"]
     },
     {
-      "before": ["]", "d"],
+      "before": ["leader", "d", "n"],
       "commands": ["editor.action.marker.next"]
     },
     {
-      "before": ["[", "d"],
+      "before": ["leader", "d", "p"],
       "commands": ["editor.action.marker.prev"]
     },
-    // window pane navigation
-    // {
-    //   "before": ["leader", "h"],
-    //   "commands": ["workbench.action.focusLeftGroup"]
-    // },
-    // {
-    //   "before": ["leader", "j"],
-    //   "commands": ["workbench.action.focusBelowGroup"]
-    // },
-    // {
-    //   "before": ["leader", "k"],
-    //   "commands": ["workbench.action.focusAboveGroup"]
-    // },
-    // {
-    //   "before": ["leader", "l"],
-    //   "commands": ["workbench.action.focusRightGroup"]
-    // },
     // navigate git hunks
     {
       "before": ["]", "c"],
@@ -242,6 +225,10 @@
     {
       "before": ["leader", "r", "n"],
       "commands": ["editor.action.rename"]
+    },
+    {
+      "before": ["g", "n"],
+      "after": ["/", "\\", "<", "<C-r>", "<C-w>", "\\", ">", "<CR>"]
     }
   ],
   "vim.visualModeKeyBindingsNonRecursive": [
@@ -252,6 +239,10 @@
     {
       "before": ["g", "l"],
       "after": ["g", "_"]
+    },
+    {
+      "before": ["g", "n"],
+      "after": ["y", "/", "<C-r>", "\"", "<CR>"]
     }
   ],
 
