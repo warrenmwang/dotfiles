@@ -47,7 +47,8 @@
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
   # - KDE
-  # services.desktopManager.plasma6.enable = true;
+  services.desktopManager.plasma6.enable = true;
+  
   # - Hyprland
   programs.hyprland.enable = true;
   programs.hyprlock.enable = true;
