@@ -1,6 +1,6 @@
 {
   // Appearance
-  "workbench.colorTheme": "One Dark Pro Night Flat",
+  "workbench.colorTheme": "Default Dark Modern",
   "editor.fontFamily": "\"Cousine Nerd Font Mono\"",
   "editor.fontSize": 16,
   "editor.lineNumbers": "relative",
@@ -274,7 +274,7 @@
   // Terminal
   "terminal.integrated.inheritEnv": false,
   "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
-  "terminal.integrated.defaultProfile.linux": "nu",
+  "terminal.integrated.defaultProfile.linux": "bash",
 
   // Selection completion
   "editor.acceptSuggestionOnCommitCharacter": false,

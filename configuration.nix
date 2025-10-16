@@ -119,7 +119,8 @@
       "wheel"
     ];
     packages = with pkgs; [ ];
-    shell = pkgs.nushell;
+    # shell = pkgs.nushell;
+    shell = pkgs.bash;
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -139,6 +140,7 @@
     tmux
     vim
     unzip
+    nushell
 
     lshw
     usbutils

@@ -128,60 +128,20 @@
   # manual and llms didn't give it to me.
   home.file = {
     # ".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
-    ".icons/default".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/icons/Rage-Gothic-Light";
-    ".config/hypr".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/hypr";
-    ".config/waybar".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/waybar";
-    ".config/mako".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/mako";
-    ".config/nushell/config.nu".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nushell/config.nu";
-    ".config/nushell/env.nu".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nushell/env.nu";
-    ".config/tmux/tmux.conf".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/tmux/tmux.conf";
-    ".config/kitty/kitty.conf".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/kitty/kitty.conf";
-    ".config/nvim".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim";
-    ".config/Code/User/settings.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/vscode/settings.json";
-    ".config/Code/User/keybindings.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/vscode/keybindings.json";
+    ".icons/default".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/icons/Rage-Gothic-Light";
+    ".config/hypr".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/hypr";
+    ".config/waybar".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/waybar";
+    ".config/mako".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/mako";
+    ".bashrc".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/.bashrc";
+    ".config/git/config".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/.gitconfig";
+    ".config/nushell/config.nu".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nushell/config.nu";
+    ".config/nushell/env.nu".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nushell/env.nu";
+    ".config/tmux/tmux.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/tmux/tmux.conf";
+    ".config/kitty/kitty.conf".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/kitty/kitty.conf";
+    ".config/nvim".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim";
+    ".config/Code/User/settings.json".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/vscode/settings.json";
+    ".config/Code/User/keybindings.json".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/vscode/keybindings.json";
     "bin".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/bin";
-  };
-
-  programs.git = {
-    enable = true;
-    userName = "Warren Wang";
-    userEmail = "warren.min.wang@gmail.com";
-    aliases = {
-      a = "add";
-      b = "branch";
-      s = "status";
-      d = "diff";
-      l = "log";
-      f = "fetch";
-      lg = "log --oneline --graph --decorate";
-      ll = "log --oneline --graph --decorate --all";
-      ci = "commit";
-      cm = "commit -m";
-      co = "checkout";
-      ps = "push";
-      pl = "pull";
-      unstage = "reset HEAD --";
-    };
-    extraConfig = {
-      init = {
-        defaultBranch = "main";
-      };
-      push = {
-        autoSetupRemote = true;
-        default = "current";
-      };
-    };
   };
 
   xdg = {
