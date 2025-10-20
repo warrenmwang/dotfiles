@@ -68,6 +68,7 @@
     # look into https://github.com/BirdeeHub/nixCats-nvim if need it
     # 
     gcc
+    clang-tools
     lua-language-server
     nixfmt-rfc-style
     # nodejs_24

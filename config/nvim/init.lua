@@ -17,6 +17,7 @@ ON_WINDOWS_OS = vim.fn.has 'win32' == 1
 ON_LINUX_NIXOS = vim.fn.has 'unix' == 1 and vim.fn.executable('nixos-rebuild') == 1
 ON_LINUX_NORMAL_OS = vim.fn.has 'unix' == 1 and not ON_WINDOWS_OS and not ON_LINUX_NIXOS
 USE_MASON = false
+IN_GUI = vim.fn.has 'gui_running' == 1
 
 WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' }
 
@@ -43,7 +44,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true -- Curr Pref: [Cousine Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Cousine.zip)
 
-if vim.fn.has 'gui_running' == 1 then
+if IN_GUI then
   vim.opt.guifont = 'Cousine Nerd Font Mono:h14'
   if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0.05 -- cursor smear; default: 0.15
@@ -105,6 +106,12 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = 'a'
 vim.opt.showmode = false
+
+-- Select current hovered over word and start search
+vim.keymap.set('n', 'gn', '/\\V\\<<C-R><C-W>\\><CR>', { desc = 'Search current word' })
+
+-- Search currently selected text
+vim.keymap.set('v', 'gn', 'y/\\V<C-R>"<CR>', { desc = 'Search selected text' })
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -221,7 +228,8 @@ local function is_not_neo_tree_window(win_id)
   return not (filetype == 'neo-tree')
 end
 
--- Build Hotkey
+--------------------------------------- build hotkey ---------------------------------------
+
 local build_term_buf = nil
 vim.keymap.set('n', '<A-m>', function()
   -- Find the build script in CWD
@@ -317,30 +325,177 @@ vim.keymap.set('n', '<A-m>', function()
   vim.api.nvim_set_current_win(starting_window)
 end, { desc = 'Run a build script in the CWD' })
 
--- Floating terminal config
+--------------------------------------- build hotkey ---------------------------------------
+
+--------------------------------------- terminal ---------------------------------------
+
 local floating_term_state = {
   win = nil,
-  buf = nil,
+  buffers = {},
+  current_index = 1,
 }
-local function toggle_floating_term()
-  if floating_term_state.win and vim.api.nvim_win_is_valid(floating_term_state.win) then
-    -- close window if opened
-    vim.api.nvim_win_close(floating_term_state.win, false)
-    floating_term_state.win = nil
-  else
-    -- init buffer with terminal if not exist
-    if not floating_term_state.buf or not vim.api.nvim_buf_is_valid(floating_term_state.buf) then
-      floating_term_state.buf = vim.api.nvim_create_buf(false, true)
-      vim.api.nvim_buf_call(floating_term_state.buf, function()
-        vim.cmd 'terminal'
-      end)
+
+local function create_terminal_title()
+  if #floating_term_state.buffers == 0
+  then
+    return "Terminal"
+  end
+
+  local title = string.format("Terminal %d/%d",
+    floating_term_state.current_index,
+    #floating_term_state.buffers)
+
+  return title
+end
+
+-- create new term buffer, add it to the buffers table state, and update curr index to it
+local function create_new_terminal()
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_call(buf, function() vim.cmd 'terminal' end)
+
+  table.insert(floating_term_state.buffers, buf)
+  floating_term_state.current_index = #floating_term_state.buffers
+
+  return buf
+end
+
+local function close_current_terminal()
+  if #floating_term_state.buffers == 0
+  then
+    return
+  end
+
+  local buf_to_delete = floating_term_state.buffers[floating_term_state.current_index]
+  local index_of_buf_to_delete = floating_term_state.current_index
+
+  -- last term: create a new one to replace it
+  if floating_term_state.win
+      and vim.api.nvim_win_is_valid(floating_term_state.win)
+      and #floating_term_state.buffers == 1
+  then
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_call(buf, function() vim.cmd 'terminal' end)
+    table.insert(floating_term_state.buffers, buf)
+
+    vim.api.nvim_win_set_buf(floating_term_state.win, buf)
+
+    table.remove(floating_term_state.buffers, index_of_buf_to_delete)
+    if vim.api.nvim_buf_is_valid(buf_to_delete) then
+      vim.api.nvim_buf_delete(buf_to_delete, { force = true })
     end
 
-    -- open/create window if closed
+    floating_term_state.current_index = 1
+    local title = create_terminal_title()
+    vim.api.nvim_win_set_config(floating_term_state.win, { title = title })
+  end
+
+  -- at least one other term: switch to prev/next term
+  if floating_term_state.win
+      and vim.api.nvim_win_is_valid(floating_term_state.win)
+      and #floating_term_state.buffers > 1
+  then
+    local new_curr_index
+
+    if floating_term_state.current_index == 1
+    then
+      new_curr_index = floating_term_state.current_index + 1
+    else
+      new_curr_index = floating_term_state.current_index - 1
+    end
+
+    local buf = floating_term_state.buffers[new_curr_index]
+    vim.api.nvim_win_set_buf(floating_term_state.win, buf)
+
+    table.remove(floating_term_state.buffers, index_of_buf_to_delete)
+    if vim.api.nvim_buf_is_valid(buf_to_delete) then
+      vim.api.nvim_buf_delete(buf_to_delete, { force = true })
+    end
+
+    floating_term_state.current_index = new_curr_index
+    local title = create_terminal_title()
+    vim.api.nvim_win_set_config(floating_term_state.win, { title = title })
+  end
+end
+
+local function cycle_terminal(direction)
+  if #floating_term_state.buffers <= 1 then
+    return
+  end
+
+  if direction > 0 then -- Next (A-j)
+    floating_term_state.current_index = floating_term_state.current_index + 1
+    if floating_term_state.current_index > #floating_term_state.buffers then
+      floating_term_state.current_index = 1
+    end
+  else -- Previous (A-k)
+    floating_term_state.current_index = floating_term_state.current_index - 1
+    if floating_term_state.current_index < 1 then
+      floating_term_state.current_index = #floating_term_state.buffers
+    end
+  end
+
+  if floating_term_state.win and vim.api.nvim_win_is_valid(floating_term_state.win) then
+    local current_buf = floating_term_state.buffers[floating_term_state.current_index]
+    vim.api.nvim_win_set_buf(floating_term_state.win, current_buf)
+
+    local title = create_terminal_title()
+    vim.api.nvim_win_set_config(floating_term_state.win, { title = title })
+
+    vim.cmd 'startinsert'
+  end
+end
+
+local function new_terminal()
+  create_new_terminal()
+
+  if floating_term_state.win and vim.api.nvim_win_is_valid(floating_term_state.win) then
+    local current_buf = floating_term_state.buffers[floating_term_state.current_index]
+    vim.api.nvim_win_set_buf(floating_term_state.win, current_buf)
+
+    local title = create_terminal_title()
+    vim.api.nvim_win_set_config(floating_term_state.win, { title = title })
+
+    vim.cmd 'startinsert'
+  end
+end
+
+local function toggle_floating_term()
+  local is_term_win_open = floating_term_state.win and vim.api.nvim_win_is_valid(floating_term_state.win)
+
+  if is_term_win_open then
+    vim.api.nvim_win_close(floating_term_state.win, false)
+    floating_term_state.win = nil
+    return
+  end
+
+  if not is_term_win_open then
+    -- Clean up any invalid buffers
+    for i = #floating_term_state.buffers, 1, -1 do
+      if not vim.api.nvim_buf_is_valid(floating_term_state.buffers[i]) then
+        table.remove(floating_term_state.buffers, i)
+        if floating_term_state.current_index > i then
+          floating_term_state.current_index = floating_term_state.current_index - 1
+        end
+      end
+    end
+
+    -- Adjust current_index if needed
+    if floating_term_state.current_index > #floating_term_state.buffers then
+      floating_term_state.current_index = math.max(1, #floating_term_state.buffers)
+    end
+
+    -- Create new terminal if none exist after clean / on startup
+    if #floating_term_state.buffers == 0 then
+      create_new_terminal()
+    end
+
+    -- Open window with current buffer
     local width = math.floor(vim.o.columns * 0.8)
     local height = math.floor(vim.o.lines * 0.8)
     local col = math.floor((vim.o.columns - width) / 2)
     local row = math.floor((vim.o.lines - height) / 2)
+
+    local title = create_terminal_title()
     local opts = {
       relative = 'editor',
       width = width,
@@ -350,15 +505,59 @@ local function toggle_floating_term()
       anchor = 'NW',
       style = 'minimal',
       border = 'rounded',
-      title = 'Terminal',
+      title = title,
       title_pos = 'center',
     }
-    floating_term_state.win = vim.api.nvim_open_win(floating_term_state.buf, true, opts)
+
+    local current_buf = floating_term_state.buffers[floating_term_state.current_index]
+    floating_term_state.win = vim.api.nvim_open_win(current_buf, true, opts)
     vim.cmd 'startinsert'
   end
 end
-vim.keymap.set('n', '<C-S-j>', toggle_floating_term)
-vim.keymap.set('t', '<C-S-j>', toggle_floating_term)
+
+
+if IN_GUI then
+  vim.keymap.set('n', '<C-S-j>', toggle_floating_term)
+  vim.keymap.set('t', '<C-S-j>', toggle_floating_term)
+
+  vim.keymap.set('n', '<C-S-n>', new_terminal)
+  vim.keymap.set('t', '<C-S-n>', new_terminal)
+
+  vim.keymap.set('n', '<C-S-w>', close_current_terminal)
+  vim.keymap.set('t', '<C-S-w>', close_current_terminal)
+
+  -- vim.keymap.set('n', '<A-;>', toggle_floating_term)
+  -- vim.keymap.set('t', '<A-;>', toggle_floating_term)
+  --
+  -- vim.keymap.set('n', '<A-n>', new_terminal)
+  -- vim.keymap.set('t', '<A-n>', new_terminal)
+  --
+  -- vim.keymap.set('n', '<A-w>', close_current_terminal)
+  -- vim.keymap.set('t', '<A-w>', close_current_terminal)
+
+  vim.keymap.set('n', '<A-k>', function() cycle_terminal(-1) end)
+  vim.keymap.set('t', '<A-k>', function() cycle_terminal(-1) end)
+
+  vim.keymap.set('n', '<A-j>', function() cycle_terminal(1) end)
+  vim.keymap.set('t', '<A-j>', function() cycle_terminal(1) end)
+else
+  vim.keymap.set('n', '<A-;>', toggle_floating_term)
+  vim.keymap.set('t', '<A-;>', toggle_floating_term)
+
+  vim.keymap.set('n', '<A-n>', new_terminal)
+  vim.keymap.set('t', '<A-n>', new_terminal)
+
+  vim.keymap.set('n', '<A-w>', close_current_terminal)
+  vim.keymap.set('t', '<A-w>', close_current_terminal)
+
+  vim.keymap.set('n', '<A-k>', function() cycle_terminal(-1) end)
+  vim.keymap.set('t', '<A-k>', function() cycle_terminal(-1) end)
+
+  vim.keymap.set('n', '<A-j>', function() cycle_terminal(1) end)
+  vim.keymap.set('t', '<A-j>', function() cycle_terminal(1) end)
+end
+
+--------------------------------------- terminal ---------------------------------------
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -439,7 +638,7 @@ local config_lsp = {
           map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
           map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
           map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-          map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+          -- map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
           map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
           map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
           map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -746,12 +945,31 @@ if not USE_MASON then
   end
 end
 
-local config_commentary = {
-  'tpope/vim-commentary',
-  keys = {
-    { '<C-/>',    ':Commentary<CR>' },
-    { mode = 'v', '<C-/>',          ':Commentary<CR>' },
-  },
+local config_commentary =
+{
+  -- {
+  --   'tpope/vim-commentary',
+  --   keys = {
+  --     { '<C-/>',    ':Commentary<CR>' },
+  --     { mode = 'v', '<C-/>',          ':Commentary<CR>' },
+  --   },
+  -- },
+  {
+    'numToStr/Comment.nvim',
+    dependencies = { 'JoosepAlviste/nvim-ts-context-commentstring' },
+    opts = {
+      -- add any options here
+    },
+    config = function(_, opts)
+      if IN_GUI then
+        vim.keymap.set('n', '<C-/>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
+        vim.keymap.set('v', '<C-/>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
+      else
+        vim.keymap.set('n', '<A-/>', '<Plug>(comment_toggle_linewise_current)', { desc = 'Toggle line comment' })
+        vim.keymap.set('v', '<A-/>', '<Plug>(comment_toggle_linewise_visual)', { desc = 'Toggle line comment' })
+      end
+    end
+  }
 }
 
 local config_git = {

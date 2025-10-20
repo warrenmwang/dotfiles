@@ -150,6 +150,8 @@
     ddcui
     brightnessctl
     wayland-utils
+    man-pages
+    man-pages-posix
 
     pulsemixer
     mako                      # a notification daemon
@@ -172,6 +174,7 @@
     dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
     localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
   };
+  documentation.dev.enable = true;
 
   # NOTE: this didn't work in home manager, so putting vars in system env def
   # https://github.com/nix-community/home-manager/issues/1011
@@ -187,6 +190,7 @@
     TERMINAL = "kitty";
     EDITOR = "nvim";
     FILE_MANAGER = "thunar";
+    MANPAGER="nvim +Man!";
 
     QT_IM_MODULE = "fcitx";
     GLFW_IM_MODULE = "ibus";
