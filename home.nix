@@ -87,8 +87,12 @@
 
     obsidian
     google-chrome
+    brave
     parsec-bin
     gnome-calculator
+    protonvpn-gui
+    spotify
+    discord
 
     # recording
     obs-studio

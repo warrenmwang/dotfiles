@@ -23,6 +23,8 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
+  networking.firewall.checkReversePath = false; # to get protonvpn working...
+  services.tailscale.enable = true; # personal devices vpn network
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";

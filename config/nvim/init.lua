@@ -19,7 +19,7 @@ ON_LINUX_NORMAL_OS = vim.fn.has 'unix' == 1 and not ON_WINDOWS_OS and not ON_LIN
 USE_MASON = false
 IN_GUI = vim.fn.has 'gui_running' == 1
 
-WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' }
+WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'astro' }
 
 if DEBUG then
   print("OS Detection:")
