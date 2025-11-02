@@ -93,6 +93,7 @@
     protonvpn-gui
     spotify
     discord
+    signal-desktop
 
     # recording
     obs-studio
@@ -174,12 +175,12 @@
         "text/nu" = "code.desktop";
         "application/x-shellscript" = "code.desktop";
 
-        "image/jpeg" = "org.gnome.eog.desktop";
-        "image/png" = "org.gnome.eog.desktop";
-        "image/gif" = "org.gnome.eog.desktop";
-        "image/webp" = "org.gnome.eog.desktop";
-        "image/avif" = "org.gnome.eog.desktop";
-        "image/svg+xml" = "org.gnome.eog.desktop";
+        "image/jpeg" = "org.kde.gwenview.desktop";
+        "image/png" = "org.kde.gwenview.desktop";
+        "image/gif" = "org.kde.gwenview.desktop";
+        "image/webp" = "org.kde.gwenview.desktop";
+        "image/avif" = "org.kde.gwenview.desktop";
+        "image/svg+xml" = "org.kde.gwenview.desktop";
 
         "video/mp4" = "vlc.desktop";
         "video/x-matroska" = "vlc.desktop";
@@ -197,7 +198,7 @@
         "application/x-tar" = "org.kde.ark.desktop";
         "application/x-7z-compressed" = "org.kde.ark.desktop";
 
-        "inode/directory" = "thunar.desktop";
+        "inode/directory" = "org.kde.dolphin.desktop";
 
         "x-scheme-handler/mailto" = "thunderbird.desktop";
         "message/rfc822" = "thunderbird.desktop";
