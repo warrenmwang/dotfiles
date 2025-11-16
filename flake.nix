@@ -5,6 +5,7 @@
     nixpkgs-nixhalla.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-ironwood.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs-cornerstone.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager-nixhalla = {
       url = "github:nix-community/home-manager";
@@ -18,6 +19,10 @@
     #   url = "github:nix-community/home-manager";
     #   inputs.nixpkgs.follows = "nixpkgs-cornerstone";
     # };
+    home-manager-rock = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-rock";
+    };
 
     nur-nixhalla = {
       url = "github:nix-community/NUR";
@@ -43,6 +48,12 @@
             nixpkgs = inputs.nixpkgs-nixhalla;
             home-manager = inputs.home-manager-nixhalla;
             nur = inputs.nur-nixhalla;
+          };
+        };
+        rock = import ./hosts/rock {
+          inputs = {
+            nixpkgs = inputs.nixpkgs-rock;
+            home-manager = inputs.home-manager-rock;
           };
         };
         ironwood = import ./hosts/ironwood {

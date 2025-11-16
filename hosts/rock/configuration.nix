@@ -13,7 +13,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "box"; # Define your hostname.
+  networking.hostName = "rock";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -47,26 +47,12 @@
     variant = "";
   };
 
-  # # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.wang = {
-  #   isNormalUser = true;
-  #   description = "Warren Wang";
-  #   extraGroups = [
-  #     "networkmanager"
-  #     "wheel"
-  #   ];
-  #   packages = with pkgs; [ ];
-  # };
-
-  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    vim
     git
-    #  wget
+    wget
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -78,6 +64,7 @@
   # };
 
   # List services that you want to enable:
+  # TODO: add nvidia and tailscale configs.
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

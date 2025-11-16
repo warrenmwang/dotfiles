@@ -82,6 +82,26 @@
         "type": "github"
       }
     },
+    "home-manager-rock": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-rock"
+        ]
+      },
+      "locked": {
+        "lastModified": 1763228015,
+        "narHash": "sha256-1rYieMVUyZ3kK/cBIr8mOusxrOEJ1/+2MsOg0oJ7b3A=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "96156a9e86281c4bfc451236bc2ddfe4317e6f39",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "type": "github"
+      }
+    },
     "nixpkgs-ironwood": {
       "locked": {
         "lastModified": 1762977756,
@@ -105,6 +125,22 @@
         "owner": "NixOS",
         "repo": "nixpkgs",
         "rev": "08f22084e6085d19bcfb4be30d1ca76ecb96fe54",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-rock": {
+      "locked": {
+        "lastModified": 1762977756,
+        "narHash": "sha256-4PqRErxfe+2toFJFgcRKZ0UI9NSIOJa+7RXVtBhy4KE=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "c5ae371f1a6a7fd27823bc500d9390b38c05fa55",
         "type": "github"
       },
       "original": {
@@ -160,8 +196,10 @@
       "inputs": {
         "home-manager-ironwood": "home-manager-ironwood",
         "home-manager-nixhalla": "home-manager-nixhalla",
+        "home-manager-rock": "home-manager-rock",
         "nixpkgs-ironwood": "nixpkgs-ironwood",
         "nixpkgs-nixhalla": "nixpkgs-nixhalla",
+        "nixpkgs-rock": "nixpkgs-rock",
         "nur-ironwood": "nur-ironwood",
         "nur-nixhalla": "nur-nixhalla"
       }
