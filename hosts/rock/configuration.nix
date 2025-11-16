@@ -12,6 +12,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelParams = [ "consoleblank=300" ];
 
   networking.hostName = "rock";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -47,12 +48,15 @@
     variant = "";
   };
 
+  nix.settings.trusted-users = [ "root" "box" ];
+
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
     vim
     git
     wget
+    btop
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -64,6 +68,13 @@
   # };
 
   # List services that you want to enable:
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      nvidia-vaapi-driver
+    ];
+  };
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia = {
     # Modesetting is required.
@@ -97,6 +108,10 @@
   };
   services.tailscale.enable = true;
   services.openssh.enable = true;
+
+  services.logind.settings.Login.HandleLidSwitch = "ignore"; # this is an "old laptop as a server" type shi
+
+  # TODO: add virtualization for containers (docker)
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
