@@ -125,6 +125,71 @@
     vim
     unzip
     nushell
+    jq
+
+    # global packages for nvim default lsps, use devshells for per project needs
+    # NOTE: do NOT use Mason to install any lsps, formatters, linters, etc.
+    # look into https://github.com/BirdeeHub/nixCats-nvim if need it
+    #
+    gcc
+    clang-tools
+    lua-language-server
+    nixfmt-rfc-style
+
+    kitty
+    ghostty
+    vscode
+    zed-editor
+    evil-helix
+    neovim
+    neovide
+    yazi
+    hyperfine
+
+    obsidian
+    google-chrome
+    brave
+    parsec-bin
+    kdePackages.kcalc
+    protonvpn-gui
+    spotify
+    discord
+    signal-desktop
+    element-desktop
+
+    # recording
+    obs-studio
+    audacity
+
+    # media editting
+    shotcut
+    gimp
+
+    # drawing
+    aseprite
+    krita
+    xournalpp
+    kdePackages.kolourpaint
+
+    # idk if i want these anymore
+    # xfce.thunar # file explorer
+    # xfce.tumbler # d-bus thumbnailer service (for thunar)
+    # xfce.thunar-volman # thunar extension (removeablle media management)
+    # eog # image viewer
+
+    vlc # video, sound viewer
+    kdePackages.okular # PDF viewer
+    kdePackages.ark # zip archive tool
+
+    # Printer / Scanning
+    hplip
+    kdePackages.skanlite
+
+    prismlauncher # open source minecraft launcher
+
+    fastfetch
+    cbonsai
+    asciiquarium
 
     lshw
     usbutils

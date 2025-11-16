@@ -5,7 +5,8 @@
 }:
 
 let
-  mkSymlink = path: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/${path}";
+  mkSymlink =
+    path: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/${path}";
 in
 {
   home.username = "wang";
@@ -40,91 +41,6 @@ in
       ];
     };
   };
-
-  programs.thunderbird = {
-    enable = true;
-    profiles.default = {
-      isDefault = true;
-      settings = {
-        # Turn off notification sound/alert
-        "mail.biff.play_sound" = false;
-        "mail.biff.show_alert" = false;
-
-        "mailnews.default_sort_type" = 18; # 18 = threaded view
-        "mailnews.default_sort_order" = 2; # 1 = ascending, 2 = descending
-        "mailnews.thread_pane_column_unthreads" = false;
-        "mail.thread_without_re" = true;
-        "mailnews.scroll_to_new_message" = true;
-        "mail.showCondensedAddresses" = true;
-      };
-    };
-  };
-
-  home.packages = with pkgs; [
-    # global packages for nvim default lsps, use devshells for per project needs
-    # NOTE: do NOT use Mason to install any lsps, formatters, linters, etc.
-    # look into https://github.com/BirdeeHub/nixCats-nvim if need it
-    #
-    gcc
-    clang-tools
-    lua-language-server
-    nixfmt-rfc-style
-
-    kitty
-    ghostty
-    vscode
-    zed-editor
-    evil-helix
-    neovim
-    neovide
-    yazi
-    hyperfine
-
-    obsidian
-    google-chrome
-    brave
-    parsec-bin
-    kdePackages.kcalc
-    protonvpn-gui
-    spotify
-    discord
-    signal-desktop
-    element-desktop
-
-    # recording
-    obs-studio
-    audacity
-
-    # media editting
-    shotcut
-    gimp
-
-    # drawing
-    aseprite
-    krita
-    xournalpp
-    kdePackages.kolourpaint
-
-    # idk if i want these anymore
-    # xfce.thunar # file explorer
-    # xfce.tumbler # d-bus thumbnailer service (for thunar)
-    # xfce.thunar-volman # thunar extension (removeablle media management)
-    # eog # image viewer
-
-    vlc # video, sound viewer
-    kdePackages.okular # PDF viewer
-    kdePackages.ark # zip archive tool
-
-    # Printer / Scanning
-    hplip
-    kdePackages.skanlite
-
-    prismlauncher # open source minecraft launcher
-
-    fastfetch
-    cbonsai
-    asciiquarium
-  ];
 
   home.file = {
     ".icons/default".source = mkSymlink "./icons/Rage-Gothic-Light";
@@ -192,15 +108,6 @@ in
         "application/x-7z-compressed" = "org.kde.ark.desktop";
 
         "inode/directory" = "org.kde.dolphin.desktop";
-
-        "x-scheme-handler/mailto" = "thunderbird.desktop";
-        "message/rfc822" = "thunderbird.desktop";
-        "application/x-extension-eml" = "thunderbird.desktop";
-
-        "text/calendar" = "thunderbird.desktop";
-        "application/x-extension-ics" = "thunderbird.desktop";
-        "x-scheme-handler/webcal" = "thunderbird.desktop";
-        "x-scheme-handler/webcals" = "thunderbird.desktop";
       };
     };
 
@@ -214,5 +121,4 @@ in
       videos = "${config.home.homeDirectory}/Videos";
     };
   };
-
 }
