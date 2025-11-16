@@ -293,5 +293,8 @@
     "plaintext": false,
     "markdown": false,
     "scminput": false
+  },
+  "[nix]": {
+    "editor.defaultFormatter": "jnoortheen.nix-ide"
   }
 }

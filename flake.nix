@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration via Flakes for my nixhalla machine.";
+  description = "NixOS config with Flakes for machines under my dominion.";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -22,23 +22,10 @@
       ...
     }@inputs:
     {
-      nixosConfigurations.nixhalla = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./configuration.nix
-          (
-            { pkgs, ... }:
-            {
-              nixpkgs.overlays = [ nur.overlays.default ];
-            }
-          )
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.wang = import ./home.nix;
-          }
-        ];
+      nixosConfigurations = {
+        nixhalla = import ./hosts/nixhalla { inherit inputs; };
+        ironwood = import ./hosts/ironwood { inherit inputs; };
+        # nixosConfigurations.cornerstone = ./hosts/cornerstone;
       };
     };
 }

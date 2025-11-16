@@ -1,20 +1,18 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
+
+let
+  mkSymlink = path: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/${path}";
+in
 {
   home.username = "wang";
   home.homeDirectory = "/home/wang";
   home.stateVersion = "25.05";
 
   programs.home-manager.enable = true;
-
-  # TODO: can see program running, can "switch" keyboards but doesn't actually work, no pinyin keyboard chinese character chooser.
-  i18n.inputMethod = {
-    type = "fcitx5";
-    fcitx5.addons = with pkgs; [
-      fcitx5-chinese-addons
-      fcitx5-gtk
-      fcitx5-configtool
-    ];
-  };
 
   gtk = {
     enable = true;
@@ -107,13 +105,14 @@
     xournalpp
     kdePackages.kolourpaint
 
-    # files
-    xfce.thunar # file explorer
-    xfce.tumbler # d-bus thumbnailer service (for thunar)
-    xfce.thunar-volman # thunar extension (removeablle media management)
-    kdePackages.okular # PDF viewer
-    eog # image viewer
+    # idk if i want these anymore
+    # xfce.thunar # file explorer
+    # xfce.tumbler # d-bus thumbnailer service (for thunar)
+    # xfce.thunar-volman # thunar extension (removeablle media management)
+    # eog # image viewer
+
     vlc # video, sound viewer
+    kdePackages.okular # PDF viewer
     kdePackages.ark # zip archive tool
 
     # Printer / Scanning
@@ -127,38 +126,21 @@
     asciiquarium
   ];
 
-  # how lovely, i needed to find this thread to learn about this symlink magic
-  # https://discourse.nixos.org/t/how-to-manage-dotfiles-with-home-manager/30576/7
-  # manual and llms didn't give it to me.
   home.file = {
-    # ".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
-    ".icons/default".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/icons/Rage-Gothic-Light";
-    ".config/hypr".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/hypr";
-    ".config/waybar".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/waybar";
-    ".config/mako".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/mako";
-    ".bashrc".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/.bashrc";
-    ".config/git/config".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/.gitconfig";
-    ".config/nushell/config.nu".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nushell/config.nu";
-    ".config/nushell/env.nu".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nushell/env.nu";
-    ".config/tmux/tmux.conf".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/tmux/tmux.conf";
-    ".config/kitty/kitty.conf".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/kitty/kitty.conf";
-    ".config/nvim".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/nvim";
-    ".config/Code/User/settings.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/vscode/settings.json";
-    ".config/Code/User/keybindings.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/config/vscode/keybindings.json";
-    "bin".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/bin";
+    ".icons/default".source = mkSymlink "./icons/Rage-Gothic-Light";
+    ".config/hypr".source = mkSymlink "./config/hypr";
+    ".config/waybar".source = mkSymlink "./config/waybar";
+    ".config/mako".source = mkSymlink "./config/mako";
+    ".bashrc".source = mkSymlink "./config/.bashrc";
+    ".config/git/config".source = mkSymlink "./config/.gitconfig";
+    ".config/nushell/config.nu".source = mkSymlink "./config/nushell/config.nu";
+    ".config/nushell/env.nu".source = mkSymlink "./config/nushell/env.nu";
+    ".config/tmux/tmux.conf".source = mkSymlink "./config/tmux/tmux.conf";
+    ".config/kitty/kitty.conf".source = mkSymlink "./config/kitty/kitty.conf";
+    ".config/nvim".source = mkSymlink "./config/nvim";
+    ".config/Code/User/settings.json".source = mkSymlink "./config/vscode/settings.json";
+    ".config/Code/User/keybindings.json".source = mkSymlink "./config/vscode/keybindings.json";
+    "bin".source = mkSymlink "./bin";
   };
 
   xdg = {

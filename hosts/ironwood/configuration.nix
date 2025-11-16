@@ -14,7 +14,16 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixhalla"; # Define your hostname.
+  systemd.services."systemd-suspend" = {
+    serviceConfig = {
+      Environment = ''"SYSTEMD_SLEEP_FREEZE_USER_SESSIONS=false"'';
+    };
+  };
+
+  # Use latest kernel.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
+  networking.hostName = "ironwood"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -23,8 +32,6 @@
 
   # Enable networking
   networking.networkmanager.enable = true;
-  networking.firewall.checkReversePath = false; # to get protonvpn working...
-  services.tailscale.enable = true; # personal devices vpn network
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -44,26 +51,19 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Desktop Environments and related modules
-  # - keep default sddm
+  # Enable the X11 windowing system.
+  # You can disable this if you're only using the Wayland session.
+  services.xserver.enable = true;
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
+
+  # Enable the KDE Plasma Desktop Environment.
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
-  # - KDE
   services.desktopManager.plasma6.enable = true;
-  
-  # - Hyprland
-  programs.hyprland.enable = true;
-  programs.hyprlock.enable = true;
-  security.pam.services.hyprlock = { };
-
-  xdg.portal = {
-    enable = true;
-    extraPortals = with pkgs; [
-      xdg-desktop-portal-hyprland
-      xdg-desktop-portal-gtk
-      kdePackages.xdg-desktop-portal-kde
-    ];
-  };
 
   # Enable CUPS to print documents.
   services.printing = {
@@ -89,13 +89,6 @@
   hardware.sane.enable = true;
   hardware.sane.extraBackends = [ pkgs.hplipWithPlugin ];
 
-  # Enable fonts
-  fonts.fontconfig.enable = true;
-  fonts.packages = with pkgs; [
-    font-awesome
-    nerd-fonts.cousine
-  ];
-
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -112,131 +105,58 @@
     #media-session.enable = true;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.wang = {
-    isNormalUser = true;
-    description = "Warren Wang";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
-    packages = with pkgs; [ ];
-    # shell = pkgs.nushell;
-    shell = pkgs.bash;
-  };
+  # Enable touchpad support (enabled default in most desktopManager).
+  # services.xserver.libinput.enable = true;
 
+  # Install firefox.
+  programs.firefox.enable = true;
+
+  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Enable the Flakes feature and the accompanying new nix command-line tool
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
 
+  # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
-    wget
     file
     git
-    gh
-    ripgrep
-    fd
-    btop
-    tmux
+    wget
+    google-chrome
     vim
-    unzip
-    nushell
+    btop
+    vlc
+    libreoffice-qt6-fresh
+    kdePackages.kcalc
+    kdePackages.kolourpaint
+    kdePackages.kate
+    kdePackages.ksystemlog
 
-    lshw
-    usbutils
-    pciutils
-    hardinfo2
-    ddcutil
-    ddcui
-    brightnessctl
     wayland-utils
-    man-pages
-    man-pages-posix
-
-    pulsemixer
-    mako                      # a notification daemon
-    libnotify
-    pavucontrol               # audio control gui
-    wofi                      # program launcher menu
-    waybar                    # top decoration bar
-    networkmanagerapplet
-    hyprshot                  # screenshot tool
-    hyprpicker                # color picker
-    wl-clipboard
-    cliphist                  # clipboard manager
-    opentabletdriver
-    libinput
-    libwacom
+    hplip # hp printer printing
+    xsane # hp printer SANE scanning frontend
+    kdePackages.skanlite # another frontend for SANE
   ];
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
-    dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
-    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-  };
-  documentation.dev.enable = true;
 
-  # NOTE: this didn't work in home manager, so putting vars in system env def
-  # https://github.com/nix-community/home-manager/issues/1011
-  environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1"; # Hint electron apps to use wayland
+  # Set environment variables
+  environment.variables.EDITOR = "vim";
 
-    XDG_CONFIG_HOME = "$HOME/.config";
-    XDG_DATA_HOME = "$HOME/.local/share";
-    XDG_STATE_HOME = "$HOME/.local/state";
-    XDG_CACHE_HOME = "$HOME/.cache";
+  # Load nvidia driver for Xorg and Wayland
+  services.xserver.videoDrivers = [ "nvidia" ];
 
-    BROWSER = "firefox";
-    TERMINAL = "kitty";
-    EDITOR = "nvim";
-    FILE_MANAGER = "thunar";
-    MANPAGER="nvim +Man!";
-
-    QT_IM_MODULE = "fcitx";
-    GLFW_IM_MODULE = "ibus";
-    XMODIFIERS = "@im=fcitx";
-  };
-
-  # =================
-  # Hardware Stuff
-  # =================
-  hardware.graphics = {
-    enable = true;
-    enable32Bit = true;
-    extraPackages = with pkgs; [
-      nvidia-vaapi-driver
-    ];
-  };
-  services.xserver.videoDrivers = [ "nvidia" ]; # this actually seems important, first time i had to use a prev generation was trying to remove this line.
   hardware.nvidia = {
 
-    # NOTE: if just utilize the MUX switch and go discrete graphics mode
-    # then don't need the settings below.
-    #
-    # optimus prime settings
-    # For more information: https://nixos.wiki/wiki/Nvidia#Laptop_Configuration:_Hybrid_Graphics_(Nvidia_Optimus_PRIME)
-    #
-    # prime = {
-    #   offload = {
-    #     enable = true;
-    #     enableOffloadCmd = true;
-    #   };
-
-    #   # sync.enable = true; # NOTE: this seems to give worse performance than offload tbh, even tho it's supposed to be the other way around.
-
-    #   intelBusId = "PCI:0:02:0";
-    #   nvidiaBusId = "PCI:1:00:0";
-    # };
-
-    modesetting.enable = true; # required
+    # Modesetting is required.
+    modesetting.enable = true;
 
     # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
     # Enable this if you have graphical corruption issues or application crashes after waking
     # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
     # of just the bare essentials.
-    powerManagement.enable = true;
+    powerManagement.enable = true; # enabling to test wake from sleep issues.
 
     # Fine-grained power management. Turns off GPU when not in use.
     # Experimental and only works on modern Nvidia GPUs (Turing or newer).
@@ -248,21 +168,20 @@
     # supported GPUs is at:
     # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
     # Only available from driver 515.43.04+
-    open = true; # can use for my 3070 ti laptop gpu
+    open = false;
 
     # Enable the Nvidia settings menu,
     # accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
     # Optionally, you may need to select the appropriate driver version for your specific GPU.
+    # package = config.boot.kernelPackages.nvidiaPackages.legacy_530;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-  nixpkgs.config.cudaSupport = true;
 
-  # Bluetooth
-  hardware.bluetooth.enable = true;
-  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
-  services.blueman.enable = true; # gui tool
+  # Enable OpenGL
+  hardware.graphics.enable = true;
+  hardware.graphics.enable32Bit = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
