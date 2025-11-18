@@ -11,6 +11,7 @@
     extraGroups = [
       "networkmanager"
       "wheel"
+      "gitea"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.bash;

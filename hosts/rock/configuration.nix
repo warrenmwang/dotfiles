@@ -48,15 +48,23 @@
     variant = "";
   };
 
-  nix.settings.trusted-users = [ "root" "box" ];
-
   nixpkgs.config.allowUnfree = true;
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+  nix.settings.trusted-users = [
+    "root"
+    "box"
+  ];
 
   environment.systemPackages = with pkgs; [
     vim
     git
     wget
     btop
+    file
+    bat
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -107,14 +115,53 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
   services.tailscale.enable = true;
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = true;
+      AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ]
+      UseDns = true;
+      X11Forwarding = false;
+      PermitRootLogin = "no"; # "yes", "without-password", "prohibit-password", "forced-commands-only", "no"
+    };
+  };
 
   services.logind.settings.Login.HandleLidSwitch = "ignore"; # this is an "old laptop as a server" type shi
 
-  # TODO: add virtualization for containers (docker)
+  # Data drive mounts
+  fileSystems."/mnt/data1" = {
+    device = "/dev/disk/by-uuid/676f6e78-e5cc-d901-606c-6e78e5ccd901";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.device-timeout=5s"
+    ];
+  };
+
+  # Apps services
+  systemd.services.gitea = {
+    after = [
+      "mnt-data1.mount"
+    ];
+    requires = [
+      "mnt-data1.mount"
+    ];
+    serviceConfig.ExecStartPre = [
+      "+${pkgs.coreutils}/bin/mkdir -p /mnt/data1/gitea/custom/conf"
+      "+${pkgs.coreutils}/bin/mkdir -p /mnt/data1/gitea/repositories"
+      "+${pkgs.coreutils}/bin/chown -R gitea:gitea /mnt/data1/gitea"
+    ];
+  };
+  services.gitea = {
+    enable = true;
+    stateDir = "/mnt/data1/gitea";
+    repositoryRoot = "/mnt/data1/gitea/repositories";
+    settings.server.DOMAIN = "rock";
+  };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 3000 ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
