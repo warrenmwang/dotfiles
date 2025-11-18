@@ -160,8 +160,37 @@
     settings.server.DOMAIN = "rock";
   };
 
+  users.users.rockdrive.isSystemUser = true;
+  users.users.rockdrive.group = "rockdrive";
+  users.groups.rockdrive = { };
+  systemd.tmpfiles.rules = [
+    "d /mnt/data1/rockdrive 0770 rockdrive rockdrive"
+    "d /mnt/data1/rockdrive/storage 0770 rockdrive rockdrive"
+  ];
+  systemd.services.rockdrive = {
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "simple";
+      User = "rockdrive";
+      Restart = "on-failure";
+
+      # NOTE: address is needed for access from other computers, using tailscale ip
+      ExecStart = ''
+        ${pkgs.filebrowser}/bin/filebrowser \
+          --address "rock.tail901c17.ts.net" \
+          --port 3001 \
+          --database /mnt/data1/rockdrive/filebrowser.db \
+          --root /mnt/data1/rockdrive/storage
+      '';
+    };
+  };
+
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 3000 ];
+  networking.firewall.allowedTCPPorts = [
+    3000
+    3001
+  ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;

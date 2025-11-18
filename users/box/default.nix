@@ -12,6 +12,7 @@
       "networkmanager"
       "wheel"
       "gitea"
+      "rockdrive"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.bash;
