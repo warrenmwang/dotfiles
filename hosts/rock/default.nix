@@ -8,6 +8,12 @@ nixpkgs.lib.nixosSystem {
     ./configuration.nix
     ./hardware-configuration.nix
     home-manager.nixosModules.home-manager
-    ../../users/box
+    ../../users/wang
+    {
+      users.users.wang.extraGroups = [
+        "gitea"
+        "rockdrive"
+      ];
+    }
   ];
 }

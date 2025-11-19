@@ -10,5 +10,6 @@ nixpkgs.lib.nixosSystem {
     ./hardware-configuration.nix
     home-manager.nixosModules.home-manager
     ../../users/wang
+    ../../users/wang/home.nix
   ];
 }

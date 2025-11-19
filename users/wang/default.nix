@@ -15,11 +15,4 @@
     packages = with pkgs; [ ];
     shell = pkgs.bash; # other options based on my mood: pkgs.nushell
   };
-
-  home-manager = {
-    useGlobalPkgs = true;
-    useUserPackages = true;
-    backupFileExtension = "backup";
-    users.wang = import ./home.nix;
-  };
 }

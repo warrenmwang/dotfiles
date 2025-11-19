@@ -54,8 +54,7 @@
     "flakes"
   ];
   nix.settings.trusted-users = [
-    "root"
-    "box"
+    "wang"
   ];
 
   environment.systemPackages = with pkgs; [
