@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs-nixhalla.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-ironwood.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs-cornerstone.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-gram.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager-nixhalla = {
@@ -15,10 +15,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs-ironwood";
     };
-    # home-manager-cornerstone = {
-    #   url = "github:nix-community/home-manager";
-    #   inputs.nixpkgs.follows = "nixpkgs-cornerstone";
-    # };
+    home-manager-gram = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs-gram";
+    };
     home-manager-rock = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs-rock";
@@ -32,15 +32,14 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs-ironwood";
     };
-    # nur-cornerstone = {
-    #   url = "github:nix-community/NUR";
-    #   inputs.nixpkgs.follows = "nixpkgs-cornerstone";
-    # };
-
+    nur-gram = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs-gram";
+    };
   };
 
   outputs =
-    { self, ...  }@inputs:
+    { self, ... }@inputs:
     {
       nixosConfigurations = {
         nixhalla = import ./hosts/nixhalla {
@@ -63,7 +62,13 @@
             nur = inputs.nur-ironwood;
           };
         };
-        # nixosConfigurations.cornerstone = ./hosts/cornerstone;
+        gram = import ./hosts/gram {
+          inputs = {
+            nixpkgs = inputs.nixpkgs-gram;
+            home-manager = inputs.home-manager-gram;
+            nur = inputs.nur-gram;
+          };
+        };
       };
     };
 }

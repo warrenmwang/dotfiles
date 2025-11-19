@@ -3,7 +3,7 @@
     "flake-parts": {
       "inputs": {
         "nixpkgs-lib": [
-          "nur-ironwood",
+          "nur-gram",
           "nixpkgs"
         ]
       },
@@ -24,6 +24,27 @@
     "flake-parts_2": {
       "inputs": {
         "nixpkgs-lib": [
+          "nur-ironwood",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1733312601,
+        "narHash": "sha256-4pDvzqnegAfRkPwO3wmwBhVi/Sye1mzps0zHWYnP88c=",
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "rev": "205b12d8b7cd4802fbcb8e8ef6a0f1408781a4f9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "hercules-ci",
+        "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "flake-parts_3": {
+      "inputs": {
+        "nixpkgs-lib": [
           "nur-nixhalla",
           "nixpkgs"
         ]
@@ -39,6 +60,26 @@
       "original": {
         "owner": "hercules-ci",
         "repo": "flake-parts",
+        "type": "github"
+      }
+    },
+    "home-manager-gram": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-gram"
+        ]
+      },
+      "locked": {
+        "lastModified": 1763416652,
+        "narHash": "sha256-8EBEEvtzQ11LCxpQHMNEBQAGtQiCu/pqP9zSovDSbNM=",
+        "owner": "nix-community",
+        "repo": "home-manager",
+        "rev": "ea164b7c9ccdc2321379c2ff78fd4317b4c41312",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "home-manager",
         "type": "github"
       }
     },
@@ -102,6 +143,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-gram": {
+      "locked": {
+        "lastModified": 1763421233,
+        "narHash": "sha256-Stk9ZYRkGrnnpyJ4eqt9eQtdFWRRIvMxpNRf4sIegnw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "89c2b2330e733d6cdb5eae7b899326930c2c0648",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-ironwood": {
       "locked": {
         "lastModified": 1762977756,
@@ -150,9 +207,30 @@
         "type": "github"
       }
     },
-    "nur-ironwood": {
+    "nur-gram": {
       "inputs": {
         "flake-parts": "flake-parts",
+        "nixpkgs": [
+          "nixpkgs-gram"
+        ]
+      },
+      "locked": {
+        "lastModified": 1763525570,
+        "narHash": "sha256-SH1scbtwe/h9W9BcOSG21u+MleL1feWydW5YjoIs4PQ=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "30671f14a666628bcb699af142743156c2518aad",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
+    "nur-ironwood": {
+      "inputs": {
+        "flake-parts": "flake-parts_2",
         "nixpkgs": [
           "nixpkgs-ironwood"
         ]
@@ -173,7 +251,7 @@
     },
     "nur-nixhalla": {
       "inputs": {
-        "flake-parts": "flake-parts_2",
+        "flake-parts": "flake-parts_3",
         "nixpkgs": [
           "nixpkgs-nixhalla"
         ]
@@ -194,12 +272,15 @@
     },
     "root": {
       "inputs": {
+        "home-manager-gram": "home-manager-gram",
         "home-manager-ironwood": "home-manager-ironwood",
         "home-manager-nixhalla": "home-manager-nixhalla",
         "home-manager-rock": "home-manager-rock",
+        "nixpkgs-gram": "nixpkgs-gram",
         "nixpkgs-ironwood": "nixpkgs-ironwood",
         "nixpkgs-nixhalla": "nixpkgs-nixhalla",
         "nixpkgs-rock": "nixpkgs-rock",
+        "nur-gram": "nur-gram",
         "nur-ironwood": "nur-ironwood",
         "nur-nixhalla": "nur-nixhalla"
       }

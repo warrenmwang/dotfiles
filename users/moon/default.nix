@@ -10,10 +10,6 @@
     description = "moon";
     extraGroups = [
       "networkmanager"
-      "wheel"
-      "scanner"
-      "lp"
-      "lpadmin"
     ];
     packages = with pkgs; [ ];
     shell = pkgs.bash;
