@@ -1,20 +1,5 @@
+{ config, pkgs, ... }:
 {
-  config,
-  pkgs,
-  ...
-}:
-
-let
-  mkSymlink =
-    path: config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/dotfiles/${path}";
-in
-{
-  home.username = "wang";
-  home.homeDirectory = "/home/wang";
-  home.stateVersion = "25.05";
-
-  programs.home-manager.enable = true;
-
   gtk = {
     enable = true;
     theme = {
@@ -25,38 +10,6 @@ in
       name = "Papirus";
       package = pkgs.papirus-icon-theme;
     };
-  };
-
-  programs.firefox = {
-    enable = true;
-    profiles.default = {
-      id = 0;
-      name = "default";
-      isDefault = true;
-      extensions.packages = with pkgs.nur.repos.rycee.firefox-addons; [
-        ublock-origin
-        bitwarden
-        darkreader
-        vimium
-      ];
-    };
-  };
-
-  home.file = {
-    ".icons/default".source = mkSymlink "./icons/Rage-Gothic-Light";
-    ".config/hypr".source = mkSymlink "./config/hypr";
-    ".config/waybar".source = mkSymlink "./config/waybar";
-    ".config/mako".source = mkSymlink "./config/mako";
-    ".bashrc".source = mkSymlink "./config/.bashrc";
-    ".config/git/config".source = mkSymlink "./config/.gitconfig";
-    ".config/nushell/config.nu".source = mkSymlink "./config/nushell/config.nu";
-    ".config/nushell/env.nu".source = mkSymlink "./config/nushell/env.nu";
-    ".config/tmux/tmux.conf".source = mkSymlink "./config/tmux/tmux.conf";
-    ".config/kitty/kitty.conf".source = mkSymlink "./config/kitty/kitty.conf";
-    ".config/nvim".source = mkSymlink "./config/nvim";
-    ".config/Code/User/settings.json".source = mkSymlink "./config/vscode/settings.json";
-    ".config/Code/User/keybindings.json".source = mkSymlink "./config/vscode/keybindings.json";
-    "bin".source = mkSymlink "./bin";
   };
 
   xdg = {

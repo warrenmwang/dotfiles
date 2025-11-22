@@ -7,13 +7,21 @@ nixpkgs.lib.nixosSystem {
   modules = [
     ./configuration.nix
     ./hardware-configuration.nix
-    home-manager.nixosModules.home-manager
     ../../users/wang
     {
       users.users.wang.extraGroups = [
         "gitea"
         "rockdrive"
       ];
+    }
+    home-manager.nixosModules.home-manager
+    {
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        backupFileExtension = "backup";
+        users.wang = import ../../users/wang/home-manager/hosts/rock.nix;
+      };
     }
   ];
 }

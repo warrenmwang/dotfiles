@@ -8,8 +8,15 @@ nixpkgs.lib.nixosSystem {
     { nixpkgs.overlays = [ nur.overlays.default ]; }
     ./configuration.nix
     ./hardware-configuration.nix
-    home-manager.nixosModules.home-manager
     ../../users/wang
-    ../../users/wang/home.nix
+    home-manager.nixosModules.home-manager
+    {
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        backupFileExtension = "backup";
+        users.wang = import ../../users/wang/home-manager/hosts/nixhalla.nix;
+      };
+    }
   ];
 }
