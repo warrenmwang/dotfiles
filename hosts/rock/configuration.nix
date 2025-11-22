@@ -58,12 +58,25 @@
   ];
 
   environment.systemPackages = with pkgs; [
-    vim
-    git
     wget
-    btop
     file
-    bat
+    git
+    gh
+    ripgrep
+    fd
+    btop
+    tmux
+    vim
+    unzip
+    nushell
+    jq
+
+    gcc
+    clang-tools
+    lua-language-server
+    nixfmt-rfc-style
+
+    neovim
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
