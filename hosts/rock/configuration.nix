@@ -49,13 +49,16 @@
   };
 
   nixpkgs.config.allowUnfree = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.settings.trusted-users = [
-    "wang"
-  ];
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    trusted-users = [
+      "wang"
+    ];
+    secret-key-files = [ "/etc/nix/cache-priv-key.pem" ];
+  };
 
   environment.systemPackages = with pkgs; [
     wget

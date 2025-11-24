@@ -15,7 +15,6 @@ in
     ".config/hypr".source = mkSymlinkDotfiles "config/hypr";
     ".config/waybar".source = mkSymlinkDotfiles "config/waybar";
     ".config/mako".source = mkSymlinkDotfiles "config/mako";
-    ".bashrc".source = mkSymlinkDotfiles "config/.bashrc";
     ".config/git/config".source = mkSymlinkDotfiles "config/.gitconfig";
     ".config/nushell/config.nu".source = mkSymlinkDotfiles "config/nushell/config.nu";
     ".config/nushell/env.nu".source = mkSymlinkDotfiles "config/nushell/env.nu";

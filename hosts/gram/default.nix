@@ -11,5 +11,13 @@ nixpkgs.lib.nixosSystem {
     home-manager.nixosModules.home-manager
     ../../users/moon
     ../../users/wang
+    {
+      home-manager = {
+        useGlobalPkgs = true;
+        useUserPackages = true;
+        backupFileExtension = "hm-backup";
+        users.wang = import ../../users/wang/home-manager/hosts/gram.nix;
+      };
+    }
   ];
 }

@@ -14,7 +14,7 @@ nixpkgs.lib.nixosSystem {
       home-manager = {
         useGlobalPkgs = true;
         useUserPackages = true;
-        backupFileExtension = "backup";
+        backupFileExtension = "hm-backup";
         users.wang = import ../../users/wang/home-manager/hosts/nixhalla.nix;
       };
     }
