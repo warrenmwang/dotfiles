@@ -115,7 +115,7 @@
     ];
     substituters = [
       "https://cache.nixos.org"
-      "ssh://wang@rock"
+      "http://rock:5000"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
@@ -219,12 +219,12 @@
     # networkmanagerapplet
     # hyprshot                  # screenshot tool
     # hyprpicker                # color picker
-    # wl-clipboard
     # cliphist                  # clipboard manager
     # libnotify
     # pulsemixer                # audio control cli
     # pavucontrol               # audio control gui
 
+    wl-clipboard
     opentabletdriver
     libinput
     libwacom

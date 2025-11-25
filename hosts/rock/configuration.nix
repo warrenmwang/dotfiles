@@ -57,7 +57,6 @@
     trusted-users = [
       "wang"
     ];
-    secret-key-files = [ "/etc/nix/cache-priv-key.pem" ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -155,6 +154,13 @@
   };
 
   # Apps services
+  services.nix-serve = {
+    enable = true;
+    secretKeyFile = "/etc/nix/cache-priv-key.pem"; 
+    port = 5000;
+    openFirewall = true;
+  };
+
   systemd.services.gitea = {
     after = [
       "mnt-data1.mount"
