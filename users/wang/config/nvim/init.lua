@@ -3,23 +3,25 @@
 -- See `:help vim.opt`, see `:help option-list`
 -- See `:help gitsigns` to understand what the configuration keys do
 -- Use `opts = {}` to force a plugin to be loaded.
--- lazy :help lazy.nvim-lazy.nvim-structuring-your-plugins
--- [[ Configure and install plugins ]]
---  To check the current status of your plugins, run
---    :Lazy
---  You can press `?` in this menu for help. Use `:q` to close the window
---  To update plugins you can run
---    :Lazy update
+-- See `:help telescope` and `:help telescope.setup()`
+-- :Lazy
 
 -- Globals
+IN_GUI = vim.fn.has 'gui_running' == 1
+if IN_GUI then
+  print("No GUI anymore. That phase is over. If you're using neovim, you are using it in the terminal. Otherwise use another GUI editor.")
+  return
+end
+
 DEBUG = false
 ON_WINDOWS_OS = vim.fn.has 'win32' == 1
 ON_LINUX_NIXOS = vim.fn.has 'unix' == 1 and vim.fn.executable('nixos-rebuild') == 1
 ON_LINUX_NORMAL_OS = vim.fn.has 'unix' == 1 and not ON_WINDOWS_OS and not ON_LINUX_NIXOS
 USE_MASON = false
-IN_GUI = vim.fn.has 'gui_running' == 1
 
 WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'astro' }
+
+local terminal = require('terminal')
 
 if DEBUG then
   print("OS Detection:")
@@ -44,58 +46,6 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true -- Curr Pref: [Cousine Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.3.0/Cousine.zip)
 
-if IN_GUI then
-  vim.opt.guifont = 'Cousine Nerd Font Mono:h14'
-  if vim.g.neovide then
-    vim.g.neovide_cursor_animation_length = 0.05 -- cursor smear; default: 0.15
-    vim.g.neovide_scroll_animation_length = 0.05 -- smooth scroll; default: 0.3
-    vim.g.neovide_position_animation_length = 0  -- default: 0.15
-    vim.g.neovide_hide_mouse_when_typing = true
-
-    -- dynamically resizable text
-    -- orig: https://github.com/neovide/neovide/discussions/2301#discussioncomment-8223203
-    vim.keymap.set({ 'n', 'v' }, '<C-=>', function()
-      vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
-    end)
-    vim.keymap.set({ 'n', 'v' }, '<C-->', function()
-      if vim.g.neovide_scale_factor > 0.2 then
-        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
-      end
-    end)
-    vim.keymap.set({ 'n', 'v' }, '<C-ScrollWheelUp>', function()
-      vim.g.neovide_scale_factor = vim.g.neovide_scale_factor + 0.1
-    end)
-    vim.keymap.set({ 'n', 'v' }, '<C-ScrollWheelDown>', function()
-      if vim.g.neovide_scale_factor > 0.2 then
-        vim.g.neovide_scale_factor = vim.g.neovide_scale_factor - 0.1
-      end
-    end)
-    vim.keymap.set({ 'n', 'v' }, '<C-0>', function()
-      vim.g.neovide_scale_factor = 1
-    end)
-
-    -- window mappings to enable expanding and shrinking window sizes with Ctrl+Shift + movement keys
-    -- vim.keymap.set({ 'n', 'v' }, '<C-S-h>', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
-    -- vim.keymap.set({ 'n', 'v' }, '<C-S-l>', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
-    -- vim.keymap.set({ 'n', 'v' }, '<C-S-k>', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
-    -- vim.keymap.set({ 'n', 'v' }, '<C-S-j>', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
-  end
-else
-  -- IN TERMINAL MODE
-
-  -- window mappings to enable expanding and shrinking window sizes with leader + movement keys
-  -- vim.keymap.set({ 'n', 'v' }, '<leader>h', '<cmd>vertical resize -5<CR>', { desc = 'Decrease window width' })
-  -- vim.keymap.set({ 'n', 'v' }, '<leader>l', '<cmd>vertical resize +5<CR>', { desc = 'Increase window width' })
-  -- vim.keymap.set({ 'n', 'v' }, '<leader>k', '<cmd>resize +5<CR>', { desc = 'Increase window height' })
-  -- vim.keymap.set({ 'n', 'v' }, '<leader>j', '<cmd>resize -5<CR>', { desc = 'Decrease window height' })
-end
-
--- allow moving text selected in visual mode
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-vim.keymap.set('v', 'H', 'xhhp`[v`]')
-vim.keymap.set('v', 'L', 'xp`[v`]')
-
 -- default tab options
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
@@ -106,12 +56,6 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.mouse = 'a'
 vim.opt.showmode = false
-
--- Select current hovered over word and start search
-vim.keymap.set('n', 'gn', '/\\V\\<<C-R><C-W>\\><CR>', { desc = 'Search current word' })
-
--- Search currently selected text
-vim.keymap.set('v', 'gn', 'y/\\V<C-R>"<CR>', { desc = 'Search selected text' })
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -153,12 +97,69 @@ vim.opt.wrap = false
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- allow moving text selected in visual mode
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+vim.keymap.set('v', 'H', 'xhhp`[v`]')
+vim.keymap.set('v', 'L', 'xp`[v`]')
+
+-- Select current hovered over word and start search
+vim.keymap.set('n', 'gn', '/\\V\\<<C-R><C-W>\\><CR>', { desc = 'Search current word' })
+
+-- Search currently selected text
+vim.keymap.set('v', 'gn', 'y/\\V<C-R>"<CR>', { desc = 'Search selected text' })
+
+-- more convenient code fold hotkeys
+vim.keymap.set('v', 'ff', 'zf');
+vim.keymap.set('n', 'fa', 'za');
+vim.keymap.set('v', 'fa', 'za');
+vim.keymap.set('n', 'fb', 'zf%'); -- help to fold a block
+
 vim.keymap.set('n', 'gh', '_')
 vim.keymap.set('n', 'gl', 'g_')
 vim.keymap.set('n', '<leader>w', ':w<CR>')
 
+-- terminal keymaps
+vim.keymap.set('n', '<A-;>', terminal.toggle_floating_term)
+vim.keymap.set('t', '<A-;>', terminal.toggle_floating_term)
+
+vim.keymap.set('n', '<A-n>', function()
+  if terminal.is_in_floating_term() then
+    terminal.new_terminal()
+    return
+  end
+  vim.cmd(':tabnew')
+end)
+vim.keymap.set('t', '<A-n>', terminal.new_terminal)
+
+vim.keymap.set('n', '<A-w>', terminal.close_current_terminal)
+vim.keymap.set('t', '<A-w>', terminal.close_current_terminal)
+
+vim.keymap.set('n', '<A-k>', function() terminal.cycle_terminal(-1) end)
+vim.keymap.set('t', '<A-k>', function() terminal.cycle_terminal(-1) end)
+
+vim.keymap.set('n', '<A-j>', function() terminal.cycle_terminal(1) end)
+vim.keymap.set('t', '<A-j>', function() terminal.cycle_terminal(1) end)
+
+-- tab keymaps
 vim.keymap.set('n', '<A-.>', ':tabnext<CR>')
 vim.keymap.set('n', '<A-,>', ':tabprev<CR>')
+vim.keymap.set('n', '<A-c>', ':tabclose<CR>')
+for i = 1, 9 do
+  vim.keymap.set('n', '<A-' .. i .. '>', i .. 'gt', { desc = 'Go to tab ' .. i })
+end
+
+-- copy path of current buffer (file or directory) to system clipboard
+vim.keymap.set('n', '<leader>cp', function()
+  local path
+  if vim.bo.filetype == 'oil' then
+    path = require('oil').get_current_dir()
+  else
+    path = vim.fn.expand('%:p')
+  end
+  vim.fn.setreg('+', path)
+end)
+
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -326,238 +327,6 @@ vim.keymap.set('n', '<A-m>', function()
 end, { desc = 'Run a build script in the CWD' })
 
 --------------------------------------- build hotkey ---------------------------------------
-
---------------------------------------- terminal ---------------------------------------
-
-local floating_term_state = {
-  win = nil,
-  buffers = {},
-  current_index = 1,
-}
-
-local function create_terminal_title()
-  if #floating_term_state.buffers == 0
-  then
-    return "Terminal"
-  end
-
-  local title = string.format("Terminal %d/%d",
-    floating_term_state.current_index,
-    #floating_term_state.buffers)
-
-  return title
-end
-
--- create new term buffer, add it to the buffers table state, and update curr index to it
-local function create_new_terminal()
-  local buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_call(buf, function() vim.cmd 'terminal' end)
-
-  table.insert(floating_term_state.buffers, buf)
-  floating_term_state.current_index = #floating_term_state.buffers
-
-  return buf
-end
-
-local function close_current_terminal()
-  if #floating_term_state.buffers == 0
-  then
-    return
-  end
-
-  local buf_to_delete = floating_term_state.buffers[floating_term_state.current_index]
-  local index_of_buf_to_delete = floating_term_state.current_index
-
-  -- last term: create a new one to replace it
-  if floating_term_state.win
-      and vim.api.nvim_win_is_valid(floating_term_state.win)
-      and #floating_term_state.buffers == 1
-  then
-    local buf = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_call(buf, function() vim.cmd 'terminal' end)
-    table.insert(floating_term_state.buffers, buf)
-
-    vim.api.nvim_win_set_buf(floating_term_state.win, buf)
-
-    table.remove(floating_term_state.buffers, index_of_buf_to_delete)
-    if vim.api.nvim_buf_is_valid(buf_to_delete) then
-      vim.api.nvim_buf_delete(buf_to_delete, { force = true })
-    end
-
-    floating_term_state.current_index = 1
-    local title = create_terminal_title()
-    vim.api.nvim_win_set_config(floating_term_state.win, { title = title })
-  end
-
-  -- at least one other term: switch to prev/next term
-  if floating_term_state.win
-      and vim.api.nvim_win_is_valid(floating_term_state.win)
-      and #floating_term_state.buffers > 1
-  then
-    local new_curr_index
-
-    if floating_term_state.current_index == 1
-    then
-      new_curr_index = floating_term_state.current_index + 1
-    else
-      new_curr_index = floating_term_state.current_index - 1
-    end
-
-    local buf = floating_term_state.buffers[new_curr_index]
-    vim.api.nvim_win_set_buf(floating_term_state.win, buf)
-
-    table.remove(floating_term_state.buffers, index_of_buf_to_delete)
-    if vim.api.nvim_buf_is_valid(buf_to_delete) then
-      vim.api.nvim_buf_delete(buf_to_delete, { force = true })
-    end
-
-    floating_term_state.current_index = new_curr_index
-    local title = create_terminal_title()
-    vim.api.nvim_win_set_config(floating_term_state.win, { title = title })
-  end
-end
-
-local function cycle_terminal(direction)
-  if #floating_term_state.buffers <= 1 then
-    return
-  end
-
-  if direction > 0 then -- Next (A-j)
-    floating_term_state.current_index = floating_term_state.current_index + 1
-    if floating_term_state.current_index > #floating_term_state.buffers then
-      floating_term_state.current_index = 1
-    end
-  else -- Previous (A-k)
-    floating_term_state.current_index = floating_term_state.current_index - 1
-    if floating_term_state.current_index < 1 then
-      floating_term_state.current_index = #floating_term_state.buffers
-    end
-  end
-
-  if floating_term_state.win and vim.api.nvim_win_is_valid(floating_term_state.win) then
-    local current_buf = floating_term_state.buffers[floating_term_state.current_index]
-    vim.api.nvim_win_set_buf(floating_term_state.win, current_buf)
-
-    local title = create_terminal_title()
-    vim.api.nvim_win_set_config(floating_term_state.win, { title = title })
-
-    vim.cmd 'startinsert'
-  end
-end
-
-local function new_terminal()
-  create_new_terminal()
-
-  if floating_term_state.win and vim.api.nvim_win_is_valid(floating_term_state.win) then
-    local current_buf = floating_term_state.buffers[floating_term_state.current_index]
-    vim.api.nvim_win_set_buf(floating_term_state.win, current_buf)
-
-    local title = create_terminal_title()
-    vim.api.nvim_win_set_config(floating_term_state.win, { title = title })
-
-    vim.cmd 'startinsert'
-  end
-end
-
-local function toggle_floating_term()
-  local is_term_win_open = floating_term_state.win and vim.api.nvim_win_is_valid(floating_term_state.win)
-
-  if is_term_win_open then
-    vim.api.nvim_win_close(floating_term_state.win, false)
-    floating_term_state.win = nil
-    return
-  end
-
-  if not is_term_win_open then
-    -- Clean up any invalid buffers
-    for i = #floating_term_state.buffers, 1, -1 do
-      if not vim.api.nvim_buf_is_valid(floating_term_state.buffers[i]) then
-        table.remove(floating_term_state.buffers, i)
-        if floating_term_state.current_index > i then
-          floating_term_state.current_index = floating_term_state.current_index - 1
-        end
-      end
-    end
-
-    -- Adjust current_index if needed
-    if floating_term_state.current_index > #floating_term_state.buffers then
-      floating_term_state.current_index = math.max(1, #floating_term_state.buffers)
-    end
-
-    -- Create new terminal if none exist after clean / on startup
-    if #floating_term_state.buffers == 0 then
-      create_new_terminal()
-    end
-
-    -- Open window with current buffer
-    local width = math.floor(vim.o.columns * 0.8)
-    local height = math.floor(vim.o.lines * 0.8)
-    local col = math.floor((vim.o.columns - width) / 2)
-    local row = math.floor((vim.o.lines - height) / 2)
-
-    local title = create_terminal_title()
-    local opts = {
-      relative = 'editor',
-      width = width,
-      height = height,
-      col = col,
-      row = row,
-      anchor = 'NW',
-      style = 'minimal',
-      border = 'rounded',
-      title = title,
-      title_pos = 'center',
-    }
-
-    local current_buf = floating_term_state.buffers[floating_term_state.current_index]
-    floating_term_state.win = vim.api.nvim_open_win(current_buf, true, opts)
-    vim.cmd 'startinsert'
-  end
-end
-
-
-if IN_GUI then
-  vim.keymap.set('n', '<C-S-j>', toggle_floating_term)
-  vim.keymap.set('t', '<C-S-j>', toggle_floating_term)
-
-  vim.keymap.set('n', '<C-S-n>', new_terminal)
-  vim.keymap.set('t', '<C-S-n>', new_terminal)
-
-  vim.keymap.set('n', '<C-S-w>', close_current_terminal)
-  vim.keymap.set('t', '<C-S-w>', close_current_terminal)
-
-  -- vim.keymap.set('n', '<A-;>', toggle_floating_term)
-  -- vim.keymap.set('t', '<A-;>', toggle_floating_term)
-  --
-  -- vim.keymap.set('n', '<A-n>', new_terminal)
-  -- vim.keymap.set('t', '<A-n>', new_terminal)
-  --
-  -- vim.keymap.set('n', '<A-w>', close_current_terminal)
-  -- vim.keymap.set('t', '<A-w>', close_current_terminal)
-
-  vim.keymap.set('n', '<A-k>', function() cycle_terminal(-1) end)
-  vim.keymap.set('t', '<A-k>', function() cycle_terminal(-1) end)
-
-  vim.keymap.set('n', '<A-j>', function() cycle_terminal(1) end)
-  vim.keymap.set('t', '<A-j>', function() cycle_terminal(1) end)
-else
-  vim.keymap.set('n', '<A-;>', toggle_floating_term)
-  vim.keymap.set('t', '<A-;>', toggle_floating_term)
-
-  vim.keymap.set('n', '<A-n>', new_terminal)
-  vim.keymap.set('t', '<A-n>', new_terminal)
-
-  vim.keymap.set('n', '<A-w>', close_current_terminal)
-  vim.keymap.set('t', '<A-w>', close_current_terminal)
-
-  vim.keymap.set('n', '<A-k>', function() cycle_terminal(-1) end)
-  vim.keymap.set('t', '<A-k>', function() cycle_terminal(-1) end)
-
-  vim.keymap.set('n', '<A-j>', function() cycle_terminal(1) end)
-  vim.keymap.set('t', '<A-j>', function() cycle_terminal(1) end)
-end
-
---------------------------------------- terminal ---------------------------------------
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -1053,56 +822,24 @@ local config_git = {
   },
 }
 
-local config_telescope = { -- Fuzzy Finder (files, lsp, etc)
+local config_telescope = {
   'nvim-telescope/telescope.nvim',
   event = 'VimEnter',
   branch = 'master',
   dependencies = {
     'nvim-lua/plenary.nvim',
-    { -- If encountering errors, see telescope-fzf-native README for installation instructions
+    {
       'nvim-telescope/telescope-fzf-native.nvim',
-
-      -- `build` is used to run some command when the plugin is installed/updated.
-      -- This is only run then, not every time Neovim starts up.
       build = 'make',
-
-      -- `cond` is a condition used to determine whether this plugin should be
-      -- installed and loaded.
       cond = function()
         return vim.fn.executable 'make' == 1
       end,
     },
     { 'nvim-telescope/telescope-ui-select.nvim' },
-
-    -- Useful for getting pretty icons, but requires a Nerd Font.
     { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
   },
   config = function()
-    -- Telescope is a fuzzy finder that comes with a lot of different things that
-    -- it can fuzzy find! It's more than just a "file finder", it can search
-    -- many different aspects of Neovim, your workspace, LSP, and more!
-    --
-    -- The easiest way to use Telescope, is to start by doing something like:
-    --  :Telescope help_tags
-    --
-    -- After running this command, a window will open up and you're able to
-    -- type in the prompt window. You'll see a list of `help_tags` options and
-    -- a corresponding preview of the help.
-    --
-    -- Two important keymaps to use while in Telescope are:
-    --  - Insert mode: <c-/>
-    --  - Normal mode: ?
-    --
-    -- This opens a window that shows you all of the keymaps for the current
-    -- Telescope picker. This is really useful to discover what Telescope can
-    -- do as well as how to actually do it!
-
-    -- [[ Configure Telescope ]]
-    -- See `:help telescope` and `:help telescope.setup()`
     require('telescope').setup {
-      -- You can put your default mappings / updates / etc. in here
-      --  All the info you're looking for is in `:help telescope.setup()`
-      --
       defaults = {
         mappings = {
           i = {
@@ -1150,24 +887,6 @@ local config_telescope = { -- Fuzzy Finder (files, lsp, etc)
       { noremap = true, silent = true, desc = '[S]earch Git [I]gnored files' }
     )
 
-    -- Slightly advanced example of overriding default behavior and theme
-    vim.keymap.set('n', '<leader>/', function()
-      -- You can pass additional configuration to Telescope to change the theme, layout, etc.
-      builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-        winblend = 10,
-        previewer = false,
-      })
-    end, { desc = '[/] Fuzzily search in current buffer' })
-
-    -- It's also possible to pass additional configuration options.
-    --  See `:help telescope.builtin.live_grep()` for information about particular keys
-    vim.keymap.set('n', '<leader>s/', function()
-      builtin.live_grep {
-        grep_open_files = true,
-        prompt_title = 'Live Grep in Open Files',
-      }
-    end, { desc = '[S]earch [/] in Open Files' })
-
     -- Shortcut for searching your Neovim configuration files
     vim.keymap.set('n', '<leader>sn', function()
       builtin.find_files { cwd = vim.fn.stdpath 'config' }
@@ -1175,7 +894,7 @@ local config_telescope = { -- Fuzzy Finder (files, lsp, etc)
   end,
 }
 
-local config_treesitter = { -- Highlight, edit, and navigate code
+local config_treesitter = {
   'nvim-treesitter/nvim-treesitter',
   build = ':TSUpdate',
   opts = {
@@ -1208,38 +927,25 @@ local config_treesitter = { -- Highlight, edit, and navigate code
     auto_install = true,
     highlight = {
       enable = true,
-      -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-      --  If you are experiencing weird indenting issues, add the language to
-      --  the list of additional_vim_regex_highlighting and disabled languages for indent.
       additional_vim_regex_highlighting = { 'ruby' },
     },
     indent = { enable = true, disable = { 'ruby' } },
   },
   config = function(_, opts)
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-
-    -- Associate specific parsers to specific filetypes, if needed
-    -- this one associates tsx parser to the typescriptreact filetype
     vim.treesitter.language.register('tsx', 'typescriptreact')
 
     ---@diagnostic disable-next-line: missing-fields
     require('nvim-treesitter.configs').setup(opts)
-
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   end,
 }
 
 local config_indent_line = {
-  { -- Add indentation guides even on blank lines
+  {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     opts = {
-      scope = { enabled = false }, -- set to true to enable highlighting of the current scope (requires tree-sitter)
+      scope = { enabled = false },
     },
   },
 }
@@ -1253,69 +959,30 @@ local config_autopairs = {
     require('nvim-autopairs').setup {
       disable_filetype = { 'TelescopePrompt', 'vim' },
     }
-    -- If you want to automatically add `(` after selecting a function or method
     local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
     local cmp = require 'cmp'
     cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
   end,
 }
 
-local config_neo_tree = {
-  'nvim-neo-tree/neo-tree.nvim',
-  version = '*',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'nvim-tree/nvim-web-devicons', -- not strictly required, but recommended
-    'MunifTanjim/nui.nvim',
-  },
-  cmd = 'Neotree',
-  keys = {
-    { '<leader>;', ':Neotree toggle right<CR>', desc = 'NeoTree toggle' },
-  },
-  lazy = false, -- according to the github, neo-tree will lazily load itself...
-  opts = {
-    filesystem = {
-      hijack_netrw_behavior = 'disabled',
-      filtered_items = {
-        visible = true,
-        hide_dotfiles = false,
-      },
-      window = {
-        mappings = {
-          ['\\'] = 'close_window',
-        },
-      },
-    },
-  },
-}
-
 local config_colors = {
+  -- {
+  --   -- Main ColorScheme
+  --   'folke/tokyonight.nvim',
+  --   priority = 1000,
+  --   init = function()
+  --     vim.cmd.termguicolors = true
+  --     vim.opt.background = 'light'
+  --     vim.cmd.colorscheme 'tokyonight-moon'
+  --     vim.cmd.hi 'Comment gui=none' -- highlights
+  --   end,
+  -- },
   {
-    -- Main ColorScheme
-    'folke/tokyonight.nvim',
-    priority = 1000,
+    "EdenEast/nightfox.nvim",
     init = function()
-      vim.cmd.termguicolors = true
-      vim.opt.background = 'light'
-      vim.cmd.colorscheme 'tokyonight-moon'
-      vim.cmd.hi 'Comment gui=none' -- highlights
-    end,
+      vim.cmd.colorscheme "carbonfox"
+    end
   },
-  -- {
-  --   "EdenEast/nightfox.nvim",
-  --   init = function()
-  --     vim.cmd.colorscheme "carbonfox"
-  --   end
-  -- },
-  -- {
-  --   "xiantang/darcula-dark.nvim",
-  --   dependencies = {
-  --     "nvim-treesitter/nvim-treesitter",
-  --   },
-  --   init = function()
-  --     vim.cmd.colorscheme("darcula-dark")
-  --   end
-  -- },
   {
     'brenoprata10/nvim-highlight-colors',
     opts = {
@@ -1377,6 +1044,7 @@ local config_spectre = {
   },
 }
 
+local oil_winid = nil
 local config_oil = {
   'stevearc/oil.nvim',
   ---@module 'oil'
@@ -1384,82 +1052,59 @@ local config_oil = {
   opts = {
     columns = {
       'icon',
-      'permissions',
-      'size',
-      'mtime',
     },
     view_options = {
       show_hidden = true,
     },
     skip_confirm_for_simple_edits = true,
+    win_options = {
+      winbar = "%{v:lua.require('oil').get_current_dir()}",
+    },
+    keymaps = {
+      ['<C-h>'] = false,
+      ['<C-l>'] = false,
+    }
   },
   -- Optional dependencies
   dependencies = { { 'echasnovski/mini.icons', opts = {} } },
   lazy = false,
   keys = {
-    { '<leader>o', '<cmd>Oil<CR>' },
+    {
+      '<leader>o',
+      function()
+        -- NOTE: unfort this doesn't actually work. oil seems to only take exactly 1 columns config and use that for all oil calls.
+        require('oil').open(nil, {
+          columns = {
+            'icon',
+            'permissions',
+            'size',
+            'mtime',
+          }
+        })
+      end,
+      desc = 'Open Oil with main config.',
+    },
+    {
+      '<leader>;',
+      function()
+        if oil_winid and vim.api.nvim_win_is_valid(oil_winid) then
+          vim.api.nvim_win_close(oil_winid, false)
+          oil_winid = nil
+        else
+          vim.cmd('rightbelow vsplit')
+
+          vim.cmd('vertical resize 60')
+
+          require('oil').open(nil, {
+            columns = { 'icon' },
+          })
+
+          oil_winid = vim.api.nvim_get_current_win()
+        end
+      end,
+      desc = 'Toggle Oil in vertical split',
+    },
   },
-}
-
--- instead of having something like this for buffers, it should be for actual vim tabs instead
--- it's pretty cool how tabs can group windows...learned that pretty late
-local config_barbar = {
-  'romgrk/barbar.nvim',
-  dependencies = {
-    'lewis6991/gitsigns.nvim',     -- OPTIONAL: for git status
-    'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-  },
-  init = function()
-    vim.g.barbar_auto_setup = true
-
-    local map = vim.api.nvim_set_keymap
-    local opts = { noremap = true, silent = true }
-
-    -- Move to previous/next
-    map('n', '<A-p>', '<Cmd>BufferPrevious<CR>', opts)
-    map('n', '<A-n>', '<Cmd>BufferNext<CR>', opts)
-    -- Re-order to previous/next
-    map('n', '<A-S-p>', '<Cmd>BufferMovePrevious<CR>', opts)
-    map('n', '<A-S-n>', '<Cmd>BufferMoveNext<CR>', opts)
-    -- Goto buffer in position...
-    map('n', '<A-1>', '<Cmd>BufferGoto 1<CR>', opts)
-    map('n', '<A-2>', '<Cmd>BufferGoto 2<CR>', opts)
-    map('n', '<A-3>', '<Cmd>BufferGoto 3<CR>', opts)
-    map('n', '<A-4>', '<Cmd>BufferGoto 4<CR>', opts)
-    map('n', '<A-5>', '<Cmd>BufferGoto 5<CR>', opts)
-    map('n', '<A-6>', '<Cmd>BufferGoto 6<CR>', opts)
-    map('n', '<A-7>', '<Cmd>BufferGoto 7<CR>', opts)
-    map('n', '<A-8>', '<Cmd>BufferGoto 8<CR>', opts)
-    map('n', '<A-9>', '<Cmd>BufferGoto 9<CR>', opts)
-    map('n', '<A-0>', '<Cmd>BufferLast<CR>', opts)
-
-    -- Pin/unpin buffer
-    -- map('n', '<A-p>', '<Cmd>BufferPin<CR>', opts)
-    -- Goto pinned/unpinned buffer
-    --                 :BufferGotoPinned
-    --                 :BufferGotoUnpinned
-    -- Close buffer
-    map('n', '<A-c>', '<Cmd>BufferClose<CR>', opts)
-    map('n', '<A-C>', '<Cmd>BufferClose!<CR>', opts)
-    -- Wipeout buffer
-    --                 :BufferWipeout
-    -- Close commands
-    --                 :BufferCloseAllButCurrent
-    --                 :BufferCloseAllButPinned
-    --                 :BufferCloseAllButCurrentOrPinned
-    --                 :BufferCloseBuffersLeft
-    --                 :BufferCloseBuffersRight
-    -- Magic buffer-picking mode
-    -- map('n', '<C-p>', '<Cmd>BufferPick<CR>', opts)
-    -- Sort automatically by...
-    -- map('n', '<leader>bb', '<Cmd>BufferOrderByBufferNumber<CR>', opts)
-    -- map('n', '<leader>bn', '<Cmd>BufferOrderByName<CR>', opts)
-    -- map('n', '<leader>bd', '<Cmd>BufferOrderByDirectory<CR>', opts)
-    -- map('n', '<leader>bl', '<Cmd>BufferOrderByLanguage<CR>', opts)
-    -- map('n', '<leader>bw', '<Cmd>BufferOrderByWindowNumber<CR>', opts)
-    -- map('n', '<leader>bc', '<Cmd>BufferCloseAllButCurrent<Cr>', opts)
-  end,
-  version = '^1.0.0', -- optional: only update when a new 1.x version is released
 }
 
 local config_harpoon = {
@@ -1478,43 +1123,43 @@ local config_harpoon = {
       harpoon.ui:toggle_quick_menu(harpoon:list())
     end, { desc = 'Harpoon: Toggle Quick Menu/[L]ist' })
 
-    vim.keymap.set('n', '<A-1>', function()
+    vim.keymap.set('n', '<leader>1', function()
       harpoon:list():select(1)
     end, { desc = 'Harpoon: Jump to item 1' })
 
-    vim.keymap.set('n', '<A-2>', function()
+    vim.keymap.set('n', '<leader>2', function()
       harpoon:list():select(2)
     end, { desc = 'Harpoon: Jump to item 2' })
 
-    vim.keymap.set('n', '<A-3>', function()
+    vim.keymap.set('n', '<leader>3', function()
       harpoon:list():select(3)
     end, { desc = 'Harpoon: Jump to item 3' })
 
-    vim.keymap.set('n', '<A-4>', function()
+    vim.keymap.set('n', '<leader>4', function()
       harpoon:list():select(4)
     end, { desc = 'Harpoon: Jump to item 4' })
 
-    vim.keymap.set('n', '<A-5>', function()
+    vim.keymap.set('n', '<leader>5', function()
       harpoon:list():select(5)
     end, { desc = 'Harpoon: Jump to item 5' })
 
-    vim.keymap.set('n', '<A-6>', function()
+    vim.keymap.set('n', '<leader>6', function()
       harpoon:list():select(6)
     end, { desc = 'Harpoon: Jump to item 6' })
 
-    vim.keymap.set('n', '<A-7>', function()
+    vim.keymap.set('n', '<leader>7', function()
       harpoon:list():select(7)
     end, { desc = 'Harpoon: Jump to item 7' })
 
-    vim.keymap.set('n', '<A-8>', function()
+    vim.keymap.set('n', '<leader>8', function()
       harpoon:list():select(8)
     end, { desc = 'Harpoon: Jump to item 8' })
 
-    vim.keymap.set('n', '<A-9>', function()
+    vim.keymap.set('n', '<leader>9', function()
       harpoon:list():select(9)
     end, { desc = 'Harpoon: Jump to item 9' })
 
-    vim.keymap.set('n', '<A-0>', function()
+    vim.keymap.set('n', '<leader>0', function()
       harpoon:list():select(10)
     end, { desc = 'Harpoon: Jump to item 10' })
   end,
@@ -1579,94 +1224,6 @@ local config_autotags = {
   ft = WebFileTypes,
 }
 
--- NOTE: requires tailwindcss-language-server
-local config_tailwind_tools = {
-  'luckasRanarison/tailwind-tools.nvim',
-  name = 'tailwind-tools',
-  build = ':UpdateRemotePlugins',
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter',
-    'nvim-telescope/telescope.nvim',
-    'neovim/nvim-lspconfig',
-  },
-  opts = {},
-  lazy = true,
-  ft = WebFileTypes,
-}
-
-local config_lint = {
-  { -- Linting
-    'mfussenegger/nvim-lint',
-    event = { 'BufReadPre', 'BufNewFile' },
-    config = function()
-      local lint = require 'lint'
-      lint.linters_by_ft = {
-        markdown = { 'markdownlint' },
-      }
-
-      -- To allow other plugins to add linters to require('lint').linters_by_ft,
-      -- instead set linters_by_ft like this:
-      -- lint.linters_by_ft = lint.linters_by_ft or {}
-      -- lint.linters_by_ft['markdown'] = { 'markdownlint' }
-      --
-      -- However, note that this will enable a set of default linters,
-      -- which will cause errors unless these tools are available:
-      -- {
-      --   clojure = { "clj-kondo" },
-      --   dockerfile = { "hadolint" },
-      --   inko = { "inko" },
-      --   janet = { "janet" },
-      --   json = { "jsonlint" },
-      --   markdown = { "vale" },
-      --   rst = { "vale" },
-      --   ruby = { "ruby" },
-      --   terraform = { "tflint" },
-      --   text = { "vale" }
-      -- }
-      --
-      -- You can disable the default linters by setting their filetypes to nil:
-      -- lint.linters_by_ft['clojure'] = nil
-      -- lint.linters_by_ft['dockerfile'] = nil
-      -- lint.linters_by_ft['inko'] = nil
-      -- lint.linters_by_ft['janet'] = nil
-      -- lint.linters_by_ft['json'] = nil
-      -- lint.linters_by_ft['markdown'] = nil
-      -- lint.linters_by_ft['rst'] = nil
-      -- lint.linters_by_ft['ruby'] = nil
-      -- lint.linters_by_ft['terraform'] = nil
-      -- lint.linters_by_ft['text'] = nil
-
-      -- Create autocommand which carries out the actual linting
-      -- on the specified events.
-      local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
-      vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
-        group = lint_augroup,
-        callback = function()
-          lint.try_lint()
-        end,
-      })
-    end,
-  },
-}
-
-local config_which_key = {
-  "folke/which-key.nvim",
-  event = "VeryLazy",
-  opts = {},
-  keys = {
-    {
-      "<leader>?",
-      function()
-        require("which-key").show({ global = false })
-      end,
-      desc = "Buffer Local Keymaps (which-key)",
-    },
-  },
-}
-
--- TODO: check if on NixOS, then we'll need to do some funky stuff
--- if vim.fn.has
-
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -1690,23 +1247,17 @@ require('lazy').setup {
   -- kickstart plugins
   config_indent_line,
   config_autopairs,
-  config_neo_tree,
-  -- config_lint,
 
   -- custom/misc plugins
   config_colors,
   config_vim_multi_cursor,
   config_spectre,
   config_oil,
-  -- config_barbar,
   config_harpoon,
   config_lualine,
 
   -- Web development
   config_autotags,
-  -- config_tailwind_tools
-
-  -- config_which_key
 }
 
 -- The line beneath this is called `modeline`. See `:help modeline`

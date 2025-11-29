@@ -114,11 +114,9 @@
       "flakes"
     ];
     substituters = [
-      "https://cache.nixos.org"
       "http://rock:5000"
     ];
     trusted-public-keys = [
-      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "rock-1:qzs/0lSKcny2zeoLPu9A5QXOk7UkRYIEvA1kiKjw49M="
     ];
   };
