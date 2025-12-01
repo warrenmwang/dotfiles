@@ -9,17 +9,33 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixhalla"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking = {
+    hostName = "nixhalla"; 
+    networkmanager = {
+      enable = true;
+      dns = "none";
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+      # NOTE: if needed, insert local router at the front, "192.168.1.1", to resolve hostnames on lan like *.lan, but honestly just don't.
+      # however, if u do that u can leak dns queries for now, even on vpn.
+      # right now, set to only use cloudflare dns.
+      insertNameservers = [ "1.1.1.1" "1.0.0.1" ]; 
+    };
+    # wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+    firewall.checkReversePath = false; # to get protonvpn working...
 
-  # Enable networking
-  networking.networkmanager.enable = true;
-  networking.firewall.checkReversePath = false; # to get protonvpn working...
-  services.tailscale.enable = true; # personal devices vpn network
+    # proxy.default = "http://user:password@proxy:port/";
+    # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+    resolvconf.enable = false;
+    nameservers = [ "1.1.1.1" "1.0.0.1" ];
+    dhcpcd.extraConfig = "nohook resolv.conf";
+
+    # Open ports in the firewall.
+    # networking.firewall.allowedTCPPorts = [ ... ];
+    # networking.firewall.allowedUDPPorts = [ ... ];
+    # Or disable the firewall altogether.
+    # networking.firewall.enable = false;
+  };
 
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
@@ -113,10 +129,10 @@
       "nix-command"
       "flakes"
     ];
-    substituters = [
-      "http://rock:5000"
+    extra-substituters = [
+      "http://192.168.1.127:5000" # TODO: might want to update to allow working if on tailscale (if i leave ever home)
     ];
-    trusted-public-keys = [
+    extra-trusted-public-keys = [
       "rock-1:qzs/0lSKcny2zeoLPu9A5QXOk7UkRYIEvA1kiKjw49M="
     ];
   };
@@ -134,6 +150,7 @@
     unzip
     nushell
     jq
+    nmap
 
     # global packages for nvim default lsps, use devshells for per project needs
     # NOTE: do NOT use Mason to install any lsps, formatters, linters, etc.
@@ -159,7 +176,9 @@
     brave
     parsec-bin
     kdePackages.kcalc
+    kdePackages.kclock
     protonvpn-gui
+    qbittorrent
     spotify
     discord
     signal-desktop
@@ -188,6 +207,7 @@
     vlc # video, sound viewer
     kdePackages.okular # PDF viewer
     kdePackages.ark # zip archive tool
+    mpv
 
     # Printer / Scanning
     hplip
@@ -334,11 +354,7 @@
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  services.tailscale.enable = true; # personal devices vpn network
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

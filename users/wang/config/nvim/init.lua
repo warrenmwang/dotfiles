@@ -9,7 +9,8 @@
 -- Globals
 IN_GUI = vim.fn.has 'gui_running' == 1
 if IN_GUI then
-  print("No GUI anymore. That phase is over. If you're using neovim, you are using it in the terminal. Otherwise use another GUI editor.")
+  print(
+    "No GUI anymore. That phase is over. If you're using neovim, you are using it in the terminal. Otherwise use another GUI editor.")
   return
 end
 
@@ -84,10 +85,8 @@ vim.opt.timeoutlen = 1000
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
-vim.opt.list = true
+-- Default listchars off, have keymap to toggle it on/off if need to see
+vim.opt.list = false
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 vim.opt.inccommand = 'split'
@@ -96,6 +95,12 @@ vim.opt.wrap = false
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+
+-- toggle show whitespace chars
+vim.keymap.set('n', '<leader>tws', function()
+  vim.opt.listchars = { tab = '» ', space = '·', trail = '·', nbsp = '␣' }
+  vim.wo.list = not vim.wo.list
+end)
 
 -- allow moving text selected in visual mode
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
@@ -117,6 +122,8 @@ vim.keymap.set('n', 'fb', 'zf%'); -- help to fold a block
 
 vim.keymap.set('n', 'gh', '_')
 vim.keymap.set('n', 'gl', 'g_')
+vim.keymap.set('v', 'gh', '_')
+vim.keymap.set('v', 'gl', 'g_')
 vim.keymap.set('n', '<leader>w', ':w<CR>')
 
 -- terminal keymaps
@@ -1044,11 +1051,11 @@ local config_spectre = {
   },
 }
 
+-- TODO: the <leader>; shortcut can be upgraded to open the sidebar window always as a "top level" vertical split to the right.
+-- and not vertical split relative to the current window
 local oil_winid = nil
 local config_oil = {
   'stevearc/oil.nvim',
-  ---@module 'oil'
-  ---@type oil.SetupOpts
   opts = {
     columns = {
       'icon',
@@ -1063,9 +1070,32 @@ local config_oil = {
     keymaps = {
       ['<C-h>'] = false,
       ['<C-l>'] = false,
+      ['<CR>'] = {
+        callback = function()
+          local oil = require("oil")
+          local entry = oil.get_cursor_entry()
+          if not entry then return end
+          if entry.type == 'directory' then
+            require('oil.actions').select.callback()
+            return
+          end
+
+          if vim.api.nvim_get_current_win() == oil_winid then
+            -- in sidebar oil buf
+            local dir = oil.get_current_dir()
+            local filepath = dir .. entry.parsed_name
+            vim.cmd('wincmd p')
+            vim.cmd('edit ' .. vim.fn.fnameescape(filepath))
+            return
+          end
+
+          -- "normal" oil buf
+          require('oil.actions').select.callback()
+        end,
+        desc = 'Open file in previous window'
+      },
     }
   },
-  -- Optional dependencies
   dependencies = { { 'echasnovski/mini.icons', opts = {} } },
   lazy = false,
   keys = {
