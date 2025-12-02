@@ -90,6 +90,16 @@
   # };
 
   # List services that you want to enable:
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+    publish = {
+      enable = true;
+      userServices = true;
+    };
+  };
+
   hardware.graphics = {
     enable = true;
     enable32Bit = true;
@@ -195,14 +205,12 @@
       Type = "simple";
       User = "rockdrive";
       Restart = "on-failure";
-
-      # NOTE: address is needed for access from other computers, using tailscale ip
       ExecStart = ''
         ${pkgs.filebrowser}/bin/filebrowser \
-          --address "rock.tail901c17.ts.net" \
+          --address "0.0.0.0" \
           --port 3001 \
           --database /mnt/data1/rockdrive/filebrowser.db \
-          --root /mnt/data1/rockdrive/storage
+          --root /mnt/data1/rockdrive/storage \
       '';
     };
   };
