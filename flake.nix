@@ -2,7 +2,7 @@
   description = "NixOS config with Flakes for machines under my dominion.";
 
   inputs = {
-    nixpkgs-nixhalla.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-nixhalla.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-ironwood.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-gram.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
