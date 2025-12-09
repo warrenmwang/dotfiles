@@ -135,6 +135,9 @@
     extra-trusted-public-keys = [
       "rock-1:qzs/0lSKcny2zeoLPu9A5QXOk7UkRYIEvA1kiKjw49M="
     ];
+    trusted-users = [
+      "wang"
+    ];
   };
 
   environment.systemPackages = with pkgs; [
@@ -286,53 +289,17 @@
       nvidia-vaapi-driver
     ];
   };
-  services.xserver.videoDrivers = [ "nvidia" ]; # this actually seems important, first time i had to use a prev generation was trying to remove this line.
+  services.xserver = {
+    enable = true;
+    videoDrivers = [ "nvidia" ]; # this actually seems important, first time i had to use a prev generation was trying to remove this line.
+  };
   hardware.nvidia = {
-
-    # NOTE: if just utilize the MUX switch and go discrete graphics mode
-    # then don't need the settings below.
-    #
-    # optimus prime settings
-    # For more information: https://nixos.wiki/wiki/Nvidia#Laptop_Configuration:_Hybrid_Graphics_(Nvidia_Optimus_PRIME)
-    #
-    # prime = {
-    #   offload = {
-    #     enable = true;
-    #     enableOffloadCmd = true;
-    #   };
-
-    #   # sync.enable = true; # NOTE: this seems to give worse performance than offload tbh, even tho it's supposed to be the other way around.
-
-    #   intelBusId = "PCI:0:02:0";
-    #   nvidiaBusId = "PCI:1:00:0";
-    # };
-
-    modesetting.enable = true; # required
-
-    # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
-    # Enable this if you have graphical corruption issues or application crashes after waking
-    # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
-    # of just the bare essentials.
+    modesetting.enable = true;
     powerManagement.enable = true;
-
-    # Fine-grained power management. Turns off GPU when not in use.
-    # Experimental and only works on modern Nvidia GPUs (Turing or newer).
     powerManagement.finegrained = false;
-
-    # Use the NVidia open source kernel module (not to be confused with the
-    # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of
-    # supported GPUs is at:
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
-    # Only available from driver 515.43.04+
-    open = true; # can use for my 3070 ti laptop gpu
-
-    # Enable the Nvidia settings menu,
-    # accessible via `nvidia-settings`.
+    open = true;
     nvidiaSettings = true;
-
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.legacy_535;
   };
   nixpkgs.config.cudaSupport = true;
 
