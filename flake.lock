@@ -191,6 +191,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-nixhalla-kernel": {
+      "locked": {
+        "lastModified": 1750365781,
+        "narHash": "sha256-XE/lFNhz5lsriMm/yjXkvSZz5DfvKJLUjsS6pP8EC50=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "08f22084e6085d19bcfb4be30d1ca76ecb96fe54",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "08f22084e6085d19bcfb4be30d1ca76ecb96fe54",
+        "type": "github"
+      }
+    },
     "nixpkgs-rock": {
       "locked": {
         "lastModified": 1762977756,
@@ -279,6 +295,7 @@
         "nixpkgs-gram": "nixpkgs-gram",
         "nixpkgs-ironwood": "nixpkgs-ironwood",
         "nixpkgs-nixhalla": "nixpkgs-nixhalla",
+        "nixpkgs-nixhalla-kernel": "nixpkgs-nixhalla-kernel",
         "nixpkgs-rock": "nixpkgs-rock",
         "nur-gram": "nur-gram",
         "nur-ironwood": "nur-ironwood",

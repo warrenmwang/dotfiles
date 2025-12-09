@@ -2,10 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
-
+{ config, pkgs, nixpkgs-kernel, ... }:
+let
+  nixpkgs-kernel-pkgs = import nixpkgs-kernel {
+    system = "x86_64-linux";
+    config.allowUnfree = true;
+  };
+in
 {
   # Bootloader.
+  boot.kernelPackages = nixpkgs-kernel-pkgs.linuxPackages; # set a "stable" working kernel/nvidia driver config...nvidia...
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -124,6 +130,7 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+
   nix.settings = {
     experimental-features = [
       "nix-command"
@@ -299,7 +306,7 @@
     powerManagement.finegrained = false;
     open = true;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.legacy_535;
+    package = config.boot.kernelPackages.nvidiaPackages.stable; # tied to whatever nvidia stable version is based on kernel version selected
   };
   nixpkgs.config.cudaSupport = true;
 
