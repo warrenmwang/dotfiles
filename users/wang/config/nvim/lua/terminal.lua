@@ -31,11 +31,7 @@ end
 function M.close_current_terminal()
   local is_term_win_open = M.floating_term_state.win and vim.api.nvim_win_is_valid(M.floating_term_state.win)
   if not is_term_win_open then return end
-
-  if #M.floating_term_state.buffers == 0
-  then
-    return
-  end
+  if #M.floating_term_state.buffers == 0 then return end
 
   local buf_to_delete = M.floating_term_state.buffers[M.floating_term_state.current_index]
   local index_of_buf_to_delete = M.floating_term_state.current_index
@@ -53,11 +49,8 @@ function M.close_current_terminal()
 
     table.remove(M.floating_term_state.buffers, index_of_buf_to_delete)
 
-    if buf_to_delete == nil then
-      return
-    end
-
-    if vim.api.nvim_buf_is_valid(buf_to_delete) then
+    if vim.api.nvim_buf_is_valid(buf_to_delete)
+    then
       vim.api.nvim_buf_delete(buf_to_delete, { force = true })
     end
 
@@ -103,24 +96,24 @@ end
 function M.cycle_terminal(direction)
   local is_term_win_open = M.floating_term_state.win and vim.api.nvim_win_is_valid(M.floating_term_state.win)
   if not is_term_win_open then return end
-
-  if #M.floating_term_state.buffers <= 1 then
-    return
-  end
+  if #M.floating_term_state.buffers <= 1 then return end
 
   if direction > 0 then -- Next (A-j)
     M.floating_term_state.current_index = M.floating_term_state.current_index + 1
-    if M.floating_term_state.current_index > #M.floating_term_state.buffers then
+    if M.floating_term_state.current_index > #M.floating_term_state.buffers
+    then
       M.floating_term_state.current_index = 1
     end
   else -- Previous (A-k)
     M.floating_term_state.current_index = M.floating_term_state.current_index - 1
-    if M.floating_term_state.current_index < 1 then
+    if M.floating_term_state.current_index < 1
+    then
       M.floating_term_state.current_index = #M.floating_term_state.buffers
     end
   end
 
-  if M.floating_term_state.win and vim.api.nvim_win_is_valid(M.floating_term_state.win) then
+  if M.floating_term_state.win and vim.api.nvim_win_is_valid(M.floating_term_state.win)
+  then
     local current_buf = M.floating_term_state.buffers[M.floating_term_state.current_index]
     vim.api.nvim_win_set_buf(M.floating_term_state.win, current_buf)
 
@@ -134,7 +127,8 @@ end
 function M.new_terminal()
   M.create_new_terminal()
 
-  if M.floating_term_state.win and vim.api.nvim_win_is_valid(M.floating_term_state.win) then
+  if M.floating_term_state.win and vim.api.nvim_win_is_valid(M.floating_term_state.win)
+  then
     local current_buf = M.floating_term_state.buffers[M.floating_term_state.current_index]
     vim.api.nvim_win_set_buf(M.floating_term_state.win, current_buf)
 
@@ -148,30 +142,36 @@ end
 function M.toggle_floating_term()
   local is_term_win_open = M.floating_term_state.win and vim.api.nvim_win_is_valid(M.floating_term_state.win)
 
-  if is_term_win_open then
+  if is_term_win_open
+  then
     vim.api.nvim_win_close(M.floating_term_state.win, false)
     M.floating_term_state.win = nil
     return
   end
 
-  if not is_term_win_open then
+  if not is_term_win_open
+  then
     -- Clean up any invalid buffers
     for i = #M.floating_term_state.buffers, 1, -1 do
-      if not vim.api.nvim_buf_is_valid(M.floating_term_state.buffers[i]) then
+      if not vim.api.nvim_buf_is_valid(M.floating_term_state.buffers[i])
+      then
         table.remove(M.floating_term_state.buffers, i)
-        if M.floating_term_state.current_index > i then
+        if M.floating_term_state.current_index > i
+        then
           M.floating_term_state.current_index = M.floating_term_state.current_index - 1
         end
       end
     end
 
     -- Adjust current_index if needed
-    if M.floating_term_state.current_index > #M.floating_term_state.buffers then
+    if M.floating_term_state.current_index > #M.floating_term_state.buffers
+    then
       M.floating_term_state.current_index = math.max(1, #M.floating_term_state.buffers)
     end
 
     -- Create new terminal if none exist after clean / on startup
-    if #M.floating_term_state.buffers == 0 then
+    if #M.floating_term_state.buffers == 0
+    then
       M.create_new_terminal()
     end
 
