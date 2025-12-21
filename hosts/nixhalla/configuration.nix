@@ -48,6 +48,16 @@ in
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
+  # i18n.inputMethod = {
+  #   type = "fcitx5";
+  #   enable = true;
+  #   fcitx5.addons = with pkgs; [
+  #     fcitx5-gtk
+  #     kdePackages.fcitx5-qt
+  #     qt6Packages.fcitx5-chinese-addons
+  #     fcitx5-nord
+  #   ];
+  # };
 
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";

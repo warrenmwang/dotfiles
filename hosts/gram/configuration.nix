@@ -20,6 +20,7 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.networkmanager.enable = true;
+  networking.firewall.checkReversePath = false; # to get protonvpn working...
 
   time.timeZone = "America/Los_Angeles";
 
@@ -96,6 +97,7 @@
     vlc
     file
     git
+    protonvpn-gui
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
