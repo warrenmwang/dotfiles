@@ -75,6 +75,7 @@ in
   # - keep default sddm
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true;
+  services.displayManager.defaultSession = "plasma";
   # - KDE
   services.desktopManager.plasma6.enable = true;
 
@@ -179,7 +180,7 @@ in
     gcc
     clang-tools
     lua-language-server
-    nixfmt-rfc-style
+    nixfmt
 
     kitty
     ghostty
@@ -266,6 +267,8 @@ in
     opentabletdriver
     libinput
     libwacom
+
+    displaylink
   ];
   programs.steam = {
     enable = true;
@@ -294,6 +297,8 @@ in
     QT_IM_MODULE = "fcitx";
     GLFW_IM_MODULE = "ibus";
     XMODIFIERS = "@im=fcitx";
+
+    KWIN_DRM_PREFER_COLOR_DEPTH = "24";
   };
 
   # =================
@@ -308,7 +313,7 @@ in
   };
   services.xserver = {
     enable = true;
-    videoDrivers = [ "nvidia" ]; # this actually seems important, first time i had to use a prev generation was trying to remove this line.
+    videoDrivers = [ "nvidia" "displaylink" "modesetting" ];
   };
   hardware.nvidia = {
     modesetting.enable = true;
@@ -339,6 +344,24 @@ in
   # services.openssh.enable = true;
 
   services.tailscale.enable = true; # personal devices vpn network
+
+  # NOTE: will need the binary blobs from Synaptic's, after agreeing to EULA for using DisplayLink.
+  # Can get it directly via:
+  # nix-prefetch-url --name displaylink-620.zip https://www.synaptics.com/sites/default/files/exe_files/2025-09/DisplayLink%20USB%20Graphics%20Software%20for%20Ubuntu6.2-EXE.zip
+  systemd.services.displaylink-server = {
+    enable = true;
+    requires = [ "systemd-udevd.service" ];
+    after = [ "systemd-udevd.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "simple";
+      ExecStart = "${pkgs.displaylink}/bin/DisplayLinkManager";
+      User = "root";
+      Group = "root";
+      Restart = "on-failure";
+      RestartSec = 5; # Wait 5 seconds before restarting
+    };
+  };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
