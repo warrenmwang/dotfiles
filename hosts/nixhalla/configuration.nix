@@ -340,6 +340,11 @@ in
 
   # List services that you want to enable:
 
+  services.emacs = {
+    enable = true;
+    package = pkgs.emacs; # replace with emacs-gtk, or a version provided by the community overlay if desired.
+  };
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 

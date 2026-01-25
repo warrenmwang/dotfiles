@@ -23,5 +23,6 @@ in
     ".config/nvim".source = mkSymlinkDotfiles "config/nvim";
     ".config/Code/User/settings.json".source = mkSymlinkDotfiles "config/vscode/settings.json";
     ".config/Code/User/keybindings.json".source = mkSymlinkDotfiles "config/vscode/keybindings.json";
+    ".config/emacs".source = mkSymlinkDotfiles "config/.emacs.d";
   };
 }
