@@ -3,7 +3,8 @@
 
   inputs = {
     nixpkgs-nixhalla.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/08f22084e6085d19bcfb4be30d1ca76ecb96fe54";
+    # nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/08f22084e6085d19bcfb4be30d1ca76ecb96fe54";
+    nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-ironwood.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-gram.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
