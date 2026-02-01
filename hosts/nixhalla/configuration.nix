@@ -49,14 +49,30 @@ in
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
   # i18n.inputMethod = {
-  #   type = "fcitx5";
   #   enable = true;
-  #   fcitx5.addons = with pkgs; [
-  #     fcitx5-gtk
-  #     kdePackages.fcitx5-qt
-  #     qt6Packages.fcitx5-chinese-addons
-  #     fcitx5-nord
-  #   ];
+  #   type = "fcitx5";
+  #   ignoreUserConfig = true;
+  #   fcitx5 = {
+  #     plasma6Support = true;
+  #     waylandFrontend = true;
+  #     addons = with pkgs; [
+  #       fcitx5-chinese-addons
+  #       # fcitx5-gtk
+  #       # kdePackages.fcitx5-qt
+  #       # fcitx5-nord
+  #     ];
+  #     settings = {
+  #       inputMethod = {
+  #         "Groups/0" = {
+  #           Name = "Default";
+  #           "Default Layout" = "us";
+  #           DefaultIM = "keyboard-us";
+  #         };
+  #         "Groups/0/Items/0".Name = "keyboard-us";
+  #         "Groups/0/Items/1".Name = "chinese"; # TODO: what's the value for simplified pinyin? https://medium.com/@cwentsai/setting-up-chinese-japanese-input-with-fcitx5-on-nixos-2b5503d0b301
+  #       };
+  #     };
+  #   };
   # };
 
   i18n.extraLocaleSettings = {
@@ -72,12 +88,16 @@ in
   };
 
   # Desktop Environments and related modules
-  # - keep default sddm
-  services.displayManager.sddm.enable = true;
-  services.displayManager.sddm.wayland.enable = true;
-  services.displayManager.defaultSession = "plasma";
-  # - KDE
   services.desktopManager.plasma6.enable = true;
+  services.displayManager = {
+    sddm = {
+      enable = true;
+      wayland = {
+        enable = true;
+        compositor = "kwin";
+      };
+    };
+  };
 
   # - Hyprland
   # programs.hyprland.enable = true;
@@ -183,14 +203,15 @@ in
     nixfmt
 
     kitty
-    ghostty
+    # ghostty
     vscode
-    zed-editor
-    evil-helix
+    # zed-editor
+    # evil-helix
     neovim
-    neovide
+    # neovide
     yazi
     hyperfine
+    emacs
 
     obsidian
     google-chrome
@@ -227,6 +248,7 @@ in
 
     vlc # video, sound viewer
     kdePackages.okular # PDF viewer
+    calibre # e-book manager
     kdePackages.ark # zip archive tool
     mpv
 
@@ -317,7 +339,7 @@ in
   };
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = true;
+    powerManagement.enable = false;
     powerManagement.finegrained = false;
     open = true;
     nvidiaSettings = true;
@@ -340,10 +362,10 @@ in
 
   # List services that you want to enable:
 
-  services.emacs = {
-    enable = true;
-    package = pkgs.emacs; # replace with emacs-gtk, or a version provided by the community overlay if desired.
-  };
+  # services.emacs = {
+  #   enable = true;
+  #   package = pkgs.emacs; # replace with emacs-gtk, or a version provided by the community overlay if desired.
+  # };
 
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
