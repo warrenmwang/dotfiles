@@ -212,6 +212,7 @@ in
     yazi
     hyperfine
     emacs
+    sqlitestudio
 
     obsidian
     google-chrome
@@ -219,6 +220,7 @@ in
     parsec-bin
     kdePackages.kcalc
     kdePackages.kclock
+    kdePackages.partitionmanager
     protonvpn-gui
     qbittorrent
     spotify
@@ -291,6 +293,7 @@ in
     libwacom
 
     displaylink
+    exfatprogs
   ];
   programs.steam = {
     enable = true;
