@@ -213,6 +213,8 @@ in
     hyperfine
     emacs
     sqlitestudio
+    wineWowPackages.waylandFull
+    winetricks
 
     obsidian
     google-chrome
