@@ -152,6 +152,8 @@ vim.keymap.set('t', '<A-j>', function() config_terminal.cycle_terminal(1) end)
 vim.keymap.set('n', '<A-.>', ':tabnext<CR>')
 vim.keymap.set('n', '<A-,>', ':tabprev<CR>')
 vim.keymap.set('n', '<A-c>', ':tabclose<CR>')
+vim.keymap.set('n', '<A-<>', ':-tabmove<CR>', { desc = 'Move tab left' })
+vim.keymap.set('n', '<A->>', ':+tabmove<CR>', { desc = 'Move tab right' })
 for i = 1, 9 do
   vim.keymap.set('n', '<A-' .. i .. '>', i .. 'gt', { desc = 'Go to tab ' .. i })
 end

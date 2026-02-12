@@ -50,6 +50,8 @@ local config_lsp = {
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
+
+      'hrsh7th/cmp-buffer',
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -351,6 +353,7 @@ local config_lsp = {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          { name = 'buffer' },
         },
       }
     end,
