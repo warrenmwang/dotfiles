@@ -226,6 +226,30 @@
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
+  systemd.timers."mirror-github-to-gitea" = {
+    description = "Mirror GitHub repos to Gitea";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "Wed *-*-* 00:00:00";
+      OnBootSec = "5min";
+      Persistent = true;
+    };
+  };
+
+  systemd.services."mirror-github-to-gitea" = {
+    description = "Mirror GitHub repos to Gitea";
+    path = with pkgs; [ bash curl jq git];
+    script = ''
+      ${pkgs.bash}/bin/bash /home/wang/config_files/home_server/gitea-backup.bash
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "wang";
+      StandardOutput = "journal";
+      StandardError = "journal";
+    };
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
