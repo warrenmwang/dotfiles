@@ -119,6 +119,9 @@
     "nix-command"
     "flakes"
   ];
+  nix.settings.trusted-users = [
+    "wang"
+  ];
 
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
@@ -126,6 +129,7 @@
     git
     wget
     google-chrome
+    brave
     vim
     btop
     vlc

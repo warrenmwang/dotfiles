@@ -10,8 +10,8 @@
     description = "sun";
     extraGroups = [
       "networkmanager"
-      "wheel"
-      # TODO: do we need the groups below?
+      "wheel" # TODO: remove admin?
+      
       "scanner" 
       "lp"
       "lpadmin"

@@ -14,7 +14,7 @@
       inputs.nixpkgs.follows = "nixpkgs-nixhalla";
     };
     home-manager-ironwood = {
-      url = "github:nix-community/home-manager";
+      url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs-ironwood";
     };
     home-manager-gram = {
