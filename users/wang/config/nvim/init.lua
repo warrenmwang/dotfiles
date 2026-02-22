@@ -107,6 +107,9 @@ vim.keymap.set('n', '<leader>tws', function()
   vim.wo.list = not vim.wo.list
 end)
 
+-- Toggle word wrap
+vim.keymap.set('n', '<leader>tww', ':set wrap!<CR>', { noremap = true, silent = true })
+
 -- Allow moving text selected in visual mode
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
@@ -157,6 +160,30 @@ vim.keymap.set('n', '<A->>', ':+tabmove<CR>', { desc = 'Move tab right' })
 for i = 1, 9 do
   vim.keymap.set('n', '<A-' .. i .. '>', i .. 'gt', { desc = 'Go to tab ' .. i })
 end
+
+-- tab line
+vim.o.tabline = '%!v:lua.MyTabLine()'
+function MyTabLine()
+  local s = ''
+  for i = 1, vim.fn.tabpagenr('$') do
+    local winnr = vim.fn.tabpagewinnr(i)
+    local bufnr = vim.fn.tabpagebuflist(i)[winnr]
+    local bufname = vim.fn.bufname(bufnr)
+    local filename = vim.fn.fnamemodify(bufname, ':t')
+
+    if i == vim.fn.tabpagenr() then
+      s = s .. '%#TabLineSel#'
+    else
+      s = s .. '%#TabLine#'
+    end
+
+    s = s .. ' ' .. (filename ~= '' and filename or '[No Name]') .. ' '
+  end
+
+  s = s .. '%#TabLineFill#'
+  return s
+end
+
 
 -- copy path of current buffer (file or directory) to system clipboard
 vim.keymap.set('n', '<leader>cp', function()
