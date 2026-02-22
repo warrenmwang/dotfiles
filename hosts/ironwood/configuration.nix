@@ -115,14 +115,22 @@
   nixpkgs.config.allowUnfree = true;
 
   # Enable the Flakes feature and the accompanying new nix command-line tool
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.settings.trusted-users = [
-    "wang"
-  ];
-
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    extra-substituters = [
+      "http://192.168.1.127:5000" # TODO: might want to update to allow working if on tailscale (if i leave ever home)
+    ];
+    extra-trusted-public-keys = [
+      "rock-1:qzs/0lSKcny2zeoLPu9A5QXOk7UkRYIEvA1kiKjw49M="
+    ];
+    trusted-users = [
+      "wang"
+    ];
+  };
+  
   # List packages installed in system profile.
   environment.systemPackages = with pkgs; [
     file
@@ -198,7 +206,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  services.openssh.enable = true;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
