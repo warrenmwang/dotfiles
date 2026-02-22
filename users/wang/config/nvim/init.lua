@@ -101,6 +101,9 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 vim.opt.wrap = false
 
+-- Automatically reload the file if it is changed outside of Neovim
+vim.o.autoread = true
+
 -- Toggle show whitespace chars
 vim.keymap.set('n', '<leader>tws', function()
   vim.opt.listchars = { tab = '» ', space = '·', trail = '·', nbsp = '␣' }
