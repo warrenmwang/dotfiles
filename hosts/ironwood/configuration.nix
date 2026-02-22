@@ -146,6 +146,7 @@
     kdePackages.kolourpaint
     kdePackages.kate
     kdePackages.ksystemlog
+    kdePackages.partitionmanager
 
     wayland-utils
     hplip # hp printer printing
