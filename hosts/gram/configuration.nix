@@ -80,13 +80,21 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-  nix.settings.trusted-users = [
-    "wang"
-  ];
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    extra-substituters = [
+      "http://rock:5000" # TODO: might want to update to allow working if on tailscale (if i leave ever home)
+    ];
+    extra-trusted-public-keys = [
+      "rock-1:qzs/0lSKcny2zeoLPu9A5QXOk7UkRYIEvA1kiKjw49M="
+    ];
+    trusted-users = [
+      "wang"
+    ];
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

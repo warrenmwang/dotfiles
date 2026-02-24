@@ -168,7 +168,7 @@ in
       "flakes"
     ];
     extra-substituters = [
-      "http://192.168.1.127:5000" # TODO: might want to update to allow working if on tailscale (if i leave ever home)
+      "http://rock:5000" # TODO: might want to update to allow working if on tailscale (if i leave ever home)
     ];
     extra-trusted-public-keys = [
       "rock-1:qzs/0lSKcny2zeoLPu9A5QXOk7UkRYIEvA1kiKjw49M="
