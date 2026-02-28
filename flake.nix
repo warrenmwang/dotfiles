@@ -5,7 +5,10 @@
     nixpkgs-nixhalla.url = "github:NixOS/nixpkgs/nixos-unstable";
     # nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/08f22084e6085d19bcfb4be30d1ca76ecb96fe54";
     nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     nixpkgs-ironwood.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-ironwood-kernel.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     nixpkgs-gram.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -61,6 +64,7 @@
         ironwood = import ./hosts/ironwood {
           inputs = {
             nixpkgs = inputs.nixpkgs-ironwood;
+            nixpkgs-kernel = inputs.nixpkgs-ironwood-kernel;
             home-manager = inputs.home-manager-ironwood;
             nur = inputs.nur-ironwood;
           };
