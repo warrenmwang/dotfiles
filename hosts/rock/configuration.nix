@@ -213,12 +213,11 @@
     };
   };
 
-  services.plex = {
+  services.jellyfin = {
     enable = true;
-    openFirewall = true; # port 32400
-    user = "plex";
+    openFirewall = true; # port 8096
+    user = "jellyfin";
     group = "users";
-    dataDir = "/var/lib/plex"; # metadata
   };
 
   # Open ports in the firewall.
