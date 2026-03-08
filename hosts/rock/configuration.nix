@@ -213,6 +213,14 @@
     };
   };
 
+  services.plex = {
+    enable = true;
+    openFirewall = true; # port 32400
+    user = "plex";
+    group = "users";
+    dataDir = "/var/lib/plex"; # metadata
+  };
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     3000
