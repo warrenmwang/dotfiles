@@ -125,6 +125,10 @@ config.key_tables = {
       }
     },
 
+    -- Page up/down
+    { key = 'd', mods = 'CTRL', action = act.CopyMode 'PageDown' },
+    { key = 'u', mods = 'CTRL', action = act.CopyMode 'PageUp' },
+
     -- Exit copy mode
     { key = 'q',      mods = 'NONE', action = act.CopyMode 'Close' },
     { key = 'Escape', mods = 'NONE', action = act.CopyMode 'Close' },
