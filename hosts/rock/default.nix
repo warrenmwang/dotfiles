@@ -1,9 +1,10 @@
 { inputs }:
 let
-  inherit (inputs) nixpkgs home-manager;
+  inherit (inputs) nixpkgs home-manager llm-agents;
 in
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
+  specialArgs = { inherit (inputs) llm-agents; };
   modules = [
     ./configuration.nix
     ./hardware-configuration.nix

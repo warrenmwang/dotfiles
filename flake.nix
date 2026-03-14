@@ -41,6 +41,8 @@
       url = "github:nix-community/NUR";
       inputs.nixpkgs.follows = "nixpkgs-gram";
     };
+
+    llm-agents.url = "github:numtide/llm-agents.nix";
   };
 
   outputs =
@@ -59,6 +61,7 @@
           inputs = {
             nixpkgs = inputs.nixpkgs-rock;
             home-manager = inputs.home-manager-rock;
+            llm-agents = inputs.llm-agents;
           };
         };
         ironwood = import ./hosts/ironwood {
