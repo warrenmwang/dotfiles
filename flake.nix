@@ -6,8 +6,8 @@
     # nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/08f22084e6085d19bcfb4be30d1ca76ecb96fe54";
     nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/nixos-unstable";
 
-    nixpkgs-ironwood.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-ironwood-kernel.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-ironwood.url = "github:NixOS/nixpkgs/3e3afe5174c561dee0df6f2c2b2236990146329f";
+    nixpkgs-ironwood-kernel.url = "github:NixOS/nixpkgs/3e3afe5174c561dee0df6f2c2b2236990146329f";
 
     nixpkgs-gram.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -17,7 +17,7 @@
       inputs.nixpkgs.follows = "nixpkgs-nixhalla";
     };
     home-manager-ironwood = {
-      url = "github:nix-community/home-manager/master";
+      url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs-ironwood";
     };
     home-manager-gram = {
