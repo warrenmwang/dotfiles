@@ -5,18 +5,15 @@ local config = wezterm.config_builder()
 
 config.font = wezterm.font 'Cousine Nerd Font Mono'
 config.font_size = 14
-
--- True colour / terminal
 config.term = "xterm-256color"
 
 -- No escape time lag (good for neovim)
-config.enable_wayland = false  -- windows, so irrelevant, but just in case
+config.enable_wayland = false  -- on windows this is irrelevant. if use on linux change this.
 -- WezTerm has essentially 0 escape-time by default, nothing to set
 
 -- Focus events for neovim
 -- config.enable_focus_follows_mouse = false  -- personal taste
 
--- Status bar styling (mimicking black bg, white fg, minimal right)
 config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false
 config.colors = {
@@ -39,50 +36,28 @@ config.colors = {
   },
 }
 
--- Tab title format mimicking <WindowName:Index>
--- WezTerm uses a callback for this
--- wezterm.on('format-tab-title', function(tab, tabs, panes, cfg, hover, max_width)
---   local cwd = tab.active_pane:get_current_working_directory()
---   local name = 'Terminal'
---   if cwd then
---     for part in string.gmatch(cwd, "[^/\\]+") do
---       name = part
---     end
---   end
---   return ' ' .. name .. ' '
--- end)
-
+config.leader = { key = 'Space', mods = 'CTRL', timeout_milliseconds = 1000 }
 local keys = {
   -- Splits
   { key = '%', mods = 'LEADER|SHIFT', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
   { key = '"', mods = 'LEADER|SHIFT', action = act.SplitVertical   { domain = 'CurrentPaneDomain' } },
 
-  -- Vim motions to move between panes
+  -- Split navigation
   { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection 'Left'  },
   { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection 'Down'  },
   { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection 'Up'    },
   { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection 'Right' },
 
-  -- Resize panes with Ctrl+hjkl (held, repeatable)
-  { key = 'h', mods = 'CTRL', action = act.AdjustPaneSize { 'Left',  5 } },
-  { key = 'j', mods = 'CTRL', action = act.AdjustPaneSize { 'Down',  5 } },
-  { key = 'k', mods = 'CTRL', action = act.AdjustPaneSize { 'Up',    5 } },
-  { key = 'l', mods = 'CTRL', action = act.AdjustPaneSize { 'Right', 5 } },
-
-  -- Copy mode (like tmux copy mode)
+  -- Copy Mode
   { key = '[', mods = 'LEADER', action = act.ActivateCopyMode },
 
-  -- Paste from clipboard (like your ']' bind)
-  { key = ']', mods = 'LEADER', action = act.PasteFrom 'Clipboard' },
-
-  -- Reload config
-  { key = 'r', mods = 'LEADER', action = act.ReloadConfiguration },
+  -- Tabs
+  { key = 'n', mods = 'LEADER', action = act.ActivateTabRelative(1) },
+  { key = 'p', mods = 'LEADER', action = act.ActivateTabRelative(-1) },
+  { key = 'c', mods = 'LEADER', action = act.SpawnTab 'CurrentPaneDomain' },
+  { key = 'w', mods = 'LEADER', action = act.CloseCurrentTab { confirm = true } },
 }
 
-config.leader = { key = 'Space', mods = 'CTRL', timeout_milliseconds = 1000 }
-keys = keys
-
--- Add Ctrl+Space+Num bindings for tab switching
 for i = 1, 9 do
   table.insert(keys, {
     key = tostring(i),
@@ -90,12 +65,6 @@ for i = 1, 9 do
     action = act.ActivateTab(i - 1),
   })
 end
-
-table.insert(keys, { key = 'n', mods = 'LEADER', action = act.ActivateTabRelative(1) })
-table.insert(keys, { key = 'p', mods = 'LEADER', action = act.ActivateTabRelative(-1) })
-
-table.insert(keys, { key = 'c', mods = 'LEADER', action = act.SpawnTab 'CurrentPaneDomain' })
-table.insert(keys, { key = 'w', mods = 'LEADER', action = act.CloseCurrentTab { confirm = true } })
 
 config.keys = keys
 
