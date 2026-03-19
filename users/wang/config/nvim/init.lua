@@ -26,11 +26,6 @@ if IN_GUI then
     "No GUI anymore. That phase is over. If you're using neovim, you are using it in the terminal. Otherwise use another GUI editor.")
   return
 end
-if ON_WINDOWS_OS then
-  vim.opt.fixendofline = false
-  vim.opt.endofline = false
-  vim.opt.fileformats = "dos,unix,mac"
-end
 
 WebFileTypes = { 'html', 'css', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'astro' }
 
@@ -49,6 +44,8 @@ local config_oil = require('config_oil')
 local config_harpoon = require('config_harpoon')
 local config_lualine = require('config_lualine')
 require('config_build')
+
+vim.opt.fileformats = "unix"
 
 -- space as leader
 vim.g.mapleader = ' '
@@ -174,6 +171,9 @@ function MyTabLine()
     local bufname = vim.fn.bufname(bufnr)
     local filename = vim.fn.fnamemodify(bufname, ':t')
 
+    -- %<i>T makes the following text clickable to switch to tab i
+    s = s .. '%' .. i .. 'T'
+
     if i == vim.fn.tabpagenr() then
       s = s .. '%#TabLineSel#'
     else
@@ -183,7 +183,7 @@ function MyTabLine()
     s = s .. ' ' .. (filename ~= '' and filename or '[No Name]') .. ' '
   end
 
-  s = s .. '%#TabLineFill#'
+  s = s .. '%T%#TabLineFill#'
   return s
 end
 
