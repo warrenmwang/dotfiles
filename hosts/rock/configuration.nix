@@ -217,6 +217,15 @@
     };
   };
 
+  services.ollama = {
+    enable = true;
+    acceleration = "cuda";
+    environmentVariables = {
+      OLLAMA_FLASH_ATTENTION = "1"; # reduces VRAM pressure on 6GB RTX 2060 Max-Q
+    };
+    loadModels = [ "qwen3:8b" ];
+  };
+
   services.jellyfin = {
     enable = true;
     openFirewall = true; # port 8096
@@ -228,6 +237,7 @@
   networking.firewall.allowedTCPPorts = [
     3000
     3001
+    18789 # openclaw gateway
   ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
