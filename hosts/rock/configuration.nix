@@ -4,6 +4,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = [ "consoleblank=300" ];
+  boot.supportedFilesystems = [ "btrfs" ];
 
   networking.hostName = "rock";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -69,6 +70,8 @@
     unzip
     nushell
     jq
+
+    btrfs-progs
 
     gcc
     clang-tools
