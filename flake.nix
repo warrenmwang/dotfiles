@@ -43,8 +43,6 @@
     };
 
     llm-agents.url = "github:numtide/llm-agents.nix";
-
-    nix-openclaw.url = "github:openclaw/nix-openclaw";
   };
 
   outputs =
@@ -64,7 +62,6 @@
             nixpkgs = inputs.nixpkgs-rock;
             home-manager = inputs.home-manager-rock;
             llm-agents = inputs.llm-agents;
-            nix-openclaw = inputs.nix-openclaw;
           };
         };
         ironwood = import ./hosts/ironwood {

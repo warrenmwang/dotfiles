@@ -11,6 +11,7 @@ fi
 
 HOSTNAME=$1
 ACTION=$2
+CURR_HOSTNAME=$(hostname)
 
 if [ "$ACTION" = "switch" ]; then
     BACKUP_FILE="/home/wang/.gtkrc-2.0.hm-backup"
@@ -20,4 +21,9 @@ if [ "$ACTION" = "switch" ]; then
     fi
 fi
 
-nixos-rebuild $ACTION --flake .#$HOSTNAME --build-host wang@rock --sudo
+BUILD_HOST=""
+if [ "$CURR_HOSTNAME" != "rock" ]; then
+    BUILD_HOST="--build-host wang@rock"
+fi
+
+nixos-rebuild $ACTION --flake .#$HOSTNAME $BUILD_HOST --sudo

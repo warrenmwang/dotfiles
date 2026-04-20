@@ -1,10 +1,10 @@
 { inputs }:
 let
-  inherit (inputs) nixpkgs home-manager llm-agents nix-openclaw;
+  inherit (inputs) nixpkgs home-manager llm-agents;
 in
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
-  specialArgs = { inherit (inputs) llm-agents nix-openclaw; };
+  specialArgs = { inherit (inputs) llm-agents; };
   modules = [
     ./configuration.nix
     ./hardware-configuration.nix
@@ -22,7 +22,6 @@ nixpkgs.lib.nixosSystem {
         useUserPackages = true;
         backupFileExtension = "hm-backup";
         users.wang = import ../../users/wang/home-manager/hosts/rock.nix;
-        extraSpecialArgs = { inherit nix-openclaw; };
       };
     }
   ];

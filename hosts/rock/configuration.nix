@@ -1,4 +1,9 @@
-{ config, pkgs, llm-agents, ... }:
+{
+  config,
+  pkgs,
+  llm-agents,
+  ...
+}:
 {
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -171,7 +176,7 @@
   # Apps services
   services.nix-serve = {
     enable = true;
-    secretKeyFile = "/etc/nix/cache-priv-key.pem"; 
+    secretKeyFile = "/etc/nix/cache-priv-key.pem";
     port = 5000;
     openFirewall = true;
   };
@@ -240,7 +245,6 @@
   networking.firewall.allowedTCPPorts = [
     3000
     3001
-    18789 # openclaw gateway
   ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
@@ -258,7 +262,12 @@
 
   systemd.services."mirror-github-to-gitea" = {
     description = "Mirror GitHub repos to Gitea";
-    path = with pkgs; [ bash curl jq git];
+    path = with pkgs; [
+      bash
+      curl
+      jq
+      git
+    ];
     script = ''
       ${pkgs.bash}/bin/bash /home/wang/config_files/home_server/gitea-backup.bash
     '';
