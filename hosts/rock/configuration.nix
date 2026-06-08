@@ -4,6 +4,17 @@
   llm-agents,
   ...
 }:
+let
+  kavitaAppsettings = pkgs.writeText "kavita-appsettings.json" ''
+    {
+      "TokenKey": "super secret unguessable key that is longer because we require it",
+      "Port": 3002,
+      "IpAddresses": "",
+      "BaseUrl": "/",
+      "Cache": 75
+    }
+  '';
+in
 {
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -207,6 +218,9 @@
   systemd.tmpfiles.rules = [
     "d /mnt/data1/rockdrive 0770 rockdrive rockdrive"
     "d /mnt/data1/rockdrive/storage 0770 rockdrive rockdrive"
+    "d /mnt/data1/KavitaData 2775 kavita users"
+    "d /var/lib/kavita/config 0750 kavita kavita"
+    "C /var/lib/kavita/config/appsettings.json 0640 kavita kavita - ${kavitaAppsettings}"
   ];
   systemd.services.rockdrive = {
     after = [ "network.target" ];
@@ -241,10 +255,61 @@
     group = "users";
   };
 
+  users.users.kavita = {
+    isSystemUser = true;
+    group = "kavita";
+    extraGroups = [ "users" ];
+  };
+  users.groups.kavita = { };
+  systemd.services.kavita-data-permissions = {
+    description = "Fix Kavita data permissions";
+    after = [ "mnt-data1.mount" ];
+    requires = [ "mnt-data1.mount" ];
+    before = [ "kavita.service" ];
+    wantedBy = [ "multi-user.target" ];
+    path = with pkgs; [
+      coreutils
+      findutils
+    ];
+    script = ''
+      mkdir -p /mnt/data1/KavitaData
+      chown kavita:users /mnt/data1/KavitaData
+      chmod 2775 /mnt/data1/KavitaData
+      chgrp -R users /mnt/data1/KavitaData
+      find /mnt/data1/KavitaData -type d -exec chmod g+rws {} +
+      find /mnt/data1/KavitaData -type f -exec chmod g+rw {} +
+    '';
+    serviceConfig.Type = "oneshot";
+  };
+  systemd.services.kavita = {
+    description = "Kavita Reading Server";
+    after = [
+      "network.target"
+      "kavita-data-permissions.service"
+    ];
+    requires = [ "kavita-data-permissions.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "simple";
+      User = "kavita";
+      Group = "kavita";
+      SupplementaryGroups = [ "users" ];
+      UMask = "0002";
+      Restart = "on-failure";
+      RestartSec = "5s";
+      ExecStart = "${pkgs.kavita}/bin/kavita --urls http://0.0.0.0:3002";
+      StateDirectory = "kavita";
+      WorkingDirectory = "/var/lib/kavita";
+    };
+  };
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
-    3000
-    3001
+    3000 # Gitea
+    3001 # Rockdrive
+    3002 # Kavita
+    5000 # Nix-serve
+    8096 # Jellyfin
   ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
