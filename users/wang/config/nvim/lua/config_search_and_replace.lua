@@ -44,9 +44,19 @@ local config_search_and_replace = {
         }
       },
     },
+    replace_engine = {
+      ['sed'] = {
+        cmd = "sed",
+        args = { '-i', '-b' },
+      },
+    },
     default = {
       find = {
         cmd = "rg",
+        options = {}
+      },
+      replace = {
+        cmd = "sed",
         options = {}
       },
     },
