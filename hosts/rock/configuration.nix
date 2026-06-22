@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  tailscalePkgs,
   llm-agents,
   ...
 }:
@@ -159,7 +160,10 @@ in
     # package = config.boot.kernelPackages.nvidiaPackages.legacy_530;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    package = tailscalePkgs.tailscale;
+  };
   services.openssh = {
     enable = true;
     settings = {
