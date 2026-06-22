@@ -309,6 +309,7 @@ in
     3001 # Rockdrive
     3002 # Kavita
     5000 # Nix-serve
+    8787 # LLM Orchestrator
     8096 # Jellyfin
   ];
   # networking.firewall.allowedUDPPorts = [ ... ];
