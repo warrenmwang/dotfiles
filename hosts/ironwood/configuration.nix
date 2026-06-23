@@ -2,9 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, nixpkgs-kernel, ... }:
+{ config, pkgs, nixpkgs-kernel, nixpkgs-brave, ... }:
 let
   nixpkgs-kernel-pkgs = import nixpkgs-kernel {
+    system = "x86_64-linux";
+    config.allowUnfree = true;
+  };
+  bravePkgs = import nixpkgs-brave {
     system = "x86_64-linux";
     config.allowUnfree = true;
   };
@@ -135,7 +139,7 @@ in
     git
     wget
     google-chrome
-    brave
+    bravePkgs.brave
     vim
     btop
     vlc

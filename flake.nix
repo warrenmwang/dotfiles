@@ -8,6 +8,7 @@
 
     nixpkgs-ironwood.url = "github:NixOS/nixpkgs/3e3afe5174c561dee0df6f2c2b2236990146329f";
     nixpkgs-ironwood-kernel.url = "github:NixOS/nixpkgs/3e3afe5174c561dee0df6f2c2b2236990146329f";
+    nixpkgs-ironwood-brave.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixpkgs-gram.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -70,6 +71,7 @@
           inputs = {
             nixpkgs = inputs.nixpkgs-ironwood;
             nixpkgs-kernel = inputs.nixpkgs-ironwood-kernel;
+            nixpkgs-brave = inputs.nixpkgs-ironwood-brave;
             home-manager = inputs.home-manager-ironwood;
             nur = inputs.nur-ironwood;
           };
