@@ -2,7 +2,13 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, nixpkgs-firefox, ... }:
+
+let
+  firefoxPkgs = import nixpkgs-firefox {
+    system = "x86_64-linux";
+  };
+in
 
 {
   # Bootloader.
@@ -71,7 +77,10 @@
   # services.xserver.libinput.enable = true;
 
   # Install firefox.
-  programs.firefox.enable = true;
+  programs.firefox = {
+    enable = true;
+    package = firefoxPkgs.firefox;
+  };
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

@@ -12,6 +12,7 @@
 
   programs.firefox = {
     enable = true;
+    package = null;
     profiles.default = {
       id = 0;
       name = "default";

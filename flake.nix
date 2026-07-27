@@ -11,6 +11,7 @@
     nixpkgs-ironwood-brave.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixpkgs-gram.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-gram-firefox.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock-tailscale.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -79,6 +80,7 @@
         gram = import ./hosts/gram {
           inputs = {
             nixpkgs = inputs.nixpkgs-gram;
+            nixpkgs-firefox = inputs.nixpkgs-gram-firefox;
             home-manager = inputs.home-manager-gram;
             nur = inputs.nur-gram;
           };
