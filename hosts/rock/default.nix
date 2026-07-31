@@ -1,12 +1,19 @@
 { inputs }:
 let
-  inherit (inputs) nixpkgs nixpkgs-tailscale home-manager llm-agents;
+  inherit (inputs)
+    nixpkgs
+    nixpkgs-tailscale
+    nixpkgs-immich
+    home-manager
+    llm-agents
+    ;
   system = "x86_64-linux";
   tailscalePkgs = import nixpkgs-tailscale { inherit system; };
+  immichPkgs = import nixpkgs-immich { inherit system; };
 in
 nixpkgs.lib.nixosSystem {
   inherit system;
-  specialArgs = { inherit llm-agents tailscalePkgs; };
+  specialArgs = { inherit llm-agents tailscalePkgs immichPkgs; };
   modules = [
     ./configuration.nix
     ./hardware-configuration.nix

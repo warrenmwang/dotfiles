@@ -2,6 +2,7 @@
   config,
   pkgs,
   tailscalePkgs,
+  immichPkgs,
   llm-agents,
   ...
 }:
@@ -187,6 +188,15 @@ in
       "x-systemd.device-timeout=5s"
     ];
   };
+  fileSystems."/mnt/data2" = {
+    device = "/dev/disk/by-uuid/e1315b76-bb20-dd01-c021-5b76bb20dd01";
+    fsType = "ext4";
+    options = [
+      "nofail"
+      "x-systemd.automount"
+      "x-systemd.device-timeout=5s"
+    ];
+  };
 
   # Apps services
   services.nix-serve = {
@@ -225,6 +235,7 @@ in
     "d /mnt/data1/KavitaData 2775 kavita users"
     "d /var/lib/kavita/config 0750 kavita kavita"
     "C /var/lib/kavita/config/appsettings.json 0640 kavita kavita - ${kavitaAppsettings}"
+    "d /mnt/data2 0755 root root -"
   ];
   systemd.services.rockdrive = {
     after = [ "network.target" ];
@@ -298,11 +309,37 @@ in
     };
   };
 
+  services.immich = {
+    enable = true;
+    package = immichPkgs.immich;
+    host = "0.0.0.0";
+    mediaLocation = "/mnt/data2/immich";
+    database.enableVectors = false;
+  };
+  services.postgresql.package = immichPkgs.postgresql_17;
+  services.redis.package = immichPkgs.redis;
+  systemd.services.immich-data-permissions = {
+    description = "Fix Immich data permissions";
+    after = [ "mnt-data2.mount" ];
+    requires = [ "mnt-data2.mount" ];
+    before = [ "immich-server.service" ];
+    wantedBy = [ "multi-user.target" ];
+    path = with pkgs; [ coreutils ];
+    script = ''
+      mkdir -p /mnt/data2/immich
+      chown immich:immich /mnt/data2/immich
+      chmod 0700 /mnt/data2/immich
+    '';
+    serviceConfig.Type = "oneshot";
+  };
+  services.redis.servers.immich.logLevel = "warning";
+
   # Open ports in the firewall.
   networking.firewall.allowedTCPPorts = [
     3000 # Gitea
     3001 # Rockdrive
     3002 # Kavita
+    2283 # Immich
     5000 # Nix-serve
     8787 # LLM Orchestrator
     8096 # Jellyfin

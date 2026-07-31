@@ -14,6 +14,7 @@
     nixpkgs-gram-firefox.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock-tailscale.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-rock-immich.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager-nixhalla = {
       url = "github:nix-community/home-manager";
@@ -64,6 +65,7 @@
           inputs = {
             nixpkgs = inputs.nixpkgs-rock;
             nixpkgs-tailscale = inputs.nixpkgs-rock-tailscale;
+            nixpkgs-immich = inputs.nixpkgs-rock-immich;
             home-manager = inputs.home-manager-rock;
             llm-agents = inputs.llm-agents;
           };

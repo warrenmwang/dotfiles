@@ -364,6 +364,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-rock-immich": {
+      "locked": {
+        "lastModified": 1785318670,
+        "narHash": "sha256-dN6Ou5x/+23FZLEpYP3IffO+NyJFzUlGumt1uu3MMaY=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0954f7ee2f6bb3dc7d4e3d0d8bcb8fd4bde4cfc5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-rock-tailscale": {
       "locked": {
         "lastModified": 1781577229,
@@ -458,6 +474,7 @@
         "nixpkgs-nixhalla": "nixpkgs-nixhalla",
         "nixpkgs-nixhalla-kernel": "nixpkgs-nixhalla-kernel",
         "nixpkgs-rock": "nixpkgs-rock",
+        "nixpkgs-rock-immich": "nixpkgs-rock-immich",
         "nixpkgs-rock-tailscale": "nixpkgs-rock-tailscale",
         "nur-gram": "nur-gram",
         "nur-ironwood": "nur-ironwood",
