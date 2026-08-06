@@ -102,6 +102,10 @@ in
     llm-agents.packages.x86_64-linux.claude-code
   ];
 
+  environment.variables = {
+    EDITOR = "nvim";
+  };
+
   programs.nix-ld.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
