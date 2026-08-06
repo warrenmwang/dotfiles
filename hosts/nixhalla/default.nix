@@ -1,11 +1,11 @@
 { inputs }:
 let
-  inherit (inputs) nixpkgs nixpkgs-kernel home-manager nur;
+  inherit (inputs) nixpkgs kernel-nixpkgs home-manager nur;
 in
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   specialArgs = { 
-    inherit nixpkgs-kernel;
+    inherit kernel-nixpkgs;
   };
   modules = [
     { nixpkgs.overlays = [ nur.overlays.default ]; }

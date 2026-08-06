@@ -2,20 +2,20 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, nixpkgs-kernel, nixpkgs-brave, ... }:
+{ config, pkgs, kernel-nixpkgs, brave-nixpkgs, tailscalePkgs, ... }:
 let
-  nixpkgs-kernel-pkgs = import nixpkgs-kernel {
+  kernel-nixpkgs-pkgs = import kernel-nixpkgs {
     system = "x86_64-linux";
     config.allowUnfree = true;
   };
-  bravePkgs = import nixpkgs-brave {
+  bravePkgs = import brave-nixpkgs {
     system = "x86_64-linux";
     config.allowUnfree = true;
   };
 in
 {
   # Bootloader.
-  boot.kernelPackages = nixpkgs-kernel-pkgs.linuxPackages; # set a "stable" working kernel/nvidia driver config...nvidia...
+  boot.kernelPackages = kernel-nixpkgs-pkgs.linuxPackages; # set a "stable" working kernel/nvidia driver config...nvidia...
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -91,6 +91,14 @@ in
   hardware.sane.enable = true;
   hardware.sane.extraBackends = [ pkgs.hplipWithPlugin ];
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      kdePackages.xdg-desktop-portal-kde
+    ];
+  };
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -140,6 +148,7 @@ in
     wget
     google-chrome
     bravePkgs.brave
+    moonlight-qt
     vim
     btop
     vlc
@@ -158,6 +167,7 @@ in
 
   # Set environment variables
   environment.variables.EDITOR = "vim";
+  environment.sessionVariables.NIXOS_OZONE_WL = "1"; # Hint Electron apps to use Wayland
 
   # Load nvidia driver for Xorg and Wayland
   services.xserver.videoDrivers = [ "nvidia" ];
@@ -184,6 +194,17 @@ in
   # };
 
   # List services that you want to enable:
+  services.tailscale = {
+    enable = true;
+    package = tailscalePkgs.tailscale;
+  };
+
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    openFirewall = true;
+    capSysAdmin = true;
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

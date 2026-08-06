@@ -1,11 +1,13 @@
 { inputs }:
 let
-  inherit (inputs) nixpkgs nixpkgs-kernel nixpkgs-brave home-manager nur;
+  inherit (inputs) nixpkgs kernel-nixpkgs brave-nixpkgs tailscale-nixpkgs home-manager nur;
+  system = "x86_64-linux";
+  tailscalePkgs = import tailscale-nixpkgs { inherit system; };
 in
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   specialArgs = { 
-    inherit nixpkgs-kernel nixpkgs-brave;
+    inherit kernel-nixpkgs brave-nixpkgs tailscalePkgs;
   };
   modules = [
     { nixpkgs.overlays = [ nur.overlays.default ]; }

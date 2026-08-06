@@ -3,18 +3,19 @@
 
   inputs = {
     nixpkgs-nixhalla.url = "github:NixOS/nixpkgs/nixos-unstable";
-    # nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/08f22084e6085d19bcfb4be30d1ca76ecb96fe54";
-    nixpkgs-nixhalla-kernel.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # kernel-nixhalla-nixpkgs.url = "github:NixOS/nixpkgs/08f22084e6085d19bcfb4be30d1ca76ecb96fe54";
+    kernel-nixhalla-nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixpkgs-ironwood.url = "github:NixOS/nixpkgs/3e3afe5174c561dee0df6f2c2b2236990146329f";
-    nixpkgs-ironwood-kernel.url = "github:NixOS/nixpkgs/3e3afe5174c561dee0df6f2c2b2236990146329f";
-    nixpkgs-ironwood-brave.url = "github:NixOS/nixpkgs/nixos-unstable";
+    kernel-ironwood-nixpkgs.url = "github:NixOS/nixpkgs/3e3afe5174c561dee0df6f2c2b2236990146329f";
+    brave-ironwood-nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    tailscale-ironwood-nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixpkgs-gram.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-gram-firefox.url = "github:NixOS/nixpkgs/nixos-unstable";
+    firefox-gram-nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-rock.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-rock-tailscale.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-rock-immich.url = "github:NixOS/nixpkgs/nixos-unstable";
+    tailscale-rock-nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    immich-rock-nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager-nixhalla = {
       url = "github:nix-community/home-manager";
@@ -56,7 +57,7 @@
         nixhalla = import ./hosts/nixhalla {
           inputs = {
             nixpkgs = inputs.nixpkgs-nixhalla;
-            nixpkgs-kernel = inputs.nixpkgs-nixhalla-kernel;
+            kernel-nixpkgs = inputs.kernel-nixhalla-nixpkgs;
             home-manager = inputs.home-manager-nixhalla;
             nur = inputs.nur-nixhalla;
           };
@@ -64,8 +65,8 @@
         rock = import ./hosts/rock {
           inputs = {
             nixpkgs = inputs.nixpkgs-rock;
-            nixpkgs-tailscale = inputs.nixpkgs-rock-tailscale;
-            nixpkgs-immich = inputs.nixpkgs-rock-immich;
+            tailscale-nixpkgs = inputs.tailscale-rock-nixpkgs;
+            immich-nixpkgs = inputs.immich-rock-nixpkgs;
             home-manager = inputs.home-manager-rock;
             llm-agents = inputs.llm-agents;
           };
@@ -73,8 +74,9 @@
         ironwood = import ./hosts/ironwood {
           inputs = {
             nixpkgs = inputs.nixpkgs-ironwood;
-            nixpkgs-kernel = inputs.nixpkgs-ironwood-kernel;
-            nixpkgs-brave = inputs.nixpkgs-ironwood-brave;
+            kernel-nixpkgs = inputs.kernel-ironwood-nixpkgs;
+            brave-nixpkgs = inputs.brave-ironwood-nixpkgs;
+            tailscale-nixpkgs = inputs.tailscale-ironwood-nixpkgs;
             home-manager = inputs.home-manager-ironwood;
             nur = inputs.nur-ironwood;
           };
@@ -82,7 +84,7 @@
         gram = import ./hosts/gram {
           inputs = {
             nixpkgs = inputs.nixpkgs-gram;
-            nixpkgs-firefox = inputs.nixpkgs-gram-firefox;
+            firefox-nixpkgs = inputs.firefox-gram-nixpkgs;
             home-manager = inputs.home-manager-gram;
             nur = inputs.nur-gram;
           };

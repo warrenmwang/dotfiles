@@ -2,16 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, nixpkgs-kernel, ... }:
+{ config, pkgs, kernel-nixpkgs, ... }:
 let
-  nixpkgs-kernel-pkgs = import nixpkgs-kernel {
+  kernel-nixpkgs-pkgs = import kernel-nixpkgs {
     system = "x86_64-linux";
     config.allowUnfree = true;
   };
 in
 {
   # Bootloader.
-  boot.kernelPackages = nixpkgs-kernel-pkgs.linuxPackages; # set a "stable" working kernel/nvidia driver config...nvidia...
+  boot.kernelPackages = kernel-nixpkgs-pkgs.linuxPackages; # set a "stable" working kernel/nvidia driver config...nvidia...
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 

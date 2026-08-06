@@ -2,10 +2,10 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, nixpkgs-firefox, ... }:
+{ config, pkgs, firefox-nixpkgs, ... }:
 
 let
-  firefoxPkgs = import nixpkgs-firefox {
+  firefoxPkgs = import firefox-nixpkgs {
     system = "x86_64-linux";
   };
 in

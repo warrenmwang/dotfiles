@@ -1,11 +1,11 @@
 { inputs }:
 let
-  inherit (inputs) nixpkgs nixpkgs-firefox home-manager nur;
+  inherit (inputs) nixpkgs firefox-nixpkgs home-manager nur;
 in
 nixpkgs.lib.nixosSystem {
   system = "x86_64-linux";
   specialArgs = {
-    inherit nixpkgs-firefox;
+    inherit firefox-nixpkgs;
   };
   modules = [
     { nixpkgs.overlays = [ nur.overlays.default ]; }
