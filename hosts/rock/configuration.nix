@@ -172,7 +172,8 @@ in
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = true;
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false; # block PAM password prompts too
       AllowUsers = null; # Allows all users by default. Can be [ "user1" "user2" ]
       UseDns = false;
       X11Forwarding = false;
