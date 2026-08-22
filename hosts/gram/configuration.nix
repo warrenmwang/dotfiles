@@ -125,6 +125,19 @@ in
 
   services.tailscale.enable = true;
 
+  services.sunshine = {
+    enable = true;
+    autoStart = true;
+    openFirewall = true;
+    capSysAdmin = true;
+  };
+
+  # Sunshine injects keyboard/mouse on Wayland by creating virtual devices
+  # through /dev/uinput; default perms are root:root 0600 so group is needed
+  services.udev.extraRules = ''
+    KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
+  '';
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 

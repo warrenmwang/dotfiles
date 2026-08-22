@@ -10,6 +10,7 @@
     description = "moon";
     extraGroups = [
       "networkmanager"
+      "input" # sunshine virtual input via /dev/uinput
     ];
     packages = with pkgs; [ ];
     shell = pkgs.bash;
