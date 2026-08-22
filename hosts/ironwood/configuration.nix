@@ -8,6 +8,22 @@ let
     system = "x86_64-linux";
     config.allowUnfree = true;
   };
+  # NVIDIA 580 LTSB (last branch supporting Maxwell / GTX 970) built with the
+  # pinned nixpkgs' own driver packaging against the pinned 6.12 kernel.
+  # Replaces 570.153.02, which has a UVM suspend deadlock that crashed every
+  # hibernate attempt (nvidia-hibernate.service SEGV in uvm_suspend).
+  nvidiaPackages580 = config.boot.kernelPackages.nvidiaPackages.extend (
+    final: prev: {
+      legacy_580 = prev.mkDriver {
+        version = "580.173.02";
+        sha256_64bit = "sha256-jY65AB4FqaimY9PV0wT+tk7yhE7hhczf2VJ4aCD0bhs=";
+        sha256_aarch64 = "sha256-1lvVYIfvTXjwSoCNp4g8NaWQHF/TfpXRUKdgLrqXqoA=";
+        openSha256 = "sha256-lhloZdf6XbaAFTZBF1DxE0Nv9VC6obY8UPf0VyfVepE=";
+        settingsSha256 = "sha256-dfdu/3tnwHUfP7WoeQFNOMalMlpmUWjeMDIOnu+yi8E=";
+        persistencedSha256 = "sha256-j8YM1w231X+JIP3c3TpUNurEBumEu1stVjzFGWu1JXE=";
+      };
+    }
+  );
   bravePkgs = import brave-nixpkgs {
     system = "x86_64-linux";
     config.allowUnfree = true;
@@ -15,9 +31,10 @@ let
 in
 {
   # Bootloader.
-  boot.kernelPackages = kernel-nixpkgs-pkgs.linuxPackages; # set a "stable" working kernel/nvidia driver config...nvidia...
+  boot.kernelPackages = kernel-nixpkgs-pkgs.linuxPackages; # pinned "stable" working kernel
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.resumeDevice = "/dev/disk/by-uuid/8370001a-e559-4bda-8d8b-c6994763a115"; # swap partition, needed to resume from hibernation
 
   systemd.services."systemd-suspend" = {
     serviceConfig = {
@@ -176,9 +193,9 @@ in
     modesetting.enable = true;
     powerManagement.enable = true;
     powerManagement.finegrained = false;
-    open = false;
+    open = false; # GTX 970 (Maxwell) is not supported by the open kernel modules
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable; # tied to whatever nvidia stable version is based on kernel version selected
+    package = nvidiaPackages580.legacy_580;
   };
 
   # Enable OpenGL
@@ -204,6 +221,77 @@ in
     autoStart = true;
     openFirewall = true;
     capSysAdmin = true;
+  };
+
+  # Sunshine keeps persistent CUDA/NVENC contexts on the GPU; if they exist
+  # during hibernation the NVIDIA driver deadlocks in uvm_suspend (SEGV in
+  # nvidia-hibernate.service, seen on both 570.153.02 and 580.173.02) and the
+  # whole hibernate chain aborts. Stop Sunshine before sleep and restart it
+  # after resume, but only if it was actually running.
+  systemd.services.sunshine-pre-sleep = {
+    description = "Stop Sunshine before hibernation/suspend";
+    wantedBy = [ "systemd-hibernate.service" "systemd-suspend.service" ];
+    before = [
+      "systemd-hibernate.service"
+      "systemd-suspend.service"
+      # must also run before the nvidia suspend hooks: they are only ordered
+      # against systemd-hibernate/suspend.service themselves, so without this
+      # they race us and can hit Sunshine's CUDA contexts while still live
+      "nvidia-hibernate.service"
+      "nvidia-suspend.service"
+    ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      if systemctl --user -M sun@ is-active --quiet sunshine.service 2>/dev/null; then
+        touch /run/sunshine-was-running
+        systemctl --user -M sun@ stop sunshine.service
+      else
+        rm -f /run/sunshine-was-running
+      fi
+    '';
+  };
+  systemd.services.sunshine-post-resume = {
+    description = "Restart Sunshine after resume (if it was running)";
+    requiredBy = [ "systemd-hibernate.service" "systemd-suspend.service" ];
+    after = [
+      "systemd-hibernate.service"
+      "systemd-suspend.service"
+      "nvidia-resume.service"
+    ];
+    serviceConfig.Type = "oneshot";
+    # systemd-hibernate/suspend.service only complete after the image is
+    # restored, so ExecStart here runs post-resume; tolerate the session
+    # being gone (reboot etc.)
+    script = ''
+      if [ -e /run/sunshine-was-running ]; then
+        rm -f /run/sunshine-was-running
+        systemctl --user -M sun@ start sunshine.service || true
+      fi
+      # tailscaled's local DNS forwarder does not come back after resume
+      # (nothing serves 100.100.100.100:53 and all name lookups fail until
+      # restart); restart it so MagicDNS works again
+      systemctl restart tailscaled.service || true
+    '';
+  };
+
+  # The machine was powering itself back on shortly after shutdown/hibernate
+  # (PCIe PME from the GPU when the monitor goes to standby, presumably).
+  # Disable S4 wake via the GPU's PCIe root port; USB (XHC) stays enabled.
+  systemd.services.disable-peg-wake = {
+    description = "Disable PCIe (GPU) wake from S4/S5";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      for dev in PEG0 RP01 PXSX; do
+        if grep -q "^$dev.*\*enabled" /proc/acpi/wakeup 2>/dev/null; then
+          echo "$dev" > /proc/acpi/wakeup || true
+        fi
+      done
+    '';
   };
 
   # Enable the OpenSSH daemon.
