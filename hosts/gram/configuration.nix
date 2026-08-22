@@ -138,6 +138,48 @@ in
     KERNEL=="uinput", GROUP="input", MODE="0660", OPTIONS+="static_node=uinput"
   '';
 
+  systemd.services.sunshine-pre-sleep = {
+    description = "Stop Sunshine before suspend/hibernate";
+    wantedBy = [
+      "systemd-suspend.service"
+      "systemd-hibernate.service"
+    ];
+    before = [
+      "systemd-suspend.service"
+      "systemd-hibernate.service"
+    ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      if systemctl --user -M moon@ is-active --quiet sunshine.service 2>/dev/null; then
+        touch /run/sunshine-was-running
+        systemctl --user -M moon@ stop sunshine.service
+      else
+        rm -f /run/sunshine-was-running
+      fi
+    '';
+  };
+  systemd.services.sunshine-post-resume = {
+    description = "Restart Sunshine after resume (if it was running)";
+    requiredBy = [
+      "systemd-suspend.service"
+      "systemd-hibernate.service"
+    ];
+    after = [
+      "systemd-suspend.service"
+      "systemd-hibernate.service"
+    ];
+    serviceConfig.Type = "oneshot";
+    # systemd-suspend/hibernate.service only complete after the image is
+    # restored, so ExecStart here runs post-resume; tolerate the session
+    # being gone (reboot etc.)
+    script = ''
+      if [ -e /run/sunshine-was-running ]; then
+        rm -f /run/sunshine-was-running
+        systemctl --user -M moon@ start sunshine.service || true
+      fi
+    '';
+  };
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
